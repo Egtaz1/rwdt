@@ -26,12 +26,29 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+        :root { color-scheme: light; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Cairo', sans-serif; background: #f6f8fb; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; transition: background .3s ease, color .3s ease; }
         main { flex: 1; }
         .hidden { display: none !important; }
-        .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        
+        .animate-fadeIn { animation: fadeIn 0.45s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes floatSoft { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes pulseSoft { 0%,100% { opacity: .65; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+        .float-soft { animation: floatSoft 5s ease-in-out infinite; }
+        .pulse-soft { animation: pulseSoft 3s ease-in-out infinite; }
+
+        .glass { background: rgba(255,255,255,.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.65); }
+        .hero-shell { background: radial-gradient(circle at 15% 20%, rgba(16,185,129,.24), transparent 34%), radial-gradient(circle at 86% 12%, rgba(217,119,6,.18), transparent 30%), linear-gradient(135deg, #052e2b 0%, #064e3b 48%, #0f766e 100%); }
+        .modern-card { background: rgba(255,255,255,.94); border: 1px solid #e8edf3; box-shadow: 0 18px 55px rgba(15,23,42,.06); }
+        .modern-card:hover { box-shadow: 0 22px 60px rgba(15,23,42,.10); }
+        .soft-icon { box-shadow: inset 0 0 0 1px rgba(15,23,42,.04), 0 10px 25px rgba(15,23,42,.07); }
+        .section-title::before { content: ''; display: inline-block; width: 6px; height: 30px; background: linear-gradient(#10b981,#d97706); border-radius: 999px; margin-left: 10px; vertical-align: middle; }
+        .bottom-nav-safe { padding-bottom: max(.55rem, env(safe-area-inset-bottom)); }
+        .bottom-nav-btn.active { color: #059669; }
+        .bottom-nav-btn.active .nav-dot { opacity: 1; transform: scale(1); }
+        .nav-dot { opacity: 0; transform: scale(.3); transition: .25s ease; }
+
         .opt-btn { width: 100%; padding: 1.25rem; border: 2px solid #e2e8f0; border-radius: 1rem; font-weight: bold; transition: all 0.2s; background: white; text-align: right; position: relative; }
         .opt-btn:hover:not(:disabled) { border-color: #10b981; background: #f0fdf4; transform: translateX(-5px); }
         .correct { background: #d1fae5 !important; border-color: #10b981 !important; color: #065f46; cursor: default; }
@@ -39,8 +56,23 @@
         .review-card { border-right: 6px solid; }
         .review-correct { border-color: #10b981; background: #f0fdf4; }
         .review-wrong { border-color: #ef4444; background: #fef2f2; }
-        
-        .gradient-card { background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); }
+        .gradient-card { background: linear-gradient(145deg, #ffffff 0%, #f3fbf6 100%); }
+
+        /* الوضع الداكن */
+        body.dark-mode { background: #08110f; color: #e5e7eb; }
+        body.dark-mode nav, body.dark-mode footer, body.dark-mode .bg-white, body.dark-mode .modern-card, body.dark-mode .gradient-card { background-color: #101c19 !important; border-color: #263833 !important; color: #e5e7eb !important; }
+        body.dark-mode .bg-slate-50, body.dark-mode .bg-slate-100 { background-color: #172521 !important; }
+        body.dark-mode .text-slate-800, body.dark-mode .text-slate-700, body.dark-mode .text-slate-600 { color: #e5e7eb !important; }
+        body.dark-mode .text-slate-500, body.dark-mode .text-slate-400 { color: #a8b5b0 !important; }
+        body.dark-mode .border-slate-100, body.dark-mode .border-slate-200 { border-color: #2b3d37 !important; }
+        body.dark-mode input, body.dark-mode textarea, body.dark-mode select { background: #13211d !important; color: #f8fafc !important; border-color: #31443e !important; }
+        body.dark-mode .opt-btn { background: #101c19; border-color: #31443e; color: #f8fafc; }
+        body.dark-mode #loading { background: #08110f !important; }
+
+        @media (max-width: 767px) {
+            body { padding-bottom: 76px; }
+            #dhikr-toast { right: 1rem !important; left: 1rem !important; bottom: 5.8rem !important; }
+        }
     </style>
 </head>
 <body class="text-slate-800">
@@ -52,15 +84,37 @@
         <span id="dhikr-text" class="font-black text-islamic-800 text-lg"></span>
     </div>
 
-    <nav class="bg-white border-b-4 border-islamic-500 p-4 shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4 px-4">
-            <h1 class="text-2xl font-black text-islamic-800 cursor-pointer flex items-center gap-2" onclick="app.resetUrlAndGo('landing')">
-                <i class="fas fa-book-quran text-islamic-500"></i>
-                <span>منصة أستاذ أحمد عيد</span>
-            </h1>
-            <div class="relative w-full md:w-1/3">
-                <i class="fas fa-search absolute top-3.5 right-4 text-slate-400"></i>
-                <input type="text" id="search-input" onkeyup="app.handleSearch()" placeholder="ابحث عن درس، باب، أو كتاب..." class="w-full bg-slate-50 border-2 border-slate-200 p-3 pr-10 rounded-xl font-bold focus:border-islamic-500 focus:outline-none transition-colors">
+    <nav class="bg-white/95 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-50">
+        <div class="container mx-auto flex items-center justify-between gap-3 px-4 py-3">
+            <button class="flex items-center gap-3 min-w-0 text-right" onclick="app.resetUrlAndGo('landing')">
+                <span class="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-islamic-900 to-islamic-500 text-white flex items-center justify-center shadow-lg shrink-0">
+                    <i class="fas fa-book-quran text-xl"></i>
+                </span>
+                <span class="min-w-0">
+                    <strong class="block text-base md:text-xl font-black text-islamic-900 truncate">منصة أستاذ أحمد عيد</strong>
+                    <small class="hidden md:block text-slate-400 font-bold mt-0.5">تعلم • اختبر نفسك • تابع تقدمك</small>
+                </span>
+            </button>
+
+            <div class="hidden md:flex items-center gap-2 flex-1 justify-end">
+                <div class="relative w-full max-w-md">
+                    <i class="fas fa-search absolute top-1/2 -translate-y-1/2 right-4 text-slate-400"></i>
+                    <input type="text" id="search-input" onkeyup="app.handleSearch()" placeholder="ابحث في الدروس والأبواب والاختبارات..." class="w-full bg-slate-50 border border-slate-200 py-3 pr-11 pl-4 rounded-2xl font-bold focus:border-islamic-500 focus:ring-4 focus:ring-islamic-50 focus:outline-none transition-all">
+                </div>
+                <button onclick="app.toggleTheme()" class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600 hover:text-islamic-600 hover:border-islamic-200 transition-all" title="تغيير الوضع">
+                    <i id="theme-icon" class="fas fa-moon"></i>
+                </button>
+            </div>
+
+            <div class="md:hidden flex items-center gap-2">
+                <button onclick="app.focusMobileSearch()" class="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600"><i class="fas fa-search"></i></button>
+                <button onclick="app.toggleTheme()" class="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600"><i id="theme-icon-mobile" class="fas fa-moon"></i></button>
+            </div>
+        </div>
+        <div id="mobile-search-wrap" class="hidden md:hidden px-4 pb-3">
+            <div class="relative">
+                <i class="fas fa-search absolute top-1/2 -translate-y-1/2 right-4 text-slate-400"></i>
+                <input type="text" id="mobile-search-input" onkeyup="app.handleSearch(true)" placeholder="ابحث عن أي محتوى..." class="w-full bg-slate-50 border border-slate-200 py-3 pr-11 pl-4 rounded-2xl font-bold focus:border-islamic-500 focus:outline-none">
             </div>
         </div>
     </nav>
@@ -79,12 +133,69 @@
             <div id="search-results" class="space-y-4"></div>
         </section>
 
-        <section id="landing" class="view-section space-y-10 animate-fadeIn hidden">
-            <div class="text-center space-y-4 pt-4">
-                <h2 class="text-4xl md:text-5xl font-black text-islamic-900 leading-tight">مرحباً بك في روضة العلم</h2>
-                <p class="text-slate-500 font-bold text-lg md:text-xl max-w-2xl mx-auto">اختر القسم الذي تود دراسته لتبدأ رحلتك في طلب العلم الشرعي.</p>
+        <section id="landing" class="view-section space-y-8 md:space-y-10 animate-fadeIn hidden">
+            <div class="hero-shell relative overflow-hidden rounded-[2rem] md:rounded-[2.7rem] p-6 md:p-10 lg:p-12 text-white shadow-2xl">
+                <div class="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-white/10 blur-2xl pulse-soft"></div>
+                <div class="absolute -bottom-24 right-1/4 w-72 h-72 rounded-full bg-amber-300/10 blur-3xl"></div>
+                <div class="relative z-10 grid lg:grid-cols-[1.4fr_.8fr] gap-8 items-center">
+                    <div>
+                        <span class="inline-flex items-center gap-2 bg-white/10 border border-white/15 px-4 py-2 rounded-full text-xs md:text-sm font-black mb-5"><i class="fas fa-sparkles text-amber-300"></i> رحلة علمية منظمة في مكان واحد</span>
+                        <h2 class="text-3xl md:text-5xl lg:text-6xl font-black leading-[1.25] mb-4">تعلّم بهدوء، راجع بذكاء،<br><span class="text-emerald-300">واختبر فهمك باستمرار.</span></h2>
+                        <p class="text-emerald-50/80 font-bold text-base md:text-lg max-w-2xl leading-loose">الدروس والاختبارات مرتبة حسب الأقسام والأبواب، مع حفظ تقدمك على جهازك لتكمل من نفس المكان في أي وقت.</p>
+                        <div class="flex flex-wrap gap-3 mt-7">
+                            <button onclick="app.scrollToCategories()" class="bg-white text-islamic-900 px-6 py-3.5 rounded-2xl font-black shadow-lg hover:-translate-y-1 transition-all">ابدأ التعلّم <i class="fas fa-arrow-left mr-2"></i></button>
+                            <button onclick="app.openQuizLibrary()" class="bg-white/10 border border-white/20 text-white px-6 py-3.5 rounded-2xl font-black hover:bg-white/15 transition-all"><i class="fas fa-clipboard-question ml-2"></i> بنك الاختبارات</button>
+                        </div>
+                    </div>
+                    <div class="hidden lg:block">
+                        <div class="glass rounded-[2rem] p-5 text-slate-800 float-soft">
+                            <div class="flex items-center justify-between mb-5"><span class="font-black text-islamic-900">تقدمك هذا الجهاز</span><span class="w-10 h-10 rounded-xl bg-islamic-50 text-islamic-600 flex items-center justify-center"><i class="fas fa-chart-simple"></i></span></div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><span id="hero-completed" class="text-3xl font-black text-islamic-700 block">0</span><small class="font-bold text-slate-400">درس مكتمل</small></div>
+                                <div class="bg-white rounded-2xl p-4 shadow-sm"><span id="hero-quizzes" class="text-3xl font-black text-amber-600 block">0</span><small class="font-bold text-slate-400">اختبار منجز</small></div>
+                            </div>
+                            <div class="mt-4 bg-white rounded-2xl p-4 shadow-sm"><div class="flex justify-between text-xs font-black mb-2"><span>نسبة الإنجاز</span><span id="hero-progress-label">0%</span></div><div class="h-2.5 rounded-full bg-slate-100 overflow-hidden"><div id="hero-progress-bar" class="h-full bg-gradient-to-l from-islamic-500 to-emerald-300 rounded-full transition-all duration-700" style="width:0%"></div></div></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="categories-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto"></div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                <div class="modern-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex items-center gap-3"><span class="soft-icon w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"><i class="fas fa-layer-group"></i></span><div><strong id="stat-categories" class="text-xl md:text-2xl font-black text-slate-800 block">0</strong><small class="text-slate-400 font-bold">قسم علمي</small></div></div>
+                <div class="modern-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex items-center gap-3"><span class="soft-icon w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0"><i class="fas fa-file-lines"></i></span><div><strong id="stat-lessons" class="text-xl md:text-2xl font-black text-slate-800 block">0</strong><small class="text-slate-400 font-bold">درس متاح</small></div></div>
+                <div class="modern-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex items-center gap-3"><span class="soft-icon w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0"><i class="fas fa-clipboard-check"></i></span><div><strong id="stat-quizzes" class="text-xl md:text-2xl font-black text-slate-800 block">0</strong><small class="text-slate-400 font-bold">اختبار</small></div></div>
+                <div class="modern-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex items-center gap-3"><span class="soft-icon w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0"><i class="fas fa-star"></i></span><div><strong id="stat-best-score" class="text-xl md:text-2xl font-black text-slate-800 block">—</strong><small class="text-slate-400 font-bold">أفضل نتيجة</small></div></div>
+            </div>
+
+            <div id="continue-card" class="hidden modern-card rounded-[2rem] p-5 md:p-7 border-r-4 border-islamic-500"></div>
+
+            <div class="grid lg:grid-cols-2 gap-5">
+                <div class="modern-card rounded-[2rem] p-5 md:p-7">
+                    <div class="flex items-center justify-between mb-5"><div><span class="text-xs font-black text-islamic-600 bg-islamic-50 px-3 py-1 rounded-full">اقتراح سريع</span><h3 class="text-xl md:text-2xl font-black text-slate-800 mt-3">اختبار مقترح لك</h3></div><span class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl"><i class="fas fa-bolt"></i></span></div>
+                    <div id="featured-quiz" class="text-slate-500 font-bold">سيظهر هنا اختبار بعد تحميل المحتوى.</div>
+                </div>
+                <div class="modern-card rounded-[2rem] p-5 md:p-7">
+                    <div class="flex items-center justify-between mb-5"><div><span class="text-xs font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">آخر إضافة</span><h3 class="text-xl md:text-2xl font-black text-slate-800 mt-3">درس مقترح للقراءة</h3></div><span class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl"><i class="fas fa-book-open-reader"></i></span></div>
+                    <div id="featured-lesson" class="text-slate-500 font-bold">سيظهر هنا درس بعد تحميل المحتوى.</div>
+                </div>
+            </div>
+
+            <div id="categories-section" class="scroll-mt-28 pt-2">
+                <div class="flex items-end justify-between gap-4 mb-5 md:mb-7">
+                    <div><h3 class="section-title text-2xl md:text-3xl font-black text-slate-800">الأقسام العلمية</h3><p class="text-slate-400 font-bold mt-2">اختر القسم وابدأ من الباب المناسب لك.</p></div>
+                </div>
+                <div id="categories-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5"></div>
+            </div>
+        </section>
+
+        <section id="quizzes-library" class="view-section space-y-6 animate-fadeIn hidden max-w-6xl mx-auto">
+            <div class="flex items-center justify-between gap-4"><div><span class="text-xs font-black text-islamic-600 bg-islamic-50 px-3 py-1 rounded-full">بنك الاختبارات</span><h2 class="text-3xl font-black text-slate-800 mt-3">كل الاختبارات</h2><p class="text-slate-400 font-bold mt-1">اختر أي اختبار وابدأ مباشرة.</p></div><button onclick="app.resetUrlAndGo('landing')" class="w-11 h-11 bg-slate-100 rounded-2xl"><i class="fas fa-arrow-right"></i></button></div>
+            <div id="all-quizzes-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </section>
+
+        <section id="saved-view" class="view-section space-y-6 animate-fadeIn hidden max-w-5xl mx-auto">
+            <div class="flex items-center justify-between gap-4"><div><span class="text-xs font-black text-rose-600 bg-rose-50 px-3 py-1 rounded-full">محفوظاتي</span><h2 class="text-3xl font-black text-slate-800 mt-3">الدروس المحفوظة</h2><p class="text-slate-400 font-bold mt-1">كل ما حفظته للرجوع إليه لاحقًا.</p></div><button onclick="app.resetUrlAndGo('landing')" class="w-11 h-11 bg-slate-100 rounded-2xl"><i class="fas fa-arrow-right"></i></button></div>
+            <div id="saved-lessons-list" class="space-y-3"></div>
         </section>
 
         <section id="category-view" class="view-section space-y-8 animate-fadeIn hidden">
@@ -115,14 +226,20 @@
                 
                 <div class="mb-8 border-b pb-6 pr-2 mt-4 flex justify-between items-start gap-4">
                     <h2 id="lesson-title" class="text-3xl md:text-4xl font-black text-slate-800 leading-tight mb-2 flex-1"></h2>
-                    <button onclick="app.shareCurrent('lesson')" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-sm shrink-0" title="مشاركة الدرس">
-                        <i class="fas fa-share-nodes text-xl"></i>
-                    </button>
+                    <div class="flex gap-2 shrink-0">
+                        <button id="favorite-lesson-btn" onclick="app.toggleFavoriteCurrentLesson()" class="bg-rose-50 text-rose-500 hover:bg-rose-100 w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-sm" title="حفظ الدرس"><i class="far fa-bookmark text-xl"></i></button>
+                        <button onclick="app.shareCurrent('lesson')" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-sm" title="مشاركة الدرس"><i class="fas fa-share-nodes text-xl"></i></button>
+                    </div>
                 </div>
                 
                 <div id="lesson-content" class="prose prose-slate prose-lg rtl:prose-invert max-w-none text-slate-700 font-bold leading-loose text-justify whitespace-pre-wrap"></div>
 
-                <div id="lesson-quiz-action" class="mt-12 pt-8 border-t-2 border-dashed border-slate-200 hidden text-center bg-islamic-50 p-8 rounded-3xl">
+                <div class="mt-10 pt-7 border-t border-slate-200 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                    <div><h4 class="font-black text-slate-800">أنهيت قراءة الدرس؟</h4><p class="text-sm text-slate-400 font-bold mt-1">علّمه كمكتمل ليظهر في نسبة تقدمك.</p></div>
+                    <button id="complete-lesson-btn" onclick="app.toggleCompleteCurrentLesson()" class="w-full sm:w-auto bg-slate-900 text-white px-6 py-3 rounded-2xl font-black shadow hover:-translate-y-0.5 transition-all"><i class="fas fa-check ml-2"></i> تم إنهاء الدرس</button>
+                </div>
+
+                <div id="lesson-quiz-action" class="mt-8 pt-8 border-t-2 border-dashed border-slate-200 hidden text-center bg-islamic-50 p-8 rounded-3xl">
                     <div class="w-16 h-16 bg-white shadow flex items-center justify-center rounded-full mx-auto mb-4">
                         <i class="fas fa-clipboard-question text-3xl text-islamic-500"></i>
                     </div>
@@ -179,7 +296,16 @@
         </section>
     </main>
 
-    <footer class="bg-white border-t-2 border-slate-200 py-8 mt-auto">
+    <div class="md:hidden fixed bottom-0 inset-x-0 z-[80] bg-white/95 backdrop-blur-xl border-t border-slate-200 bottom-nav-safe">
+        <div class="grid grid-cols-4 px-2 pt-2">
+            <button data-nav="home" onclick="app.bottomNavigate('home')" class="bottom-nav-btn active relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[11px]"><i class="fas fa-house text-lg"></i><span>الرئيسية</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
+            <button data-nav="sections" onclick="app.bottomNavigate('sections')" class="bottom-nav-btn relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[11px]"><i class="fas fa-layer-group text-lg"></i><span>الأقسام</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
+            <button data-nav="quizzes" onclick="app.bottomNavigate('quizzes')" class="bottom-nav-btn relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[11px]"><i class="fas fa-clipboard-question text-lg"></i><span>الاختبارات</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
+            <button data-nav="saved" onclick="app.bottomNavigate('saved')" class="bottom-nav-btn relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[11px]"><i class="fas fa-bookmark text-lg"></i><span>المحفوظات</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t-2 border-slate-200 py-8 mt-auto mb-0">
         <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <p class="text-sm font-bold text-slate-400 text-center">جميع الحقوق محفوظة © 2026 إشراف أستاذ أحمد عيد</p>
         </div>
@@ -202,11 +328,14 @@
             db: { categories: [], books: [], chapters: [], lessons: [], quizzes: [], settings: {} },
             currentCat: null, currentChap: null, currentLesson: null,
             quizData: null, qIdx: 0, answers: [], quizReturnLocation: 'category',
-            dhikrIntervalId: null, hasCountedVisit: false, initialLoadDone: false
+            dhikrIntervalId: null, hasCountedVisit: false, initialLoadDone: false,
+            local: { completedLessons: [], favorites: [], quizHistory: [], lastLessonId: null }
         };
 
         const app = {
             init: () => {
+                app.loadLocalState();
+                app.applySavedTheme();
                 if (!state.hasCountedVisit) { dbRef.child('stats/visitors').set(firebase.database.ServerValue.increment(1)); state.hasCountedVisit = true; }
                 dbRef.on('value', snap => {
                     const data = snap.val();
@@ -226,9 +355,148 @@
                         state.initialLoadDone = true;
                     }
                     
-                    app.renderCategories(); 
+                    app.renderCategories();
+                    app.renderDashboard();
+                    app.renderQuizLibrary();
+                    app.renderSavedLessons();
                     app.initDhikr();
                 });
+            },
+
+            // بيانات الطالب المحلية (بدون حساب وبدون ضغط إضافي على Firebase)
+            loadLocalState: () => {
+                try {
+                    state.local.completedLessons = JSON.parse(localStorage.getItem('ahmed_completed_lessons') || '[]');
+                    state.local.favorites = JSON.parse(localStorage.getItem('ahmed_favorite_lessons') || '[]');
+                    state.local.quizHistory = JSON.parse(localStorage.getItem('ahmed_quiz_history') || '[]');
+                    state.local.lastLessonId = localStorage.getItem('ahmed_last_lesson') || null;
+                } catch (e) { console.warn('تعذر قراءة بيانات التقدم المحلية', e); }
+            },
+
+            saveLocalState: () => {
+                localStorage.setItem('ahmed_completed_lessons', JSON.stringify(state.local.completedLessons));
+                localStorage.setItem('ahmed_favorite_lessons', JSON.stringify(state.local.favorites));
+                localStorage.setItem('ahmed_quiz_history', JSON.stringify(state.local.quizHistory));
+                if (state.local.lastLessonId) localStorage.setItem('ahmed_last_lesson', state.local.lastLessonId);
+            },
+
+            applySavedTheme: () => {
+                const dark = localStorage.getItem('ahmed_theme') === 'dark';
+                document.body.classList.toggle('dark-mode', dark);
+                app.syncThemeIcons(dark);
+            },
+
+            syncThemeIcons: (dark) => {
+                ['theme-icon','theme-icon-mobile'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.className = `fas ${dark ? 'fa-sun' : 'fa-moon'}`;
+                });
+            },
+
+            toggleTheme: () => {
+                const dark = !document.body.classList.contains('dark-mode');
+                document.body.classList.toggle('dark-mode', dark);
+                localStorage.setItem('ahmed_theme', dark ? 'dark' : 'light');
+                app.syncThemeIcons(dark);
+            },
+
+            focusMobileSearch: () => {
+                const wrap = document.getElementById('mobile-search-wrap');
+                wrap.classList.toggle('hidden');
+                if (!wrap.classList.contains('hidden')) setTimeout(() => document.getElementById('mobile-search-input')?.focus(), 50);
+            },
+
+            scrollToCategories: () => {
+                app.showSection('landing');
+                setTimeout(() => document.getElementById('categories-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+            },
+
+            setBottomNav: (name) => {
+                document.querySelectorAll('.bottom-nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.nav === name));
+            },
+
+            bottomNavigate: (target) => {
+                if (target === 'home') { app.resetUrlAndGo('landing'); app.setBottomNav('home'); }
+                if (target === 'sections') { app.scrollToCategories(); app.setBottomNav('sections'); }
+                if (target === 'quizzes') { app.openQuizLibrary(); app.setBottomNav('quizzes'); }
+                if (target === 'saved') { app.openSaved(); app.setBottomNav('saved'); }
+            },
+
+            renderDashboard: () => {
+                const totalLessons = state.db.lessons.length;
+                const completed = state.local.completedLessons.filter(id => state.db.lessons.some(l => l.id === id));
+                const history = state.local.quizHistory || [];
+                const best = history.length ? Math.max(...history.map(h => Number(h.percentage) || 0)) : null;
+                const progress = totalLessons ? Math.min(100, Math.round((completed.length / totalLessons) * 100)) : 0;
+
+                const setText = (id, value) => { const el = document.getElementById(id); if (el) el.innerText = value; };
+                setText('stat-categories', state.db.categories.length);
+                setText('stat-lessons', totalLessons);
+                setText('stat-quizzes', state.db.quizzes.length);
+                setText('stat-best-score', best === null ? '—' : `${best}%`);
+                setText('hero-completed', completed.length);
+                setText('hero-quizzes', history.length);
+                setText('hero-progress-label', `${progress}%`);
+                const bar = document.getElementById('hero-progress-bar'); if (bar) bar.style.width = `${progress}%`;
+
+                const continueCard = document.getElementById('continue-card');
+                const lastLesson = state.db.lessons.find(l => l.id === state.local.lastLessonId);
+                if (continueCard && lastLesson) {
+                    const chap = state.db.chapters.find(c => c.id === lastLesson.chapterId);
+                    continueCard.classList.remove('hidden');
+                    continueCard.innerHTML = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4"><div class="flex items-center gap-4"><span class="w-14 h-14 rounded-2xl bg-islamic-50 text-islamic-600 flex items-center justify-center text-xl soft-icon"><i class="fas fa-play"></i></span><div><span class="text-xs text-islamic-600 font-black">أكمل من حيث توقفت</span><h3 class="text-xl md:text-2xl font-black text-slate-800 mt-1">${lastLesson.title}</h3><p class="text-slate-400 font-bold text-sm mt-1">${chap ? chap.title : 'درس سابق'}</p></div></div><button onclick="app.openLesson('${lastLesson.id}')" class="bg-islamic-600 text-white px-6 py-3 rounded-2xl font-black shadow hover:bg-islamic-700 transition">متابعة الدرس <i class="fas fa-arrow-left mr-2"></i></button></div>`;
+                } else if (continueCard) continueCard.classList.add('hidden');
+
+                const featuredQuiz = document.getElementById('featured-quiz');
+                const q = state.db.quizzes.find(q => q.questions && q.questions.length) || state.db.quizzes[0];
+                if (featuredQuiz) featuredQuiz.innerHTML = q ? `<div class="flex items-center justify-between gap-4"><div><strong class="text-lg font-black text-slate-800 block">${q.name || 'اختبار متاح'}</strong><span class="text-sm text-slate-400 font-bold">${q.questions?.length || 0} سؤال</span></div><button onclick="app.startQuiz('${q.id}','landing')" class="bg-amber-500 text-white px-5 py-2.5 rounded-xl font-black">ابدأ الآن</button></div>` : '<span>لا توجد اختبارات متاحة حاليًا.</span>';
+
+                const featuredLesson = document.getElementById('featured-lesson');
+                const l = state.db.lessons[state.db.lessons.length - 1] || state.db.lessons[0];
+                if (featuredLesson) featuredLesson.innerHTML = l ? `<div class="flex items-center justify-between gap-4"><div><strong class="text-lg font-black text-slate-800 block">${l.title}</strong><span class="text-sm text-slate-400 font-bold">جاهز للقراءة الآن</span></div><button onclick="app.openLesson('${l.id}')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-black">قراءة</button></div>` : '<span>لا توجد دروس متاحة حاليًا.</span>';
+            },
+
+            openQuizLibrary: () => { app.renderQuizLibrary(); app.showSection('quizzes-library'); app.setBottomNav('quizzes'); },
+            renderQuizLibrary: () => {
+                const box = document.getElementById('all-quizzes-grid'); if (!box) return;
+                const quizzes = state.db.quizzes.filter(q => q.questions && q.questions.length);
+                box.innerHTML = quizzes.length ? quizzes.map(q => `<div class="modern-card rounded-3xl p-5 flex flex-col gap-4"><div class="flex items-start justify-between gap-3"><span class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg"><i class="fas fa-clipboard-question"></i></span><span class="text-xs font-black text-slate-400 bg-slate-50 px-3 py-1 rounded-full">${q.questions.length} سؤال</span></div><div><h3 class="font-black text-lg text-slate-800 leading-relaxed">${q.name || 'اختبار'}</h3></div><button onclick="app.startQuiz('${q.id}','landing')" class="mt-auto bg-islamic-600 text-white py-3 rounded-2xl font-black">ابدأ الاختبار <i class="fas fa-arrow-left mr-2"></i></button></div>`).join('') : `<div class="md:col-span-2 lg:col-span-3 text-center p-12 modern-card rounded-3xl"><i class="fas fa-clipboard text-4xl text-slate-300 mb-4"></i><p class="font-black text-slate-500">لا توجد اختبارات متاحة حاليًا.</p></div>`;
+            },
+
+            openSaved: () => { app.renderSavedLessons(); app.showSection('saved-view'); app.setBottomNav('saved'); },
+            renderSavedLessons: () => {
+                const box = document.getElementById('saved-lessons-list'); if (!box) return;
+                const lessons = state.local.favorites.map(id => state.db.lessons.find(l => l.id === id)).filter(Boolean);
+                box.innerHTML = lessons.length ? lessons.map(l => `<div class="modern-card rounded-2xl p-5 flex items-center justify-between gap-4"><div class="flex items-center gap-3 min-w-0"><span class="w-11 h-11 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center shrink-0"><i class="fas fa-bookmark"></i></span><h3 class="font-black text-slate-800 truncate">${l.title}</h3></div><button onclick="app.openLesson('${l.id}')" class="bg-slate-900 text-white px-4 py-2 rounded-xl font-black text-sm shrink-0">فتح</button></div>`).join('') : `<div class="modern-card rounded-3xl p-12 text-center"><i class="far fa-bookmark text-5xl text-slate-300 mb-4"></i><h3 class="font-black text-slate-600 text-xl">لا توجد دروس محفوظة بعد</h3><p class="text-slate-400 font-bold mt-2">افتح أي درس واضغط علامة الحفظ.</p></div>`;
+            },
+
+            updateLessonActionButtons: () => {
+                if (!state.currentLesson) return;
+                const fav = state.local.favorites.includes(state.currentLesson.id);
+                const done = state.local.completedLessons.includes(state.currentLesson.id);
+                const favBtn = document.getElementById('favorite-lesson-btn');
+                if (favBtn) favBtn.innerHTML = `<i class="${fav ? 'fas' : 'far'} fa-bookmark text-xl"></i>`;
+                const doneBtn = document.getElementById('complete-lesson-btn');
+                if (doneBtn) {
+                    doneBtn.innerHTML = done ? '<i class="fas fa-circle-check ml-2"></i> مكتمل ✓' : '<i class="fas fa-check ml-2"></i> تم إنهاء الدرس';
+                    doneBtn.className = done ? 'w-full sm:w-auto bg-islamic-600 text-white px-6 py-3 rounded-2xl font-black shadow transition-all' : 'w-full sm:w-auto bg-slate-900 text-white px-6 py-3 rounded-2xl font-black shadow hover:-translate-y-0.5 transition-all';
+                }
+            },
+
+            toggleFavoriteCurrentLesson: () => {
+                if (!state.currentLesson) return;
+                const id = state.currentLesson.id;
+                const idx = state.local.favorites.indexOf(id);
+                if (idx >= 0) state.local.favorites.splice(idx, 1); else state.local.favorites.unshift(id);
+                app.saveLocalState(); app.updateLessonActionButtons(); app.renderSavedLessons();
+            },
+
+            toggleCompleteCurrentLesson: () => {
+                if (!state.currentLesson) return;
+                const id = state.currentLesson.id;
+                const idx = state.local.completedLessons.indexOf(id);
+                if (idx >= 0) state.local.completedLessons.splice(idx, 1); else state.local.completedLessons.push(id);
+                app.saveLocalState(); app.updateLessonActionButtons(); app.renderDashboard();
             },
 
             // قراءة الرابط المباشر عند فتح المنصة
@@ -306,31 +574,35 @@
                 }, intervalMinutes * 60 * 1000); 
             },
 
-            handleSearch: () => {
-                const query = document.getElementById('search-input').value.trim().toLowerCase();
+            handleSearch: (mobile = false) => {
+                const input = document.getElementById(mobile ? 'mobile-search-input' : 'search-input');
+                const query = (input?.value || '').trim().toLowerCase();
                 if(!query) { if(!document.getElementById('search-view').classList.contains('hidden')) app.showSection('landing'); return; }
                 const results = [];
-                state.db.lessons.forEach(l => { if(l.title.toLowerCase().includes(query)) results.push({ type: 'درس', title: l.title, action: `app.openLesson('${l.id}')`, icon: 'fa-file-lines', color: 'text-blue-500' }); });
-                state.db.chapters.forEach(c => { if(c.title.toLowerCase().includes(query)) results.push({ type: 'باب', title: c.title, action: `app.openChapter('${c.id}')`, icon: 'fa-folder-open', color: 'text-emerald-500' }); });
+                state.db.lessons.forEach(l => { if((l.title || '').toLowerCase().includes(query) || (l.content || '').toLowerCase().includes(query)) results.push({ type: 'درس', title: l.title, action: `app.openLesson('${l.id}')`, icon: 'fa-file-lines', color: 'text-blue-500' }); });
+                state.db.chapters.forEach(c => { if((c.title || '').toLowerCase().includes(query)) results.push({ type: 'باب', title: c.title, action: `app.openChapter('${c.id}')`, icon: 'fa-folder-open', color: 'text-emerald-500' }); });
+                state.db.categories.forEach(c => { if((c.name || '').toLowerCase().includes(query)) results.push({ type: 'قسم', title: c.name, action: `app.openCategory('${c.id}')`, icon: 'fa-layer-group', color: 'text-purple-500' }); });
+                state.db.quizzes.forEach(q => { if((q.name || '').toLowerCase().includes(query)) results.push({ type: 'اختبار', title: q.name || 'اختبار', action: `app.startQuiz('${q.id}','landing')`, icon: 'fa-clipboard-question', color: 'text-amber-500' }); });
                 const resContainer = document.getElementById('search-results');
-                resContainer.innerHTML = results.length > 0 ? results.map(r => `<div onclick="${r.action}" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center cursor-pointer hover:border-islamic-500 transition-colors"><div class="flex items-center gap-4"><i class="fas ${r.icon} ${r.color} text-2xl"></i><div><h4 class="font-black text-lg text-slate-800">${r.title}</h4><span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded">${r.type}</span></div></div><i class="fas fa-chevron-left text-slate-300"></i></div>`).join('') : `<div class="text-center p-10 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200"><p class="font-bold text-slate-500">لا توجد نتائج مطابقة.</p></div>`;
+                resContainer.innerHTML = results.length > 0 ? results.slice(0,30).map(r => `<div onclick="${r.action}" class="modern-card p-5 rounded-2xl flex justify-between items-center cursor-pointer hover:border-islamic-300 transition-all"><div class="flex items-center gap-4"><span class="w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center"><i class="fas ${r.icon} ${r.color} text-xl"></i></span><div><h4 class="font-black text-lg text-slate-800">${r.title}</h4><span class="text-xs font-bold text-slate-400">${r.type}</span></div></div><i class="fas fa-chevron-left text-slate-300"></i></div>`).join('') : `<div class="text-center p-10 modern-card rounded-3xl"><p class="font-bold text-slate-500">لا توجد نتائج مطابقة.</p></div>`;
                 app.showSection('search-view');
             },
 
             showSection: (id) => { 
                 document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden')); 
-                document.getElementById(id).classList.remove('hidden'); 
-                if(id !== 'search-view') document.getElementById('search-input').value = ''; 
+                document.getElementById(id)?.classList.remove('hidden'); 
+                if(id !== 'search-view') { const d = document.getElementById('search-input'); const m = document.getElementById('mobile-search-input'); if(d) d.value = ''; if(m) m.value = ''; }
+                if (id === 'landing') app.setBottomNav('home');
                 window.scrollTo(0, 0); 
             },
 
             renderCategories: () => {
-                document.getElementById('categories-grid').innerHTML = state.db.categories.map(cat => `
-                    <button onclick="app.openCategory('${cat.id}')" class="gradient-card p-6 md:p-8 rounded-[2rem] shadow hover:shadow-lg border border-islamic-100 hover:-translate-y-2 transition-all flex flex-col items-center gap-4 group">
-                        <div class="w-20 h-20 md:w-24 md:h-24 bg-white rounded-full flex items-center justify-center shadow-sm text-islamic-500 group-hover:scale-110 transition-transform"><i class="fas fa-book text-3xl md:text-4xl"></i></div>
-                        <h3 class="text-xl md:text-2xl font-black text-slate-800 text-center">${cat.name}</h3>
-                    </button>
-                `).join('');
+                const icons = ['fa-book-quran','fa-mosque','fa-scale-balanced','fa-book-open','fa-lightbulb','fa-graduation-cap','fa-feather','fa-star-and-crescent'];
+                document.getElementById('categories-grid').innerHTML = state.db.categories.map((cat, i) => {
+                    const chCount = state.db.chapters.filter(ch => ch.categoryId === cat.id).length;
+                    const lessonCount = state.db.lessons.filter(l => state.db.chapters.some(ch => ch.id === l.chapterId && ch.categoryId === cat.id)).length;
+                    return `<button onclick="app.openCategory('${cat.id}')" class="gradient-card modern-card text-right p-5 md:p-6 rounded-[1.7rem] hover:-translate-y-1 transition-all group"><div class="flex items-start justify-between gap-3 mb-5"><span class="soft-icon w-12 h-12 md:w-14 md:h-14 bg-islamic-50 text-islamic-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl group-hover:bg-islamic-600 group-hover:text-white transition-all"><i class="fas ${icons[i % icons.length]}"></i></span><i class="fas fa-arrow-left text-slate-300 group-hover:text-islamic-500 transition"></i></div><h3 class="text-lg md:text-xl font-black text-slate-800 mb-2">${cat.name}</h3><div class="flex gap-2 text-[11px] font-bold text-slate-400"><span>${chCount} باب</span><span>•</span><span>${lessonCount} درس</span></div></button>`;
+                }).join('');
             },
 
             openCategory: (catId) => {
@@ -383,6 +655,8 @@
                 const lesson = state.db.lessons.find(l => l.id === lessonId); if(!lesson) return;
                 state.currentLesson = lesson; 
                 state.currentChap = state.db.chapters.find(c => c.id === lesson.chapterId);
+                state.local.lastLessonId = lesson.id;
+                app.saveLocalState();
                 
                 document.getElementById('lesson-title').innerText = lesson.title;
                 document.getElementById('lesson-content').innerHTML = app.formatLessonContent(lesson.content);
@@ -399,6 +673,8 @@
                 } else { 
                     quizAction.classList.add('hidden'); 
                 }
+                app.updateLessonActionButtons();
+                app.renderDashboard();
                 
                 // تغيير الرابط ليناسب الدرس للمشاركة المباشرة مستقبلاً
                 window.history.pushState({}, document.title, `?lesson=${lesson.id}`);
@@ -474,7 +750,11 @@
                 let finalScore = 0;
                 state.answers.forEach((ans, idx) => { if(ans === state.quizData.questions[idx].correctIndex) finalScore++; });
 
-                const percentage = Math.round((finalScore / total) * 100); 
+                const percentage = Math.round((finalScore / total) * 100);
+                state.local.quizHistory.unshift({ quizId: state.quizData.id, name: state.quizData.name || 'اختبار', percentage, date: Date.now() });
+                state.local.quizHistory = state.local.quizHistory.slice(0, 50);
+                app.saveLocalState();
+                app.renderDashboard();
                 document.getElementById('res-score').innerText = `${percentage}%`; 
                 document.getElementById('res-msg').innerText = percentage >= 90 ? "ممتاز! بارك الله في علمك 🌟" : percentage >= 70 ? "جيد جداً! استمر في المراجعة 👍" : "تحتاج لمراجعة المادة العلمية 📚"; 
                 
