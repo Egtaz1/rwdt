@@ -58,6 +58,28 @@
         .review-wrong { border-color: #ef4444; background: #fef2f2; }
         .gradient-card { background: linear-gradient(145deg, #ffffff 0%, #f3fbf6 100%); }
 
+        /* واجهات المرحلة الثانية */
+        .section-hero { background: radial-gradient(circle at 8% 18%, rgba(255,255,255,.16), transparent 25%), linear-gradient(135deg,#064e3b 0%,#087f5b 55%,#0f766e 100%); box-shadow: 0 24px 70px rgba(6,78,59,.18); }
+        .metric-chip { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16); backdrop-filter: blur(10px); }
+        .chapter-card { position: relative; overflow: hidden; }
+        .chapter-card::after { content:''; position:absolute; width:110px; height:110px; border-radius:999px; background:rgba(16,185,129,.07); left:-38px; bottom:-48px; pointer-events:none; }
+        .lesson-row { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+        .lesson-row:hover { transform: translateY(-2px); box-shadow: 0 16px 42px rgba(15,23,42,.07); }
+        .reader-shell { background: linear-gradient(180deg,#ffffff 0%,#fbfdfc 100%); box-shadow: 0 22px 65px rgba(15,23,42,.07); }
+        .reader-toolbar { position: sticky; top: 82px; z-index: 35; }
+        .lesson-reading-text { font-size: 1.12rem; line-height: 2.25; transition: font-size .2s ease; }
+        .focus-reading nav, body.focus-reading footer, body.focus-reading .md\:hidden.fixed.bottom-0 { opacity:.16; transition: opacity .25s ease; }
+        .focus-reading nav:hover, body.focus-reading footer:hover, body.focus-reading .md\:hidden.fixed.bottom-0:hover { opacity:1; }
+        .quiz-shell { background: radial-gradient(circle at 100% 0%, rgba(16,185,129,.12), transparent 32%), #fff; }
+        .quiz-number { background: linear-gradient(135deg,#064e3b,#10b981); box-shadow: 0 10px 30px rgba(16,185,129,.22); }
+        .result-ring { width: 170px; height: 170px; border-radius: 50%; display:flex; align-items:center; justify-content:center; position:relative; margin-inline:auto; background: conic-gradient(#10b981 0deg, #e2e8f0 0deg); }
+        .result-ring::after { content:''; position:absolute; inset:13px; border-radius:50%; background:white; box-shadow: inset 0 0 0 1px #e5e7eb; }
+        .result-ring > div { position:relative; z-index:2; }
+        .result-stat { background: #f8fafc; border:1px solid #eef2f7; }
+        body.dark-mode .reader-shell, body.dark-mode .quiz-shell { background:#101c19 !important; }
+        body.dark-mode .result-ring::after { background:#101c19; border-color:#31443e; }
+        body.dark-mode .result-stat { background:#172521; border-color:#2b3d37; }
+
         /* الوضع الداكن */
         body.dark-mode { background: #08110f; color: #e5e7eb; }
         body.dark-mode nav, body.dark-mode footer, body.dark-mode .bg-white, body.dark-mode .modern-card, body.dark-mode .gradient-card { background-color: #101c19 !important; border-color: #263833 !important; color: #e5e7eb !important; }
@@ -198,100 +220,125 @@
             <div id="saved-lessons-list" class="space-y-3"></div>
         </section>
 
-        <section id="category-view" class="view-section space-y-8 animate-fadeIn hidden">
-            <div class="flex items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <button onclick="app.resetUrlAndGo('landing')" class="w-10 h-10 bg-islamic-50 text-islamic-600 rounded-full flex items-center justify-center hover:bg-islamic-100 transition-colors"><i class="fas fa-arrow-right"></i></button>
-                <h2 id="cat-title" class="text-3xl font-black text-islamic-800"></h2>
-            </div>
-            <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100">
-                <h3 class="font-black text-2xl text-slate-800 mb-6 border-r-4 border-islamic-500 pr-3">أبواب وفصول القسم</h3>
-                <div id="chapters-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
-            </div>
-        </section>
-
-        <section id="chapter-view" class="view-section space-y-6 animate-fadeIn hidden max-w-5xl mx-auto">
-            <div class="flex items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <button id="back-to-cat-btn" class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center hover:bg-slate-200"><i class="fas fa-arrow-right text-slate-600"></i></button>
-                <div>
-                    <span id="chap-parent-cat" class="text-xs font-bold text-islamic-500 bg-islamic-50 px-2 py-1 rounded"></span>
-                    <h2 id="chap-title" class="text-2xl font-black text-slate-800 mt-2"></h2>
-                </div>
-            </div>
-            <div id="lessons-list" class="space-y-4"></div>
-        </section>
-
-        <section id="lesson-view" class="view-section space-y-6 animate-fadeIn hidden max-w-4xl mx-auto">
-            <div class="bg-white p-6 md:p-10 rounded-[2rem] shadow-lg border-t-8 border-islamic-500 relative">
-                <button id="back-to-chap-btn" class="absolute top-6 left-6 text-slate-400 hover:text-white hover:bg-red-500 bg-slate-100 w-10 h-10 rounded-full flex items-center justify-center transition-colors"><i class="fas fa-times"></i></button>
-                
-                <div class="mb-8 border-b pb-6 pr-2 mt-4 flex justify-between items-start gap-4">
-                    <h2 id="lesson-title" class="text-3xl md:text-4xl font-black text-slate-800 leading-tight mb-2 flex-1"></h2>
-                    <div class="flex gap-2 shrink-0">
-                        <button id="favorite-lesson-btn" onclick="app.toggleFavoriteCurrentLesson()" class="bg-rose-50 text-rose-500 hover:bg-rose-100 w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-sm" title="حفظ الدرس"><i class="far fa-bookmark text-xl"></i></button>
-                        <button onclick="app.shareCurrent('lesson')" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center transition-colors shadow-sm" title="مشاركة الدرس"><i class="fas fa-share-nodes text-xl"></i></button>
-                    </div>
-                </div>
-                
-                <div id="lesson-content" class="prose prose-slate prose-lg rtl:prose-invert max-w-none text-slate-700 font-bold leading-loose text-justify whitespace-pre-wrap"></div>
-
-                <div class="mt-10 pt-7 border-t border-slate-200 flex flex-col sm:flex-row gap-3 items-center justify-between">
-                    <div><h4 class="font-black text-slate-800">أنهيت قراءة الدرس؟</h4><p class="text-sm text-slate-400 font-bold mt-1">علّمه كمكتمل ليظهر في نسبة تقدمك.</p></div>
-                    <button id="complete-lesson-btn" onclick="app.toggleCompleteCurrentLesson()" class="w-full sm:w-auto bg-slate-900 text-white px-6 py-3 rounded-2xl font-black shadow hover:-translate-y-0.5 transition-all"><i class="fas fa-check ml-2"></i> تم إنهاء الدرس</button>
-                </div>
-
-                <div id="lesson-quiz-action" class="mt-8 pt-8 border-t-2 border-dashed border-slate-200 hidden text-center bg-islamic-50 p-8 rounded-3xl">
-                    <div class="w-16 h-16 bg-white shadow flex items-center justify-center rounded-full mx-auto mb-4">
-                        <i class="fas fa-clipboard-question text-3xl text-islamic-500"></i>
-                    </div>
-                    <h4 class="font-black text-2xl text-islamic-900 mb-2">اختبر فهمك للدرس</h4>
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
-                        <button id="start-quiz-btn" class="bg-islamic-600 text-white px-8 py-4 rounded-full font-black shadow-lg hover:bg-islamic-700 hover:scale-105 transition-all text-lg flex items-center gap-2">
-                            ابدأ الاختبار الآن <i class="fas fa-arrow-left"></i>
-                        </button>
-                        <button onclick="app.shareCurrent('quiz')" class="bg-white border-2 border-slate-200 text-slate-600 px-6 py-4 rounded-full font-black hover:border-indigo-500 hover:text-indigo-600 transition-all flex items-center gap-2 shadow-sm">
-                            مشاركة الاختبار <i class="fas fa-share-from-square"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="quiz-view" class="view-section space-y-6 animate-fadeIn hidden max-w-3xl mx-auto">
-            <div id="question-box">
-                <div class="bg-white p-6 md:p-10 rounded-[2.5rem] shadow-xl border-t-8 border-islamic-500 mb-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <div class="flex gap-3 items-center">
-                            <span id="quiz-progress" class="bg-islamic-50 text-islamic-600 px-4 py-1.5 rounded-full font-bold text-sm border border-islamic-100"></span>
-                            <button onclick="app.shareCurrent('quiz')" class="text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-indigo-100 transition-colors" title="مشاركة الاختبار"><i class="fas fa-share-nodes"></i></button>
+        <section id="category-view" class="view-section space-y-6 md:space-y-8 animate-fadeIn hidden max-w-6xl mx-auto">
+            <div class="section-hero rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-9 text-white relative overflow-hidden">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-7 relative z-10">
+                    <div class="flex items-start gap-4">
+                        <button onclick="app.resetUrlAndGo('landing')" class="w-11 h-11 rounded-2xl bg-white/10 border border-white/15 hover:bg-white/20 flex items-center justify-center shrink-0"><i class="fas fa-arrow-right"></i></button>
+                        <div>
+                            <span class="inline-flex items-center gap-2 text-xs font-black bg-white/10 border border-white/15 px-3 py-1.5 rounded-full"><i class="fas fa-layer-group"></i> قسم علمي</span>
+                            <h2 id="cat-title" class="text-3xl md:text-5xl font-black mt-4 leading-tight"></h2>
+                            <p class="text-emerald-50/80 font-bold mt-2">تصفح الأبواب، تابع تقدمك، وابدأ الاختبار المناسب.</p>
                         </div>
-                        <button onclick="app.closeQuiz()" class="text-red-500 text-sm font-bold bg-red-50 px-4 py-1.5 rounded-lg hover:bg-red-100 transition-colors">إنهاء / انسحاب</button>
                     </div>
-                    <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden mb-8">
-                        <div id="progress-bar" class="h-full bg-islamic-500 transition-all duration-500 ease-out" style="width: 0%"></div>
+                    <div class="grid grid-cols-3 gap-2 md:gap-3 min-w-0 lg:min-w-[420px]">
+                        <div class="metric-chip rounded-2xl p-3 md:p-4 text-center"><strong id="cat-chapters-count" class="text-2xl font-black block">0</strong><span class="text-[11px] md:text-xs font-bold text-white/70">باب</span></div>
+                        <div class="metric-chip rounded-2xl p-3 md:p-4 text-center"><strong id="cat-lessons-count" class="text-2xl font-black block">0</strong><span class="text-[11px] md:text-xs font-bold text-white/70">درس</span></div>
+                        <div class="metric-chip rounded-2xl p-3 md:p-4 text-center"><strong id="cat-completed-count" class="text-2xl font-black block">0</strong><span class="text-[11px] md:text-xs font-bold text-white/70">مكتمل</span></div>
                     </div>
-                    <h3 id="q-text" class="font-black text-2xl md:text-3xl leading-relaxed text-slate-800 mb-10"></h3>
-                    <div id="q-opts" class="space-y-4"></div>
-                    
-                    <div class="flex justify-between items-center mt-10 pt-6 border-t-2 border-slate-100">
-                        <button id="prev-btn" onclick="app.prevQuestion()" class="bg-slate-100 text-slate-600 px-6 py-3 rounded-xl font-black hover:bg-slate-200 transition-colors hidden shadow-sm"><i class="fas fa-arrow-right ml-2"></i> السابق</button>
-                        <div class="flex-1"></div>
-                        <button id="next-btn" onclick="app.nextQuestion()" class="bg-islamic-50 text-islamic-600 px-6 py-3 rounded-xl font-black hover:bg-islamic-100 transition-colors hidden shadow-sm">التالي <i class="fas fa-arrow-left mr-2"></i></button>
-                    </div>
+                </div>
+                <div class="mt-7 relative z-10">
+                    <div class="flex justify-between text-xs font-black mb-2"><span>تقدمك في القسم</span><span id="cat-progress-label">0%</span></div>
+                    <div class="h-2.5 bg-black/15 rounded-full overflow-hidden"><div id="cat-progress-bar" class="h-full bg-white rounded-full transition-all duration-700" style="width:0%"></div></div>
                 </div>
             </div>
 
-            <div id="result-box" class="hidden text-center space-y-8 animate-fadeIn">
-                <div class="bg-white p-10 rounded-[3rem] shadow-xl border-t-8 border-islamic-500 relative overflow-hidden">
-                    <i class="fas fa-award text-7xl text-islamic-gold mb-6 block animate-bounce"></i>
-                    <h2 class="text-3xl font-black mb-2 text-slate-800">نتيجة الاختبار</h2>
-                    <p id="res-score" class="text-7xl font-black text-islamic-600 mb-6 font-mono"></p>
-                    <p id="res-msg" class="text-xl font-bold text-slate-600 mb-8 bg-slate-50 py-3 rounded-2xl"></p>
-                    <button onclick="app.closeQuiz()" class="bg-slate-900 text-white px-10 py-4 rounded-full font-black shadow-lg hover:bg-black transition-all">العودة وإغلاق النتيجة</button>
+            <div>
+                <div class="flex items-center justify-between gap-4 mb-5">
+                    <div><h3 class="section-title text-2xl md:text-3xl font-black text-slate-800">أبواب وفصول القسم</h3><p class="text-slate-400 font-bold mt-2">كل باب يعرض لك عدد الدروس ونسبة الإنجاز.</p></div>
                 </div>
-                <div class="text-right">
-                    <h3 class="font-black text-2xl text-slate-700 mb-6 border-r-8 border-islamic-500 pr-4 bg-white p-4 rounded-xl shadow-sm">مراجعة الإجابات</h3>
-                    <div id="review-list" class="space-y-5"></div>
+                <div id="chapters-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5"></div>
+            </div>
+        </section>
+
+        <section id="chapter-view" class="view-section space-y-6 animate-fadeIn hidden max-w-6xl mx-auto">
+            <div class="modern-card rounded-[2rem] overflow-hidden">
+                <div class="p-5 md:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div class="flex items-start gap-4">
+                        <button id="back-to-cat-btn" class="w-11 h-11 bg-slate-100 rounded-2xl flex items-center justify-center hover:bg-islamic-50 hover:text-islamic-600 transition"><i class="fas fa-arrow-right"></i></button>
+                        <div>
+                            <span id="chap-parent-cat" class="text-xs font-black text-islamic-600 bg-islamic-50 px-3 py-1.5 rounded-full"></span>
+                            <h2 id="chap-title" class="text-3xl md:text-4xl font-black text-slate-800 mt-3 leading-tight"></h2>
+                            <p class="text-slate-400 font-bold mt-2">اختر درسًا للقراءة أو ابدأ اختبارًا مباشرًا.</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 min-w-0 lg:min-w-[360px]">
+                        <div class="bg-blue-50 rounded-2xl p-3 text-center"><strong id="chap-lessons-count" class="text-xl font-black text-blue-700 block">0</strong><span class="text-[11px] font-bold text-blue-500">دروس</span></div>
+                        <div class="bg-emerald-50 rounded-2xl p-3 text-center"><strong id="chap-completed-count" class="text-xl font-black text-emerald-700 block">0</strong><span class="text-[11px] font-bold text-emerald-500">مكتمل</span></div>
+                        <div class="bg-amber-50 rounded-2xl p-3 text-center"><strong id="chap-quizzes-count" class="text-xl font-black text-amber-700 block">0</strong><span class="text-[11px] font-bold text-amber-500">اختبارات</span></div>
+                    </div>
                 </div>
+                <div class="px-5 md:px-8 pb-6">
+                    <div class="flex justify-between text-xs font-black text-slate-500 mb-2"><span>نسبة إنجاز الباب</span><span id="chap-progress-label">0%</span></div>
+                    <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden"><div id="chap-progress-bar" class="h-full bg-gradient-to-l from-islamic-500 to-emerald-400 rounded-full transition-all duration-700" style="width:0%"></div></div>
+                </div>
+            </div>
+            <div id="chapter-quiz-banner" class="hidden modern-card rounded-3xl p-5 md:p-6 border-r-4 border-amber-400"></div>
+            <div id="lessons-list" class="space-y-3"></div>
+        </section>
+
+        <section id="lesson-view" class="view-section space-y-4 animate-fadeIn hidden max-w-5xl mx-auto">
+            <div class="reader-toolbar glass rounded-2xl p-2 md:p-3 flex items-center justify-between gap-2 shadow-lg">
+                <div class="flex items-center gap-2 min-w-0">
+                    <button id="back-to-chap-btn" class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center shrink-0" title="رجوع"><i class="fas fa-arrow-right"></i></button>
+                    <div class="hidden sm:block min-w-0"><p id="lesson-breadcrumb" class="text-xs font-black text-slate-400 truncate">الدرس</p><p id="lesson-reader-status" class="text-[11px] font-bold text-islamic-600 mt-0.5">وضع القراءة</p></div>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="app.adjustLessonFont(-1)" class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 font-black" title="تصغير الخط">A-</button>
+                    <button onclick="app.adjustLessonFont(1)" class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 font-black" title="تكبير الخط">A+</button>
+                    <button onclick="app.toggleFocusMode()" class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200" title="وضع التركيز"><i class="fas fa-expand"></i></button>
+                    <button id="favorite-lesson-btn" onclick="app.toggleFavoriteCurrentLesson()" class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500" title="حفظ الدرس"><i class="far fa-bookmark"></i></button>
+                    <button onclick="app.shareCurrent('lesson')" class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600" title="مشاركة"><i class="fas fa-share-nodes"></i></button>
+                </div>
+            </div>
+
+            <article class="reader-shell rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 overflow-hidden">
+                <div class="p-6 md:p-10 lg:p-12 border-b border-slate-100 bg-gradient-to-bl from-islamic-50/80 to-white">
+                    <div class="flex flex-wrap gap-2 mb-4"><span class="text-xs font-black text-islamic-600 bg-white border border-islamic-100 px-3 py-1.5 rounded-full"><i class="fas fa-book-open ml-1"></i> شرح مقالي</span><span id="lesson-complete-badge" class="hidden text-xs font-black text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full"><i class="fas fa-circle-check ml-1"></i> تم إكماله</span></div>
+                    <h2 id="lesson-title" class="text-3xl md:text-5xl font-black text-slate-800 leading-[1.35]"></h2>
+                </div>
+                <div class="p-6 md:p-10 lg:p-12">
+                    <div id="lesson-content" class="lesson-reading-text prose prose-slate prose-lg rtl:prose-invert max-w-none text-slate-700 font-bold text-justify whitespace-pre-wrap"></div>
+                </div>
+                <div class="p-6 md:p-8 bg-slate-50 border-t border-slate-100 flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <div><h4 class="font-black text-slate-800 text-lg">وصلت لنهاية الدرس</h4><p class="text-sm text-slate-400 font-bold mt-1">سجّل الدرس كمكتمل ليُحتسب ضمن تقدمك.</p></div>
+                    <button id="complete-lesson-btn" onclick="app.toggleCompleteCurrentLesson()" class="w-full md:w-auto bg-slate-900 text-white px-7 py-3.5 rounded-2xl font-black shadow transition-all"><i class="fas fa-check ml-2"></i> تم إنهاء الدرس</button>
+                </div>
+            </article>
+
+            <div id="lesson-quiz-action" class="hidden section-hero rounded-[2rem] p-6 md:p-8 text-white overflow-hidden relative">
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+                    <div class="flex items-center gap-4"><span class="w-14 h-14 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-2xl"><i class="fas fa-clipboard-question"></i></span><div><span class="text-xs font-black text-emerald-100">بعد القراءة</span><h4 class="font-black text-2xl mt-1">اختبر فهمك للدرس</h4><p class="text-white/70 font-bold text-sm mt-1">أجب عن الأسئلة واعرف نقاط القوة والمراجعة.</p></div></div>
+                    <div class="flex flex-col sm:flex-row gap-2"><button id="start-quiz-btn" class="bg-white text-islamic-800 px-6 py-3 rounded-2xl font-black shadow">ابدأ الاختبار <i class="fas fa-arrow-left mr-2"></i></button><button onclick="app.shareCurrent('quiz')" class="bg-white/10 border border-white/20 px-5 py-3 rounded-2xl font-black">مشاركة</button></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz-view" class="view-section space-y-5 animate-fadeIn hidden max-w-4xl mx-auto">
+            <div id="question-box" class="space-y-4">
+                <div class="modern-card rounded-3xl p-4 md:p-5 flex items-center justify-between gap-3">
+                    <div class="min-w-0"><span class="text-[11px] font-black text-islamic-600">الاختبار الحالي</span><h2 id="quiz-title-display" class="font-black text-slate-800 text-lg md:text-xl truncate">اختبار</h2></div>
+                    <div class="flex items-center gap-2"><span id="quiz-correct-live" class="hidden sm:inline-flex bg-emerald-50 text-emerald-600 px-3 py-2 rounded-xl text-xs font-black">0 صحيحة</span><button onclick="app.shareCurrent('quiz')" class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600"><i class="fas fa-share-nodes"></i></button><button onclick="app.closeQuiz()" class="w-10 h-10 rounded-xl bg-red-50 text-red-500" title="إنهاء"><i class="fas fa-xmark"></i></button></div>
+                </div>
+                <div class="quiz-shell rounded-[2rem] md:rounded-[2.7rem] shadow-xl border border-slate-100 p-6 md:p-10">
+                    <div class="flex items-center justify-between gap-4 mb-5"><div class="flex items-center gap-3"><span id="quiz-question-number" class="quiz-number w-12 h-12 rounded-2xl text-white flex items-center justify-center font-black text-lg">1</span><div><span id="quiz-progress" class="text-xs font-black text-islamic-600"></span><p class="text-[11px] font-bold text-slate-400 mt-1">اختر الإجابة الأنسب</p></div></div><span id="quiz-percent" class="text-sm font-black text-slate-500">0%</span></div>
+                    <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden mb-8"><div id="progress-bar" class="h-full bg-gradient-to-l from-islamic-600 to-emerald-400 transition-all duration-500 rounded-full" style="width:0%"></div></div>
+                    <h3 id="q-text" class="font-black text-2xl md:text-3xl leading-[1.65] text-slate-800 mb-8"></h3>
+                    <div id="q-opts" class="space-y-3"></div>
+                    <div class="flex justify-between items-center mt-8 pt-6 border-t border-slate-100"><button id="prev-btn" onclick="app.prevQuestion()" class="bg-slate-100 text-slate-600 px-5 py-3 rounded-xl font-black hidden"><i class="fas fa-arrow-right ml-2"></i> السابق</button><div class="flex-1"></div><button id="next-btn" onclick="app.nextQuestion()" class="bg-islamic-600 text-white px-5 py-3 rounded-xl font-black hidden">التالي <i class="fas fa-arrow-left mr-2"></i></button></div>
+                </div>
+            </div>
+
+            <div id="result-box" class="hidden space-y-6 animate-fadeIn">
+                <div class="modern-card rounded-[2.5rem] p-6 md:p-10 text-center overflow-hidden relative">
+                    <span class="inline-flex text-xs font-black text-islamic-600 bg-islamic-50 px-3 py-1.5 rounded-full mb-5">اكتمل الاختبار</span>
+                    <h2 class="text-3xl font-black text-slate-800 mb-6">نتيجتك</h2>
+                    <div id="res-ring" class="result-ring"><div><p id="res-score" class="text-4xl font-black text-islamic-700 font-mono">0%</p><span class="text-[11px] font-black text-slate-400">الدرجة</span></div></div>
+                    <p id="res-msg" class="text-lg md:text-xl font-bold text-slate-600 mt-6"></p>
+                    <div class="grid grid-cols-3 gap-2 md:gap-3 max-w-lg mx-auto mt-7"><div class="result-stat rounded-2xl p-3"><strong id="res-correct" class="text-2xl font-black text-emerald-600 block">0</strong><span class="text-[11px] font-bold text-slate-400">صحيحة</span></div><div class="result-stat rounded-2xl p-3"><strong id="res-wrong" class="text-2xl font-black text-red-500 block">0</strong><span class="text-[11px] font-bold text-slate-400">خاطئة</span></div><div class="result-stat rounded-2xl p-3"><strong id="res-total" class="text-2xl font-black text-blue-600 block">0</strong><span class="text-[11px] font-bold text-slate-400">إجمالي</span></div></div>
+                    <div class="flex flex-col sm:flex-row gap-2 justify-center mt-7"><button onclick="app.retryQuiz()" class="bg-islamic-600 text-white px-6 py-3 rounded-2xl font-black"><i class="fas fa-rotate-right ml-2"></i> إعادة الاختبار</button><button id="retry-wrong-btn" onclick="app.retryWrongAnswers()" class="bg-amber-50 text-amber-700 border border-amber-200 px-6 py-3 rounded-2xl font-black"><i class="fas fa-bullseye ml-2"></i> راجع أخطاءك فقط</button><button onclick="app.closeQuiz()" class="bg-slate-100 text-slate-600 px-6 py-3 rounded-2xl font-black">إغلاق</button></div>
+                </div>
+                <div class="text-right"><div class="flex items-center justify-between gap-4 mb-4"><div><h3 class="section-title font-black text-2xl text-slate-800">مراجعة الإجابات</h3><p class="text-sm text-slate-400 font-bold mt-2">راجع كل سؤال والإجابة الصحيحة.</p></div></div><div id="review-list" class="space-y-4"></div></div>
             </div>
         </section>
     </main>
@@ -327,8 +374,8 @@
         const state = {
             db: { categories: [], books: [], chapters: [], lessons: [], quizzes: [], settings: {} },
             currentCat: null, currentChap: null, currentLesson: null,
-            quizData: null, qIdx: 0, answers: [], quizReturnLocation: 'category',
-            dhikrIntervalId: null, hasCountedVisit: false, initialLoadDone: false,
+            quizData: null, quizBaseData: null, qIdx: 0, answers: [], quizReturnLocation: 'category',
+            dhikrIntervalId: null, hasCountedVisit: false, initialLoadDone: false, lessonFontLevel: 0,
             local: { completedLessons: [], favorites: [], quizHistory: [], lastLessonId: null }
         };
 
@@ -476,6 +523,8 @@
                 const done = state.local.completedLessons.includes(state.currentLesson.id);
                 const favBtn = document.getElementById('favorite-lesson-btn');
                 if (favBtn) favBtn.innerHTML = `<i class="${fav ? 'fas' : 'far'} fa-bookmark text-xl"></i>`;
+                const badge = document.getElementById('lesson-complete-badge');
+                if (badge) badge.classList.toggle('hidden', !done);
                 const doneBtn = document.getElementById('complete-lesson-btn');
                 if (doneBtn) {
                     doneBtn.innerHTML = done ? '<i class="fas fa-circle-check ml-2"></i> مكتمل ✓' : '<i class="fas fa-check ml-2"></i> تم إنهاء الدرس';
@@ -529,14 +578,15 @@
                     id = state.currentLesson.id;
                     title = state.currentLesson.title;
                 } else if (type === 'quiz') {
-                    if(state.quizData && state.quizData.id !== 'comp_quiz') {
-                        id = state.quizData.id;
-                        title = state.quizData.name || 'اختبار مخصص';
+                    const realQuiz = state.quizData ? state.db.quizzes.find(q => q.id === state.quizData.id) : null;
+                    if(realQuiz) {
+                        id = realQuiz.id;
+                        title = realQuiz.name || 'اختبار';
                     } else if (state.currentLesson && state.currentLesson.quizId) {
                         id = state.currentLesson.quizId;
                         title = state.currentLesson.title;
                     } else {
-                        return alert('لا يمكن مشاركة الاختبار الشامل حالياً');
+                        return alert('مشاركة رابط مباشر متاحة للاختبارات الأصلية فقط.');
                     }
                 }
 
@@ -607,28 +657,69 @@
 
             openCategory: (catId) => {
                 const cat = state.db.categories.find(c => c.id === catId); if(!cat) return;
-                state.currentCat = cat; document.getElementById('cat-title').innerText = `قسم ${cat.name}`;
+                state.currentCat = cat;
+                document.getElementById('cat-title').innerText = cat.name;
                 const chapters = state.db.chapters.filter(ch => ch.categoryId === catId);
+                const categoryLessons = state.db.lessons.filter(l => chapters.some(ch => ch.id === l.chapterId));
+                const completedCount = categoryLessons.filter(l => state.local.completedLessons.includes(l.id)).length;
+                const categoryProgress = categoryLessons.length ? Math.round((completedCount / categoryLessons.length) * 100) : 0;
+                document.getElementById('cat-chapters-count').innerText = chapters.length;
+                document.getElementById('cat-lessons-count').innerText = categoryLessons.length;
+                document.getElementById('cat-completed-count').innerText = completedCount;
+                document.getElementById('cat-progress-label').innerText = `${categoryProgress}%`;
+                document.getElementById('cat-progress-bar').style.width = `${categoryProgress}%`;
+
                 const chapGrid = document.getElementById('chapters-grid');
                 if(chapters.length > 0) {
-                    chapGrid.innerHTML = chapters.map(ch => {
-                        const hasQuizzes = state.db.lessons.some(l => l.chapterId === ch.id && l.quizId);
-                        return `<div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-islamic-400 hover:bg-white hover:shadow-md transition-all flex flex-col gap-4"><div class="flex items-center gap-3"><i class="fas fa-folder-open text-islamic-500 text-2xl"></i><span class="font-black text-xl text-slate-800">${ch.title}</span></div><div class="flex flex-col md:flex-row gap-2 mt-2"><button onclick="app.openChapter('${ch.id}')" class="flex-1 bg-white border-2 border-slate-200 text-slate-700 py-3 rounded-xl font-black hover:bg-slate-100 transition shadow-sm text-sm">تصفح الدروس <i class="fas fa-arrow-left mr-1"></i></button>${hasQuizzes ? `<button onclick="app.startComprehensiveQuiz('${ch.id}')" class="flex-1 bg-islamic-50 border-2 border-islamic-200 text-islamic-700 py-3 rounded-xl font-black hover:bg-islamic-100 transition shadow-sm text-sm"><i class="fas fa-clipboard-check ml-1"></i> اختبار شامل</button>` : ''}</div></div>`;
+                    chapGrid.innerHTML = chapters.map((ch, idx) => {
+                        const lessons = state.db.lessons.filter(l => l.chapterId === ch.id);
+                        const completed = lessons.filter(l => state.local.completedLessons.includes(l.id)).length;
+                        const progress = lessons.length ? Math.round((completed / lessons.length) * 100) : 0;
+                        const quizCount = lessons.filter(l => l.quizId).length;
+                        const hasQuizzes = quizCount > 0;
+                        return `<div class="chapter-card modern-card rounded-[1.8rem] p-5 md:p-6 flex flex-col gap-5 group"><div class="flex items-start justify-between gap-3 relative z-10"><div class="flex items-center gap-3"><span class="w-12 h-12 rounded-2xl bg-islamic-50 text-islamic-600 flex items-center justify-center font-black">${String(idx+1).padStart(2,'0')}</span><div><h3 class="font-black text-xl text-slate-800 leading-relaxed">${ch.title}</h3><div class="flex gap-2 text-[11px] font-bold text-slate-400 mt-1"><span>${lessons.length} درس</span><span>•</span><span>${quizCount} اختبار</span></div></div></div><i class="fas fa-folder-open text-islamic-500 text-xl"></i></div><div class="relative z-10"><div class="flex justify-between text-[11px] font-black text-slate-400 mb-2"><span>التقدم</span><span>${progress}%</span></div><div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-islamic-500 rounded-full" style="width:${progress}%"></div></div></div><div class="flex gap-2 relative z-10"><button onclick="app.openChapter('${ch.id}')" class="flex-1 bg-slate-900 text-white py-3 rounded-xl font-black text-sm">فتح الباب <i class="fas fa-arrow-left mr-1"></i></button>${hasQuizzes ? `<button onclick="app.startComprehensiveQuiz('${ch.id}')" class="px-4 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl font-black text-sm" title="اختبار شامل"><i class="fas fa-clipboard-check"></i></button>` : ''}</div></div>`;
                     }).join('');
-                } else { chapGrid.innerHTML = `<p class="text-slate-400 font-bold col-span-2 text-center p-8 bg-slate-50 rounded-2xl">لم يتم إضافة أبواب بعد.</p>`; }
-                window.history.pushState({}, document.title, window.location.pathname); // تنظيف الرابط
+                } else {
+                    chapGrid.innerHTML = `<div class="md:col-span-2 modern-card rounded-3xl p-12 text-center"><i class="far fa-folder-open text-5xl text-slate-300 mb-4"></i><p class="text-slate-500 font-black">لم يتم إضافة أبواب بعد.</p></div>`;
+                }
+                window.history.pushState({}, document.title, window.location.pathname);
                 app.showSection('category-view');
             },
 
             openChapter: (chapId) => {
                 const chap = state.db.chapters.find(c => c.id === chapId); if(!chap) return;
-                state.currentChap = chap; state.currentCat = state.db.categories.find(c => c.id === chap.categoryId);
-                document.getElementById('chap-parent-cat').innerText = `قسم ${state.currentCat.name}`; document.getElementById('chap-title').innerText = chap.title; document.getElementById('back-to-cat-btn').onclick = () => app.openCategory(state.currentCat.id);
+                state.currentChap = chap;
+                state.currentCat = state.db.categories.find(c => c.id === chap.categoryId);
+                document.getElementById('chap-parent-cat').innerText = state.currentCat ? `قسم ${state.currentCat.name}` : 'قسم';
+                document.getElementById('chap-title').innerText = chap.title;
+                document.getElementById('back-to-cat-btn').onclick = () => state.currentCat ? app.openCategory(state.currentCat.id) : app.resetUrlAndGo('landing');
+
                 const lessons = state.db.lessons.filter(l => l.chapterId === chapId);
+                const completed = lessons.filter(l => state.local.completedLessons.includes(l.id)).length;
+                const quizCount = lessons.filter(l => l.quizId).length;
+                const progress = lessons.length ? Math.round((completed / lessons.length) * 100) : 0;
+                document.getElementById('chap-lessons-count').innerText = lessons.length;
+                document.getElementById('chap-completed-count').innerText = completed;
+                document.getElementById('chap-quizzes-count').innerText = quizCount;
+                document.getElementById('chap-progress-label').innerText = `${progress}%`;
+                document.getElementById('chap-progress-bar').style.width = `${progress}%`;
+
+                const banner = document.getElementById('chapter-quiz-banner');
+                if (quizCount > 0) {
+                    banner.classList.remove('hidden');
+                    banner.innerHTML = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4"><div class="flex items-center gap-3"><span class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fas fa-bolt"></i></span><div><h3 class="font-black text-slate-800">اختبار شامل على الباب</h3><p class="text-sm text-slate-400 font-bold mt-1">يجمع أسئلة اختبارات الدروس الموجودة في هذا الباب.</p></div></div><button onclick="app.startComprehensiveQuiz('${chap.id}')" class="bg-amber-500 text-white px-6 py-3 rounded-2xl font-black shadow">ابدأ الاختبار الشامل</button></div>`;
+                } else banner.classList.add('hidden');
+
                 const list = document.getElementById('lessons-list');
                 if(lessons.length > 0) {
-                    list.innerHTML = lessons.map((l, index) => `<div class="bg-white p-5 rounded-2xl border-2 border-slate-100 shadow-sm flex flex-col md:flex-row justify-between items-center gap-5 hover:border-islamic-300 transition-all group"><div class="flex items-center gap-4 flex-1 w-full cursor-pointer" onclick="app.openLesson('${l.id}')"><div class="w-12 h-12 bg-islamic-50 text-islamic-600 rounded-full flex items-center justify-center font-black text-xl shrink-0 group-hover:bg-islamic-500 group-hover:text-white transition-colors">${index + 1}</div><div><h4 class="font-black text-xl text-slate-800 group-hover:text-islamic-700 transition-colors">${l.title}</h4></div></div><div class="flex gap-3 w-full md:w-auto">${l.quizId ? `<button onclick="app.startQuiz('${l.quizId}', 'chapter')" class="flex-1 md:flex-none bg-amber-50 text-amber-700 border-2 border-amber-200 px-5 py-2.5 rounded-xl font-black hover:bg-amber-100 hover:scale-105 transition-all text-sm whitespace-nowrap shadow-sm"><i class="fas fa-question-circle ml-1"></i> اختبار الدرس</button>` : ''}<button onclick="app.openLesson('${l.id}')" class="flex-1 md:flex-none bg-slate-800 text-white px-5 py-2.5 rounded-xl font-black hover:bg-slate-900 hover:scale-105 transition-all text-sm whitespace-nowrap shadow-sm">قراءة الشرح <i class="fas fa-book-open mr-1"></i></button></div></div>`).join('');
-                } else { list.innerHTML = `<p class="text-slate-400 font-bold text-center p-8 bg-slate-50 rounded-2xl border border-dashed border-slate-200">لا توجد دروس مضافة حالياً.</p>`; }
+                    list.innerHTML = lessons.map((l, index) => {
+                        const isDone = state.local.completedLessons.includes(l.id);
+                        const isFav = state.local.favorites.includes(l.id);
+                        return `<div class="lesson-row modern-card rounded-[1.6rem] p-4 md:p-5 border ${isDone ? 'border-emerald-200' : 'border-slate-100'} flex flex-col md:flex-row md:items-center justify-between gap-4"><div class="flex items-center gap-4 min-w-0 cursor-pointer flex-1" onclick="app.openLesson('${l.id}')"><span class="w-12 h-12 rounded-2xl ${isDone ? 'bg-emerald-500 text-white' : 'bg-islamic-50 text-islamic-600'} flex items-center justify-center font-black shrink-0">${isDone ? '<i class="fas fa-check"></i>' : index+1}</span><div class="min-w-0"><div class="flex items-center gap-2"><h4 class="font-black text-lg md:text-xl text-slate-800 truncate">${l.title}</h4>${isFav ? '<i class="fas fa-bookmark text-rose-400 text-xs"></i>' : ''}</div><div class="flex flex-wrap gap-2 mt-2"><span class="text-[11px] font-bold text-slate-400"><i class="fas fa-book-open ml-1"></i> شرح</span>${l.quizId ? '<span class="text-[11px] font-bold text-amber-600"><i class="fas fa-clipboard-question ml-1"></i> اختبار متاح</span>' : ''}${isDone ? '<span class="text-[11px] font-black text-emerald-600">مكتمل ✓</span>' : ''}</div></div></div><div class="flex gap-2 w-full md:w-auto">${l.quizId ? `<button onclick="app.startQuiz('${l.quizId}', 'chapter')" class="flex-1 md:flex-none bg-amber-50 text-amber-700 border border-amber-200 px-4 py-2.5 rounded-xl font-black text-sm">اختبار</button>` : ''}<button onclick="app.openLesson('${l.id}')" class="flex-1 md:flex-none bg-slate-900 text-white px-5 py-2.5 rounded-xl font-black text-sm">قراءة <i class="fas fa-arrow-left mr-1"></i></button></div></div>`;
+                    }).join('');
+                } else {
+                    list.innerHTML = `<div class="modern-card rounded-3xl p-12 text-center"><i class="fas fa-book-open text-5xl text-slate-300 mb-4"></i><p class="text-slate-500 font-black">لا توجد دروس مضافة حالياً.</p></div>`;
+                }
                 window.history.pushState({}, document.title, window.location.pathname);
                 app.showSection('chapter-view');
             },
@@ -651,124 +742,183 @@
                 return text;
             },
 
+            adjustLessonFont: (direction) => {
+                state.lessonFontLevel = Math.max(-2, Math.min(4, state.lessonFontLevel + direction));
+                const sizes = ['0.94rem','1.02rem','1.12rem','1.22rem','1.32rem','1.42rem','1.52rem'];
+                const content = document.getElementById('lesson-content');
+                if (content) content.style.fontSize = sizes[state.lessonFontLevel + 2];
+            },
+
+            toggleFocusMode: () => {
+                document.body.classList.toggle('focus-reading');
+                const active = document.body.classList.contains('focus-reading');
+                const status = document.getElementById('lesson-reader-status');
+                if (status) status.innerText = active ? 'وضع التركيز مفعل' : 'وضع القراءة';
+            },
+
             openLesson: (lessonId) => {
                 const lesson = state.db.lessons.find(l => l.id === lessonId); if(!lesson) return;
-                state.currentLesson = lesson; 
+                state.currentLesson = lesson;
                 state.currentChap = state.db.chapters.find(c => c.id === lesson.chapterId);
+                state.currentCat = state.currentChap ? state.db.categories.find(c => c.id === state.currentChap.categoryId) : null;
                 state.local.lastLessonId = lesson.id;
                 app.saveLocalState();
-                
+
+                document.body.classList.remove('focus-reading');
+                state.lessonFontLevel = 0;
                 document.getElementById('lesson-title').innerText = lesson.title;
-                document.getElementById('lesson-content').innerHTML = app.formatLessonContent(lesson.content);
-                
+                const content = document.getElementById('lesson-content');
+                content.innerHTML = app.formatLessonContent(lesson.content);
+                content.style.fontSize = '';
+                document.getElementById('lesson-breadcrumb').innerText = `${state.currentCat ? state.currentCat.name + ' • ' : ''}${state.currentChap ? state.currentChap.title : 'الدرس'}`;
+                document.getElementById('lesson-reader-status').innerText = 'وضع القراءة';
+
                 document.getElementById('back-to-chap-btn').onclick = () => {
-                    if (state.currentChap) app.openChapter(state.currentChap.id);
-                    else app.resetUrlAndGo('landing');
+                    document.body.classList.remove('focus-reading');
+                    if (state.currentChap) app.openChapter(state.currentChap.id); else app.resetUrlAndGo('landing');
                 };
-                
+
                 const quizAction = document.getElementById('lesson-quiz-action');
-                if(lesson.quizId) { 
-                    quizAction.classList.remove('hidden'); 
-                    document.getElementById('start-quiz-btn').onclick = () => app.startQuiz(lesson.quizId, 'lesson'); 
-                } else { 
-                    quizAction.classList.add('hidden'); 
-                }
+                if(lesson.quizId) {
+                    quizAction.classList.remove('hidden');
+                    document.getElementById('start-quiz-btn').onclick = () => app.startQuiz(lesson.quizId, 'lesson');
+                } else quizAction.classList.add('hidden');
+
                 app.updateLessonActionButtons();
                 app.renderDashboard();
-                
-                // تغيير الرابط ليناسب الدرس للمشاركة المباشرة مستقبلاً
                 window.history.pushState({}, document.title, `?lesson=${lesson.id}`);
                 app.showSection('lesson-view');
             },
 
             // --- دوال الاختبارات ---
-            startComprehensiveQuiz: (chapterId) => { const chapLessons = state.db.lessons.filter(l => l.chapterId === chapterId); let combinedQs = []; chapLessons.forEach(l => { if(l.quizId) { const qz = state.db.quizzes.find(q => q.id === l.quizId); if(qz && qz.questions) combinedQs = combinedQs.concat(qz.questions); } }); if(combinedQs.length === 0) return alert('لا توجد أسئلة لإنشاء اختبار شامل.'); state.quizData = { id: 'comp_quiz', name: 'الاختبار الشامل', questions: combinedQs }; state.quizReturnLocation = 'category'; app.initiateQuizSession(); },
-            startQuiz: (quizId, returnLocation = 'lesson') => { const quiz = state.db.quizzes.find(q => q.id === quizId); if(!quiz || !quiz.questions || quiz.questions.length === 0) return alert('غير متوفر حالياً.'); state.quizData = quiz; state.quizReturnLocation = returnLocation; window.history.pushState({}, document.title, `?quiz=${quiz.id}`); app.initiateQuizSession(); },
-            
-            initiateQuizSession: () => { 
-                state.qIdx = 0; 
-                state.answers = new Array(state.quizData.questions.length).fill(null); 
-                document.getElementById('question-box').classList.remove('hidden'); 
-                document.getElementById('result-box').classList.add('hidden'); 
-                app.showSection('quiz-view'); 
-                app.renderQuestion(); 
+            startComprehensiveQuiz: (chapterId) => {
+                const targetChapter = state.db.chapters.find(c => c.id === chapterId);
+                if (targetChapter) {
+                    state.currentChap = targetChapter;
+                    state.currentCat = state.db.categories.find(c => c.id === targetChapter.categoryId) || state.currentCat;
+                }
+                const chapLessons = state.db.lessons.filter(l => l.chapterId === chapterId);
+                let combinedQs = [];
+                chapLessons.forEach(l => { if(l.quizId) { const qz = state.db.quizzes.find(q => q.id === l.quizId); if(qz && qz.questions) combinedQs = combinedQs.concat(qz.questions); } });
+                if(combinedQs.length === 0) return alert('لا توجد أسئلة لإنشاء اختبار شامل.');
+                const data = { id: `comp_${chapterId}`, name: `اختبار شامل - ${targetChapter?.title || state.currentChap?.title || 'الباب'}`, questions: combinedQs };
+                state.quizData = data; state.quizBaseData = data; state.quizReturnLocation = 'chapter';
+                app.initiateQuizSession();
             },
 
-            renderQuestion: () => { 
-                const q = state.quizData.questions[state.qIdx]; if (!q) return; 
-                const progress = ((state.qIdx + 1) / state.quizData.questions.length) * 100; 
-                document.getElementById('quiz-progress').innerText = `سؤال ${state.qIdx + 1} من ${state.quizData.questions.length}`; 
-                document.getElementById('progress-bar').style.width = `${progress}%`; 
-                document.getElementById('q-text').innerText = q.text; 
-                
+            startQuiz: (quizId, returnLocation = 'lesson') => {
+                const quiz = state.db.quizzes.find(q => q.id === quizId);
+                if(!quiz || !quiz.questions || quiz.questions.length === 0) return alert('غير متوفر حالياً.');
+                state.quizData = quiz; state.quizBaseData = quiz; state.quizReturnLocation = returnLocation;
+                window.history.pushState({}, document.title, `?quiz=${quiz.id}`);
+                app.initiateQuizSession();
+            },
+
+            initiateQuizSession: () => {
+                state.qIdx = 0;
+                state.answers = new Array(state.quizData.questions.length).fill(null);
+                document.getElementById('question-box').classList.remove('hidden');
+                document.getElementById('result-box').classList.add('hidden');
+                document.getElementById('quiz-title-display').innerText = state.quizData.name || 'اختبار';
+                app.showSection('quiz-view');
+                app.renderQuestion();
+            },
+
+            renderQuestion: () => {
+                const q = state.quizData.questions[state.qIdx]; if (!q) return;
+                const progress = ((state.qIdx + 1) / state.quizData.questions.length) * 100;
+                const correctSoFar = state.answers.reduce((n, ans, idx) => n + (ans !== null && ans === state.quizData.questions[idx]?.correctIndex ? 1 : 0), 0);
+                document.getElementById('quiz-progress').innerText = `سؤال ${state.qIdx + 1} من ${state.quizData.questions.length}`;
+                document.getElementById('quiz-question-number').innerText = state.qIdx + 1;
+                document.getElementById('quiz-percent').innerText = `${Math.round(progress)}%`;
+                document.getElementById('quiz-correct-live').innerText = `${correctSoFar} صحيحة`;
+                document.getElementById('progress-bar').style.width = `${progress}%`;
+                document.getElementById('q-text').innerText = q.text;
                 const prevAns = state.answers[state.qIdx];
 
-                document.getElementById('q-opts').innerHTML = q.options.map((opt, i) => { 
-                    let btnClass = "opt-btn flex items-center justify-between group";
-                    let disabled = "";
-                    
+                document.getElementById('q-opts').innerHTML = q.options.map((opt, i) => {
+                    let btnClass = 'opt-btn flex items-center justify-between gap-3 group';
+                    let disabled = '';
                     if (prevAns !== null) {
-                        disabled = "disabled";
-                        if (i === q.correctIndex) btnClass += " correct";
-                        else if (i === prevAns) btnClass += " wrong";
+                        disabled = 'disabled';
+                        if (i === q.correctIndex) btnClass += ' correct';
+                        else if (i === prevAns) btnClass += ' wrong';
                     }
-                    
-                    return `<button ${disabled} onclick="app.submitAnswer(${i}, this)" class="${btnClass}"><span class="pl-4 leading-relaxed text-lg">${opt}</span><span class="w-10 h-10 shrink-0 rounded-full border-2 border-slate-200 flex items-center justify-center text-sm text-slate-400 font-bold transition-colors group-hover:border-islamic-500 group-hover:text-islamic-500">${['أ','ب','ج','د'][i]}</span></button>`; 
-                }).join(''); 
+                    return `<button ${disabled} onclick="app.submitAnswer(${i}, this)" class="${btnClass}"><span class="flex items-center gap-3"><span class="w-10 h-10 shrink-0 rounded-xl border-2 border-slate-200 flex items-center justify-center text-sm text-slate-400 font-black transition-colors group-hover:border-islamic-500 group-hover:text-islamic-500">${['أ','ب','ج','د'][i] || i+1}</span><span class="leading-relaxed text-base md:text-lg">${opt}</span></span><i class="fas fa-chevron-left text-slate-200"></i></button>`;
+                }).join('');
 
                 const prevBtn = document.getElementById('prev-btn');
                 const nextBtn = document.getElementById('next-btn');
-                
-                if (state.qIdx > 0) prevBtn.classList.remove('hidden'); else prevBtn.classList.add('hidden');
-                if (prevAns !== null) nextBtn.classList.remove('hidden'); else nextBtn.classList.add('hidden');
+                prevBtn.classList.toggle('hidden', state.qIdx === 0);
+                nextBtn.classList.toggle('hidden', prevAns === null);
+                nextBtn.innerHTML = state.qIdx + 1 < state.quizData.questions.length ? 'التالي <i class="fas fa-arrow-left mr-2"></i>' : 'عرض النتيجة <i class="fas fa-flag-checkered mr-2"></i>';
             },
 
-            submitAnswer: (selectedIdx, btnElement) => { 
-                if(state.answers[state.qIdx] !== null) return; 
-
-                const q = state.quizData.questions[state.qIdx]; 
-                state.answers[state.qIdx] = selectedIdx; 
-                document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true); 
-                
-                if(selectedIdx === q.correctIndex) { btnElement.classList.add('correct'); } 
-                else { btnElement.classList.add('wrong'); document.querySelectorAll('.opt-btn')[q.correctIndex].classList.add('correct'); } 
-                
-                setTimeout(() => { 
-                    if (state.qIdx + 1 < state.quizData.questions.length) { state.qIdx++; app.renderQuestion(); } 
-                    else { app.finishQuiz(); } 
-                }, 1200); 
+            submitAnswer: (selectedIdx, btnElement) => {
+                if(state.answers[state.qIdx] !== null) return;
+                const q = state.quizData.questions[state.qIdx];
+                state.answers[state.qIdx] = selectedIdx;
+                document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+                if(selectedIdx === q.correctIndex) btnElement.classList.add('correct');
+                else { btnElement.classList.add('wrong'); document.querySelectorAll('.opt-btn')[q.correctIndex]?.classList.add('correct'); }
+                document.getElementById('next-btn').classList.remove('hidden');
+                setTimeout(() => {
+                    if (state.qIdx + 1 < state.quizData.questions.length) { state.qIdx++; app.renderQuestion(); }
+                    else app.finishQuiz();
+                }, 850);
             },
 
             prevQuestion: () => { if (state.qIdx > 0) { state.qIdx--; app.renderQuestion(); } },
-            nextQuestion: () => { if (state.qIdx + 1 < state.quizData.questions.length) { state.qIdx++; app.renderQuestion(); } else { app.finishQuiz(); } },
+            nextQuestion: () => { if (state.qIdx + 1 < state.quizData.questions.length) { state.qIdx++; app.renderQuestion(); } else app.finishQuiz(); },
 
-            finishQuiz: () => { 
-                document.getElementById('question-box').classList.add('hidden'); 
-                document.getElementById('result-box').classList.remove('hidden'); 
-                const total = state.quizData.questions.length; 
-                
+            finishQuiz: () => {
+                document.getElementById('question-box').classList.add('hidden');
+                document.getElementById('result-box').classList.remove('hidden');
+                const total = state.quizData.questions.length;
                 let finalScore = 0;
                 state.answers.forEach((ans, idx) => { if(ans === state.quizData.questions[idx].correctIndex) finalScore++; });
+                const wrong = total - finalScore;
+                const percentage = total ? Math.round((finalScore / total) * 100) : 0;
 
-                const percentage = Math.round((finalScore / total) * 100);
                 state.local.quizHistory.unshift({ quizId: state.quizData.id, name: state.quizData.name || 'اختبار', percentage, date: Date.now() });
                 state.local.quizHistory = state.local.quizHistory.slice(0, 50);
-                app.saveLocalState();
-                app.renderDashboard();
-                document.getElementById('res-score').innerText = `${percentage}%`; 
-                document.getElementById('res-msg').innerText = percentage >= 90 ? "ممتاز! بارك الله في علمك 🌟" : percentage >= 70 ? "جيد جداً! استمر في المراجعة 👍" : "تحتاج لمراجعة المادة العلمية 📚"; 
-                
-                document.getElementById('review-list').innerHTML = state.quizData.questions.map((q, idx) => { 
-                    if(!q) return ''; const userAns = state.answers[idx]; const isCorrect = userAns === q.correctIndex; 
-                    return `<div class="review-card ${isCorrect ? 'review-correct' : 'review-wrong'} p-6 rounded-3xl shadow-sm text-right bg-white border border-slate-100"><div class="flex justify-between mb-3"><span class="text-xs font-black text-slate-500 bg-slate-100 px-3 py-1 rounded-lg">سؤال ${idx+1}</span><span class="text-xs font-bold ${isCorrect ? 'text-green-600' : 'text-red-500'}">${isCorrect ? 'إجابة صحيحة ✅' : 'إجابة خاطئة ❌'}</span></div><p class="font-bold text-slate-800 mb-4 text-lg leading-relaxed">${q.text}</p><div class="text-sm space-y-2 bg-slate-50 p-4 rounded-xl"><p class="${isCorrect ? 'text-green-700' : 'text-red-600'} font-bold flex items-center gap-2"><span class="opacity-70 w-16">إجابتك:</span> <span class="flex-1 border-r-2 border-slate-300 pr-2">${userAns !== null ? q.options[userAns] : "لم يتم الاختيار"}</span></p>${!isCorrect ? `<p class="text-green-700 font-bold flex items-center gap-2 border-t border-slate-200 pt-2 mt-2"><span class="opacity-70 w-16">الصحيحة:</span> <span class="flex-1 border-r-2 border-green-300 pr-2">${q.options[q.correctIndex]}</span></p>` : ''}</div></div>`; 
-                }).join(''); window.scrollTo(0, 0); 
+                app.saveLocalState(); app.renderDashboard();
+
+                document.getElementById('res-score').innerText = `${percentage}%`;
+                document.getElementById('res-correct').innerText = finalScore;
+                document.getElementById('res-wrong').innerText = wrong;
+                document.getElementById('res-total').innerText = total;
+                document.getElementById('res-ring').style.background = `conic-gradient(#10b981 ${percentage * 3.6}deg, #e2e8f0 0deg)`;
+                document.getElementById('res-msg').innerText = percentage >= 90 ? 'ممتاز! أداء قوي جدًا 🌟' : percentage >= 70 ? 'جيد جدًا، راجع الأخطاء لتحسن نتيجتك 👍' : 'راجع الدرس ثم جرّب مرة أخرى 📚';
+                document.getElementById('retry-wrong-btn').classList.toggle('hidden', wrong === 0);
+
+                document.getElementById('review-list').innerHTML = state.quizData.questions.map((q, idx) => {
+                    if(!q) return '';
+                    const userAns = state.answers[idx];
+                    const isCorrect = userAns === q.correctIndex;
+                    return `<div class="review-card ${isCorrect ? 'review-correct' : 'review-wrong'} modern-card p-5 md:p-6 rounded-[1.7rem] text-right"><div class="flex items-center justify-between gap-3 mb-4"><span class="text-xs font-black text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl">سؤال ${idx+1}</span><span class="text-xs font-black ${isCorrect ? 'text-emerald-600 bg-emerald-50' : 'text-red-500 bg-red-50'} px-3 py-1.5 rounded-xl">${isCorrect ? 'صحيحة ✓' : 'تحتاج مراجعة'}</span></div><p class="font-black text-slate-800 mb-4 text-lg leading-relaxed">${q.text}</p><div class="space-y-2"><div class="bg-slate-50 p-3 rounded-xl text-sm font-bold"><span class="text-slate-400">إجابتك: </span><span class="${isCorrect ? 'text-emerald-700' : 'text-red-600'}">${userAns !== null ? q.options[userAns] : 'لم يتم الاختيار'}</span></div>${!isCorrect ? `<div class="bg-emerald-50 p-3 rounded-xl text-sm font-bold"><span class="text-emerald-500">الإجابة الصحيحة: </span><span class="text-emerald-800">${q.options[q.correctIndex]}</span></div>` : ''}</div></div>`;
+                }).join('');
+                window.scrollTo(0, 0);
             },
-            
-            closeQuiz: () => { 
-                window.history.pushState({}, document.title, window.location.pathname); // تنظيف الرابط
-                if(state.quizReturnLocation === 'category' && state.currentCat) app.openCategory(state.currentCat.id); 
-                else if(state.quizReturnLocation === 'chapter' && state.currentChap) app.openChapter(state.currentChap.id); 
-                else if (state.currentLesson) app.openLesson(state.currentLesson.id); 
+
+            retryQuiz: () => {
+                if (!state.quizBaseData) return;
+                state.quizData = state.quizBaseData;
+                app.initiateQuizSession();
+            },
+
+            retryWrongAnswers: () => {
+                const wrongQuestions = state.quizData.questions.filter((q, idx) => state.answers[idx] !== q.correctIndex);
+                if (!wrongQuestions.length) return alert('أحسنت! لا توجد أخطاء لمراجعتها.');
+                state.quizData = { id: `${state.quizBaseData?.id || 'quiz'}_mistakes`, name: 'مراجعة الأخطاء', questions: wrongQuestions };
+                app.initiateQuizSession();
+            },
+
+            closeQuiz: () => {
+                window.history.pushState({}, document.title, window.location.pathname);
+                if(state.quizReturnLocation === 'category' && state.currentCat) app.openCategory(state.currentCat.id);
+                else if(state.quizReturnLocation === 'chapter' && state.currentChap) app.openChapter(state.currentChap.id);
+                else if (state.currentLesson) app.openLesson(state.currentLesson.id);
                 else app.showSection('landing');
             }
         };
