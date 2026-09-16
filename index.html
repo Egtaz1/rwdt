@@ -273,7 +273,7 @@
                     <div class="account-stat rounded-2xl p-5"><span id="account-best" class="text-3xl font-black text-indigo-600 block">—</span><span class="text-xs font-bold text-slate-400">أفضل نتيجة</span></div>
                 </div>
                 <div class="modern-card rounded-[2rem] p-5 md:p-7"><div class="flex items-center justify-between gap-3 mb-5"><div><h3 class="text-xl font-black text-slate-800">آخر نتائج الاختبارات</h3><p class="text-xs font-bold text-slate-400 mt-1">آخر محاولات محفوظة على حسابك.</p></div><i class="fas fa-chart-line text-islamic-500 text-xl"></i></div><div id="account-history" class="space-y-3"></div></div>
-                <div class="flex flex-col sm:flex-row gap-3"><button onclick="app.syncCloudProgress(true)" class="flex-1 bg-islamic-50 border border-islamic-100 text-islamic-700 py-3 rounded-2xl font-black"><i class="fas fa-arrows-rotate ml-2"></i>مزامنة الآن</button><button onclick="app.logout()" class="flex-1 bg-red-50 border border-red-100 text-red-600 py-3 rounded-2xl font-black"><i class="fas fa-right-from-bracket ml-2"></i>تسجيل الخروج</button></div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><button onclick="app.syncCloudProgress(true)" class="bg-islamic-50 border border-islamic-100 text-islamic-700 py-3 rounded-2xl font-black"><i class="fas fa-arrows-rotate ml-2"></i>مزامنة الآن</button><button onclick="app.resetCurrentProgress()" class="bg-amber-50 border border-amber-100 text-amber-700 py-3 rounded-2xl font-black"><i class="fas fa-rotate-left ml-2"></i>تصفير تقدمي</button><button onclick="app.logout()" class="bg-red-50 border border-red-100 text-red-600 py-3 rounded-2xl font-black"><i class="fas fa-right-from-bracket ml-2"></i>تسجيل الخروج</button></div>
             </div>
         </section>
 
@@ -453,7 +453,7 @@
             quizData: null, quizBaseData: null, qIdx: 0, answers: [], quizReturnLocation: 'category',
             dhikrIntervalId: null, hasCountedVisit: false, initialLoadDone: false, lessonFontLevel: 0,
             local: { completedLessons: [], favorites: [], quizHistory: [], lastLessonId: null },
-            auth: { user: null, profile: null, mode: 'login', syncing: false, hydrated: false, syncTimer: null, profileRef: null }
+            auth: { user: null, profile: null, mode: 'login', syncing: false, hydrated: false, syncTimer: null, profileRef: null, pendingGuestMigration: null }
         };
 
         const app = {
@@ -490,24 +490,51 @@
                 });
             },
 
-            // بيانات الطالب المحلية (بدون حساب وبدون ضغط إضافي على Firebase)
-            loadLocalState: () => {
+            // تخزين منفصل لكل طالب حتى لا ينتقل تقدم حساب إلى حساب آخر على نفس المتصفح.
+            progressStorageKey: (uid = null) => uid ? `ahmed_progress_v2_user_${uid}` : 'ahmed_progress_v2_guest',
+
+            emptyProgress: () => ({ completedLessons: [], favorites: [], quizHistory: [], lastLessonId: null }),
+
+            cloneProgress: (source = state.local) => ({
+                completedLessons: [...(source?.completedLessons || [])],
+                favorites: [...(source?.favorites || [])],
+                quizHistory: [...(source?.quizHistory || [])],
+                lastLessonId: source?.lastLessonId || null
+            }),
+
+            hasProgress: (source = state.local) => Boolean(
+                (source?.completedLessons || []).length ||
+                (source?.favorites || []).length ||
+                (source?.quizHistory || []).length ||
+                source?.lastLessonId
+            ),
+
+            loadLocalState: (uid = null) => {
                 try {
-                    state.local.completedLessons = JSON.parse(localStorage.getItem('ahmed_completed_lessons') || '[]');
-                    state.local.favorites = JSON.parse(localStorage.getItem('ahmed_favorite_lessons') || '[]');
-                    state.local.quizHistory = JSON.parse(localStorage.getItem('ahmed_quiz_history') || '[]');
-                    state.local.lastLessonId = localStorage.getItem('ahmed_last_lesson') || null;
-                } catch (e) { console.warn('تعذر قراءة بيانات التقدم المحلية', e); }
+                    const raw = localStorage.getItem(app.progressStorageKey(uid));
+                    const saved = raw ? JSON.parse(raw) : app.emptyProgress();
+                    state.local = {
+                        completedLessons: Array.isArray(saved.completedLessons) ? saved.completedLessons : [],
+                        favorites: Array.isArray(saved.favorites) ? saved.favorites : [],
+                        quizHistory: Array.isArray(saved.quizHistory) ? saved.quizHistory : [],
+                        lastLessonId: saved.lastLessonId || null
+                    };
+                } catch (e) {
+                    state.local = app.emptyProgress();
+                    console.warn('تعذر قراءة بيانات التقدم المحلية', e);
+                }
             },
 
             saveLocalState: (syncCloud = true) => {
-                localStorage.setItem('ahmed_completed_lessons', JSON.stringify(state.local.completedLessons));
-                localStorage.setItem('ahmed_favorite_lessons', JSON.stringify(state.local.favorites));
-                localStorage.setItem('ahmed_quiz_history', JSON.stringify(state.local.quizHistory));
-                if (state.local.lastLessonId) localStorage.setItem('ahmed_last_lesson', state.local.lastLessonId);
-                else localStorage.removeItem('ahmed_last_lesson');
+                const uid = state.auth.user?.uid || null;
+                localStorage.setItem(app.progressStorageKey(uid), JSON.stringify(app.cloneProgress()));
                 if (syncCloud && state.auth.user && state.auth.hydrated) app.syncCloudProgress();
                 app.renderAccount();
+            },
+
+            clearLocalProgress: (uid = null) => {
+                localStorage.removeItem(app.progressStorageKey(uid));
+                if ((state.auth.user?.uid || null) === uid) state.local = app.emptyProgress();
             },
 
             initAuth: () => {
@@ -518,15 +545,21 @@
                     state.auth.hydrated = false;
                     if (state.auth.profileRef) { state.auth.profileRef.off(); state.auth.profileRef = null; }
                     if (user) {
+                        // حمّل أولًا التخزين المحلي الخاص بهذا الـ UID فقط، ثم ادمجه مع سحابة نفس الحساب.
+                        app.loadLocalState(user.uid);
                         await app.loadCloudProfileAndProgress(user);
                         app.watchCurrentProfile(user.uid);
                     } else {
+                        // بعد تسجيل الخروج نرجع لمساحة الزائر المنفصلة، وليس بيانات آخر حساب.
+                        app.loadLocalState(null);
                         state.auth.profile = null;
                         state.auth.hydrated = false;
                     }
                     app.renderAuthUI();
                     app.renderAccount();
                     app.renderDashboard();
+                    app.renderSavedLessons();
+                    app.renderCategories();
                 });
             },
 
@@ -546,19 +579,41 @@
                     }
                     state.auth.profile = { ...profile, email: user.email || profile.email || '' };
                     const cloud = data.progress || {};
+                    const migration = state.auth.pendingGuestMigration &&
+                        state.auth.pendingGuestMigration.email === String(user.email || '').toLowerCase()
+                            ? state.auth.pendingGuestMigration.progress
+                            : null;
                     const uniq = arr => [...new Set((arr || []).filter(Boolean))];
-                    state.local.completedLessons = uniq([...(state.local.completedLessons || []), ...(cloud.completedLessons || [])]);
-                    state.local.favorites = uniq([...(state.local.favorites || []), ...(cloud.favorites || [])]);
-                    const mergedHistory = [...(cloud.quizHistory || []), ...(state.local.quizHistory || [])];
+                    state.local.completedLessons = uniq([
+                        ...(state.local.completedLessons || []),
+                        ...(cloud.completedLessons || []),
+                        ...(migration?.completedLessons || [])
+                    ]);
+                    state.local.favorites = uniq([
+                        ...(state.local.favorites || []),
+                        ...(cloud.favorites || []),
+                        ...(migration?.favorites || [])
+                    ]);
+                    const mergedHistory = [
+                        ...(cloud.quizHistory || []),
+                        ...(state.local.quizHistory || []),
+                        ...(migration?.quizHistory || [])
+                    ];
                     const seen = new Set();
                     state.local.quizHistory = mergedHistory.filter(item => {
                         const key = `${item.quizId || ''}_${item.date || ''}_${item.percentage ?? ''}`;
                         if (seen.has(key)) return false; seen.add(key); return true;
                     }).sort((a,b) => (b.date || 0) - (a.date || 0)).slice(0, 100);
-                    state.local.lastLessonId = cloud.lastLessonId || state.local.lastLessonId || null;
+                    state.local.lastLessonId = cloud.lastLessonId || state.local.lastLessonId || migration?.lastLessonId || null;
                     state.auth.hydrated = true;
                     app.saveLocalState(false);
                     await app.syncCloudProgress(true);
+
+                    // نقل تقدم الزائر يتم فقط عند إنشاء حساب جديد، ثم يُمسح من مساحة الزائر.
+                    if (migration) {
+                        localStorage.removeItem(app.progressStorageKey(null));
+                        state.auth.pendingGuestMigration = null;
+                    }
                     app.renderSavedLessons();
                     app.renderCategories();
                 } catch (e) {
@@ -712,13 +767,24 @@
                 if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin ml-2"></i>جاري التنفيذ...';}
                 try {
                     if(state.auth.mode==='register'){
+                        // عند إنشاء حساب جديد فقط، انقل تقدم الزائر الحالي لهذا الحساب مرة واحدة.
+                        state.auth.pendingGuestMigration = {
+                            email: email.toLowerCase(),
+                            progress: app.cloneProgress()
+                        };
                         const cred=await firebase.auth().createUserWithEmailAndPassword(email,password);
                         await cred.user.updateProfile({displayName:name});
                         await usersRef.child(`${cred.user.uid}/profile`).set({name,email,createdAt:Date.now(),lastLoginAt:Date.now(),lastActivityAt:Date.now()});
-                    } else await firebase.auth().signInWithEmailAndPassword(email,password);
+                    } else {
+                        state.auth.pendingGuestMigration = null;
+                        await firebase.auth().signInWithEmailAndPassword(email,password);
+                    }
                     app.closeAuthModal();
                     app.openAccount();
-                } catch(e){app.showAuthMessage(app.authErrorText(e),'error');}
+                } catch(e){
+                    state.auth.pendingGuestMigration = null;
+                    app.showAuthMessage(app.authErrorText(e),'error');
+                }
                 finally {if(btn){btn.disabled=false;btn.innerText=state.auth.mode==='register'?'إنشاء الحساب':'تسجيل الدخول';}}
             },
             resetPassword: async () => {
@@ -731,7 +797,34 @@
                 const input=document.getElementById('auth-password'), icon=document.getElementById('auth-password-icon'); if(!input) return;
                 const show=input.type==='password'; input.type=show?'text':'password'; if(icon) icon.className=`fas ${show?'fa-eye-slash':'fa-eye'}`;
             },
-            logout: async () => { try { await app.syncCloudProgress(true); await firebase.auth().signOut(); app.resetUrlAndGo('landing'); } catch(e){ console.warn(e); } },
+            resetCurrentProgress: async () => {
+                if (!state.auth.user) return;
+                const ok = confirm('هل تريد تصفير تقدم هذا الحساب فقط؟ سيتم حذف الدروس المكتملة والمحفوظات ونتائج الاختبارات لهذا الحساب.');
+                if (!ok) return;
+                try {
+                    const uid = state.auth.user.uid;
+                    await usersRef.child(`${uid}/progress`).remove();
+                    app.clearLocalProgress(uid);
+                    state.local = app.emptyProgress();
+                    app.saveLocalState(false);
+                    app.renderDashboard();
+                    app.renderSavedLessons();
+                    app.renderCategories();
+                    app.renderAccount();
+                    alert('تم تصفير تقدم هذا الحساب فقط.');
+                } catch(e) {
+                    console.warn(e);
+                    alert('تعذر تصفير التقدم الآن. حاول مرة أخرى.');
+                }
+            },
+
+            logout: async () => {
+                try {
+                    await app.syncCloudProgress(true);
+                    await firebase.auth().signOut();
+                    app.resetUrlAndGo('landing');
+                } catch(e){ console.warn(e); }
+            },
             escapeHtml: (str='') => String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])),
 
             applySavedTheme: () => {
