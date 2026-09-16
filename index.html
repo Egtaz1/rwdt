@@ -156,6 +156,7 @@
         </section>
 
         <section id="landing" class="view-section space-y-8 md:space-y-10 animate-fadeIn hidden">
+            <div id="platform-announcement" class="hidden"></div>
             <div class="hero-shell relative overflow-hidden rounded-[2rem] md:rounded-[2.7rem] p-6 md:p-10 lg:p-12 text-white shadow-2xl">
                 <div class="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-white/10 blur-2xl pulse-soft"></div>
                 <div class="absolute -bottom-24 right-1/4 w-72 h-72 rounded-full bg-amber-300/10 blur-3xl"></div>
@@ -404,6 +405,7 @@
                     
                     app.renderCategories();
                     app.renderDashboard();
+                    app.renderPlatformAnnouncement();
                     app.renderQuizLibrary();
                     app.renderSavedLessons();
                     app.initDhikr();
@@ -467,6 +469,35 @@
                 if (target === 'sections') { app.scrollToCategories(); app.setBottomNav('sections'); }
                 if (target === 'quizzes') { app.openQuizLibrary(); app.setBottomNav('quizzes'); }
                 if (target === 'saved') { app.openSaved(); app.setBottomNav('saved'); }
+            },
+
+            renderPlatformAnnouncement: () => {
+                const box = document.getElementById('platform-announcement');
+                if (!box) return;
+                const a = state.db.settings?.announcement;
+                const dismissed = localStorage.getItem('ahmed_dismissed_announcement');
+                if (!a || !a.active || !a.text || (a.updatedAt && String(a.updatedAt) === dismissed)) {
+                    box.classList.add('hidden');
+                    box.innerHTML = '';
+                    return;
+                }
+                const themes = {
+                    info: { wrap:'bg-blue-50 border-blue-200', icon:'bg-blue-100 text-blue-600 fa-circle-info', title:'text-blue-900', text:'text-blue-700' },
+                    success: { wrap:'bg-emerald-50 border-emerald-200', icon:'bg-emerald-100 text-emerald-600 fa-circle-check', title:'text-emerald-900', text:'text-emerald-700' },
+                    warning: { wrap:'bg-amber-50 border-amber-200', icon:'bg-amber-100 text-amber-600 fa-triangle-exclamation', title:'text-amber-900', text:'text-amber-800' },
+                    danger: { wrap:'bg-rose-50 border-rose-200', icon:'bg-rose-100 text-rose-600 fa-bell', title:'text-rose-900', text:'text-rose-700' }
+                };
+                const th = themes[a.type] || themes.info;
+                const escape = (v='') => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+                box.className = `modern-card rounded-[1.6rem] border ${th.wrap} p-4 md:p-5`;
+                box.innerHTML = `<div class="flex items-start gap-3 md:gap-4"><span class="w-11 h-11 rounded-2xl ${th.icon.split(' ').slice(0,2).join(' ')} flex items-center justify-center shrink-0"><i class="fas ${th.icon.split(' ').slice(2).join(' ')}"></i></span><div class="flex-1 min-w-0"><div class="flex items-start justify-between gap-3"><div><div class="font-black text-lg ${th.title}">${escape(a.title || 'إعلان المنصة')}</div><p class="font-bold ${th.text} leading-7 mt-1">${escape(a.text)}</p></div><button onclick="app.dismissAnnouncement('${a.updatedAt || ''}')" class="w-9 h-9 rounded-xl bg-white/70 text-slate-400 hover:text-rose-500 hover:bg-white shrink-0" title="إغلاق"><i class="fas fa-times"></i></button></div></div></div>`;
+                box.classList.remove('hidden');
+            },
+
+            dismissAnnouncement: (updatedAt) => {
+                if (updatedAt) localStorage.setItem('ahmed_dismissed_announcement', String(updatedAt));
+                const box = document.getElementById('platform-announcement');
+                if (box) box.classList.add('hidden');
             },
 
             renderDashboard: () => {
