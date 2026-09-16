@@ -25,6 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&amp;display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <style>
         :root { color-scheme: light; }
         html { scroll-behavior: smooth; }
@@ -78,6 +79,16 @@
         .result-stat { background: #f8fafc; border:1px solid #eef2f7; }
         body.dark-mode .reader-shell, body.dark-mode .quiz-shell { background:#101c19 !important; }
         body.dark-mode .result-ring::after { background:#101c19; border-color:#31443e; }
+        /* نظام حسابات الطلاب */
+        .account-avatar { background: linear-gradient(135deg,#059669,#0f766e); box-shadow:0 10px 28px rgba(5,150,105,.2); }
+        .auth-modal-card { background:rgba(255,255,255,.98); border:1px solid rgba(226,232,240,.95); box-shadow:0 30px 90px rgba(15,23,42,.24); }
+        .auth-mode-btn.active { background:#064e3b; color:white; box-shadow:0 8px 20px rgba(6,78,59,.16); }
+        .account-stat { background:#f8fafc; border:1px solid #edf2f7; }
+        .sync-badge { background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; }
+        body.dark-mode .auth-modal-card { background:#101c19; border-color:#31443e; }
+        body.dark-mode .account-stat { background:#13231f; border-color:#31443e; }
+        body.dark-mode .sync-badge { background:#12352b; color:#6ee7b7; border-color:#215846; }
+
         body.dark-mode .result-stat { background:#172521; border-color:#2b3d37; }
 
         /* الوضع الداكن */
@@ -123,6 +134,10 @@
                     <i class="fas fa-search absolute top-1/2 -translate-y-1/2 right-4 text-slate-400"></i>
                     <input type="text" id="search-input" onkeyup="app.handleSearch()" placeholder="ابحث في الدروس والأبواب والاختبارات..." class="w-full bg-slate-50 border border-slate-200 py-3 pr-11 pl-4 rounded-2xl font-bold focus:border-islamic-500 focus:ring-4 focus:ring-islamic-50 focus:outline-none transition-all">
                 </div>
+                <button id="account-nav-btn" onclick="app.openAccount()" class="h-12 px-3 rounded-2xl bg-islamic-50 border border-islamic-100 text-islamic-700 hover:bg-islamic-100 transition-all flex items-center gap-2" title="حسابي">
+                    <span id="account-nav-avatar" class="w-8 h-8 rounded-xl account-avatar text-white flex items-center justify-center text-xs font-black"><i class="fas fa-user"></i></span>
+                    <span id="account-nav-label" class="font-black text-sm hidden lg:block">دخول</span>
+                </button>
                 <button onclick="app.toggleTheme()" class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600 hover:text-islamic-600 hover:border-islamic-200 transition-all" title="تغيير الوضع">
                     <i id="theme-icon" class="fas fa-moon"></i>
                 </button>
@@ -130,6 +145,7 @@
 
             <div class="md:hidden flex items-center gap-2">
                 <button onclick="app.focusMobileSearch()" class="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600"><i class="fas fa-search"></i></button>
+                <button onclick="app.openAccount()" class="w-11 h-11 rounded-2xl bg-islamic-50 border border-islamic-100 text-islamic-700" title="حسابي"><i class="fas fa-user"></i></button>
                 <button onclick="app.toggleTheme()" class="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600"><i id="theme-icon-mobile" class="fas fa-moon"></i></button>
             </div>
         </div>
@@ -164,7 +180,7 @@
                     <div>
                         <span class="inline-flex items-center gap-2 bg-white/10 border border-white/15 px-4 py-2 rounded-full text-xs md:text-sm font-black mb-5"><i class="fas fa-sparkles text-amber-300"></i> رحلة علمية منظمة في مكان واحد</span>
                         <h2 class="text-3xl md:text-5xl lg:text-6xl font-black leading-[1.25] mb-4">تعلّم بهدوء، راجع بذكاء،<br><span class="text-emerald-300">واختبر فهمك باستمرار.</span></h2>
-                        <p class="text-emerald-50/80 font-bold text-base md:text-lg max-w-2xl leading-loose">الدروس والاختبارات مرتبة حسب الأقسام والأبواب، مع حفظ تقدمك على جهازك لتكمل من نفس المكان في أي وقت.</p>
+                        <p class="text-emerald-50/80 font-bold text-base md:text-lg max-w-2xl leading-loose">الدروس والاختبارات مرتبة حسب الأقسام والأبواب، مع حساب اختياري يحفظ تقدمك ونتائجك لتكمل من أي جهاز، ويمكنك الاستمرار كزائر أيضًا.</p>
                         <div class="flex flex-wrap gap-3 mt-7">
                             <button onclick="app.scrollToCategories()" class="bg-white text-islamic-900 px-6 py-3.5 rounded-2xl font-black shadow-lg hover:-translate-y-1 transition-all">ابدأ التعلّم <i class="fas fa-arrow-left mr-2"></i></button>
                             <button onclick="app.openQuizLibrary()" class="bg-white/10 border border-white/20 text-white px-6 py-3.5 rounded-2xl font-black hover:bg-white/15 transition-all"><i class="fas fa-clipboard-question ml-2"></i> بنك الاختبارات</button>
@@ -172,7 +188,7 @@
                     </div>
                     <div class="hidden lg:block">
                         <div class="glass rounded-[2rem] p-5 text-slate-800 float-soft">
-                            <div class="flex items-center justify-between mb-5"><span class="font-black text-islamic-900">تقدمك هذا الجهاز</span><span class="w-10 h-10 rounded-xl bg-islamic-50 text-islamic-600 flex items-center justify-center"><i class="fas fa-chart-simple"></i></span></div>
+                            <div class="flex items-center justify-between mb-5"><span class="font-black text-islamic-900">تقدمك في المنصة</span><span class="w-10 h-10 rounded-xl bg-islamic-50 text-islamic-600 flex items-center justify-center"><i class="fas fa-chart-simple"></i></span></div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="bg-white rounded-2xl p-4 shadow-sm"><span id="hero-completed" class="text-3xl font-black text-islamic-700 block">0</span><small class="font-bold text-slate-400">درس مكتمل</small></div>
                                 <div class="bg-white rounded-2xl p-4 shadow-sm"><span id="hero-quizzes" class="text-3xl font-black text-amber-600 block">0</span><small class="font-bold text-slate-400">اختبار منجز</small></div>
@@ -219,6 +235,34 @@
         <section id="saved-view" class="view-section space-y-6 animate-fadeIn hidden max-w-5xl mx-auto">
             <div class="flex items-center justify-between gap-4"><div><span class="text-xs font-black text-rose-600 bg-rose-50 px-3 py-1 rounded-full">محفوظاتي</span><h2 class="text-3xl font-black text-slate-800 mt-3">الدروس المحفوظة</h2><p class="text-slate-400 font-bold mt-1">كل ما حفظته للرجوع إليه لاحقًا.</p></div><button onclick="app.resetUrlAndGo('landing')" class="w-11 h-11 bg-slate-100 rounded-2xl"><i class="fas fa-arrow-right"></i></button></div>
             <div id="saved-lessons-list" class="space-y-3"></div>
+        </section>
+
+        <section id="account-view" class="view-section space-y-6 animate-fadeIn hidden max-w-5xl mx-auto">
+            <div class="flex items-center justify-between gap-4"><div><span class="text-xs font-black text-islamic-600 bg-islamic-50 px-3 py-1 rounded-full">حساب الطالب</span><h2 class="text-3xl font-black text-slate-800 mt-3">حسابي وتقدمي</h2><p class="text-slate-400 font-bold mt-1">سجّل الدخول لمزامنة تقدمك ونتائجك بين أجهزتك.</p></div><button onclick="app.resetUrlAndGo('landing')" class="w-11 h-11 bg-slate-100 rounded-2xl"><i class="fas fa-arrow-right"></i></button></div>
+
+            <div id="account-guest-card" class="modern-card rounded-[2rem] p-6 md:p-10 text-center">
+                <span class="w-20 h-20 rounded-[1.7rem] bg-islamic-50 text-islamic-600 flex items-center justify-center text-3xl mx-auto mb-5"><i class="fas fa-user-graduate"></i></span>
+                <h3 class="text-2xl md:text-3xl font-black text-slate-800">أنت تستخدم المنصة كزائر</h3>
+                <p class="text-slate-500 font-bold max-w-2xl mx-auto mt-3 leading-8">تقدمك محفوظ على هذا الجهاز. أنشئ حسابًا مجانيًا لمزامنة الدروس المكتملة والمحفوظات ونتائج الاختبارات على Firebase.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-3 mt-7"><button onclick="app.openAuthModal('register')" class="bg-islamic-600 text-white px-7 py-3.5 rounded-2xl font-black shadow">إنشاء حساب مجاني</button><button onclick="app.openAuthModal('login')" class="bg-slate-100 text-slate-700 px-7 py-3.5 rounded-2xl font-black">تسجيل الدخول</button></div>
+            </div>
+
+            <div id="account-user-card" class="hidden space-y-5">
+                <div class="section-hero rounded-[2rem] p-6 md:p-8 text-white">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
+                        <div class="flex items-center gap-4"><span id="profile-avatar" class="w-16 h-16 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-2xl font-black">ط</span><div><span id="profile-plan" class="inline-flex bg-white/10 border border-white/15 px-3 py-1 rounded-full text-xs font-black">طالب مجاني</span><h3 id="profile-name" class="text-2xl md:text-3xl font-black mt-2">الطالب</h3><p id="profile-email" class="text-white/70 font-bold text-sm mt-1"></p></div></div>
+                        <div class="flex flex-col items-start md:items-end gap-2"><span class="sync-badge px-3 py-1.5 rounded-xl text-xs font-black"><i class="fas fa-cloud-arrow-up ml-1"></i> مزامنة سحابية مفعلة</span><span id="profile-sync-time" class="text-white/60 text-xs font-bold">آخر مزامنة الآن</span></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div class="account-stat rounded-2xl p-5"><span id="account-completed" class="text-3xl font-black text-emerald-600 block">0</span><span class="text-xs font-bold text-slate-400">درس مكتمل</span></div>
+                    <div class="account-stat rounded-2xl p-5"><span id="account-favorites" class="text-3xl font-black text-rose-500 block">0</span><span class="text-xs font-bold text-slate-400">درس محفوظ</span></div>
+                    <div class="account-stat rounded-2xl p-5"><span id="account-quizzes" class="text-3xl font-black text-amber-600 block">0</span><span class="text-xs font-bold text-slate-400">اختبار منجز</span></div>
+                    <div class="account-stat rounded-2xl p-5"><span id="account-best" class="text-3xl font-black text-indigo-600 block">—</span><span class="text-xs font-bold text-slate-400">أفضل نتيجة</span></div>
+                </div>
+                <div class="modern-card rounded-[2rem] p-5 md:p-7"><div class="flex items-center justify-between gap-3 mb-5"><div><h3 class="text-xl font-black text-slate-800">آخر نتائج الاختبارات</h3><p class="text-xs font-bold text-slate-400 mt-1">آخر محاولات محفوظة على حسابك.</p></div><i class="fas fa-chart-line text-islamic-500 text-xl"></i></div><div id="account-history" class="space-y-3"></div></div>
+                <div class="flex flex-col sm:flex-row gap-3"><button onclick="app.syncCloudProgress(true)" class="flex-1 bg-islamic-50 border border-islamic-100 text-islamic-700 py-3 rounded-2xl font-black"><i class="fas fa-arrows-rotate ml-2"></i>مزامنة الآن</button><button onclick="app.logout()" class="flex-1 bg-red-50 border border-red-100 text-red-600 py-3 rounded-2xl font-black"><i class="fas fa-right-from-bracket ml-2"></i>تسجيل الخروج</button></div>
+            </div>
         </section>
 
         <section id="category-view" class="view-section space-y-6 md:space-y-8 animate-fadeIn hidden max-w-6xl mx-auto">
@@ -344,12 +388,30 @@
         </section>
     </main>
 
+
+
+    <div id="auth-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[200] hidden items-center justify-center p-4" onclick="if(event.target===this) app.closeAuthModal()">
+        <div class="auth-modal-card w-full max-w-md rounded-[2rem] p-6 md:p-8 relative max-h-[92vh] overflow-y-auto">
+            <button onclick="app.closeAuthModal()" class="absolute top-4 left-4 w-10 h-10 rounded-xl bg-slate-100 text-slate-500 hover:text-red-500"><i class="fas fa-xmark"></i></button>
+            <div class="text-center mb-6"><span class="w-14 h-14 rounded-2xl account-avatar text-white flex items-center justify-center text-xl mx-auto mb-3"><i class="fas fa-user-graduate"></i></span><h3 id="auth-modal-title" class="text-2xl font-black text-slate-800">تسجيل الدخول</h3><p id="auth-modal-subtitle" class="text-sm font-bold text-slate-400 mt-2">تابع تقدمك من أي جهاز.</p></div>
+            <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-2xl mb-6"><button id="auth-login-tab" onclick="app.switchAuthMode('login')" class="auth-mode-btn active py-2.5 rounded-xl font-black text-sm">دخول</button><button id="auth-register-tab" onclick="app.switchAuthMode('register')" class="auth-mode-btn py-2.5 rounded-xl font-black text-sm text-slate-500">حساب جديد</button></div>
+            <div id="auth-name-wrap" class="hidden mb-4"><label class="block text-sm font-black text-slate-600 mb-2">الاسم</label><input id="auth-name" type="text" autocomplete="name" placeholder="اكتب اسمك" class="w-full border-2 border-slate-200 p-3.5 rounded-xl font-bold outline-none focus:border-islamic-500"></div>
+            <div class="mb-4"><label class="block text-sm font-black text-slate-600 mb-2">البريد الإلكتروني</label><input id="auth-email" type="email" autocomplete="email" placeholder="name@example.com" dir="ltr" class="w-full border-2 border-slate-200 p-3.5 rounded-xl font-bold outline-none focus:border-islamic-500 text-left"></div>
+            <div class="mb-3"><label class="block text-sm font-black text-slate-600 mb-2">كلمة المرور</label><div class="relative"><input id="auth-password" type="password" autocomplete="current-password" placeholder="6 أحرف على الأقل" dir="ltr" class="w-full border-2 border-slate-200 p-3.5 pl-12 rounded-xl font-bold outline-none focus:border-islamic-500 text-left"><button onclick="app.toggleAuthPassword()" type="button" class="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg text-slate-400"><i id="auth-password-icon" class="fas fa-eye"></i></button></div></div>
+            <button id="forgot-password-btn" onclick="app.resetPassword()" class="text-xs font-black text-islamic-600 mb-5">نسيت كلمة المرور؟</button>
+            <div id="auth-message" class="hidden mb-4 p-3 rounded-xl text-sm font-bold"></div>
+            <button id="auth-submit-btn" onclick="app.submitAuth()" class="w-full bg-islamic-600 hover:bg-islamic-700 text-white py-3.5 rounded-2xl font-black shadow-lg">تسجيل الدخول</button>
+            <p class="text-[11px] text-slate-400 font-bold leading-6 text-center mt-5">سيتم حفظ تقدمك ونتائجك على حسابك عند تسجيل الدخول. يمكنك استخدام المنصة كزائر بدون حساب.</p>
+        </div>
+    </div>
+
     <div class="md:hidden fixed bottom-0 inset-x-0 z-[80] bg-white/95 backdrop-blur-xl border-t border-slate-200 bottom-nav-safe">
-        <div class="grid grid-cols-4 px-2 pt-2">
-            <button data-nav="home" onclick="app.bottomNavigate('home')" class="bottom-nav-btn active relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[11px]"><i class="fas fa-house text-lg"></i><span>الرئيسية</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
-            <button data-nav="sections" onclick="app.bottomNavigate('sections')" class="bottom-nav-btn relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[11px]"><i class="fas fa-layer-group text-lg"></i><span>الأقسام</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
-            <button data-nav="quizzes" onclick="app.bottomNavigate('quizzes')" class="bottom-nav-btn relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[11px]"><i class="fas fa-clipboard-question text-lg"></i><span>الاختبارات</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
-            <button data-nav="saved" onclick="app.bottomNavigate('saved')" class="bottom-nav-btn relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[11px]"><i class="fas fa-bookmark text-lg"></i><span>المحفوظات</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
+        <div class="grid grid-cols-5 px-1 pt-2">
+            <button data-nav="home" onclick="app.bottomNavigate('home')" class="bottom-nav-btn active relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[10px]"><i class="fas fa-house text-lg"></i><span>الرئيسية</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
+            <button data-nav="sections" onclick="app.bottomNavigate('sections')" class="bottom-nav-btn relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[10px]"><i class="fas fa-layer-group text-lg"></i><span>الأقسام</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
+            <button data-nav="quizzes" onclick="app.bottomNavigate('quizzes')" class="bottom-nav-btn relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[10px]"><i class="fas fa-clipboard-question text-lg"></i><span>الاختبارات</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
+            <button data-nav="saved" onclick="app.bottomNavigate('saved')" class="bottom-nav-btn relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[10px]"><i class="fas fa-bookmark text-lg"></i><span>المحفوظات</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
+            <button data-nav="account" onclick="app.bottomNavigate('account')" class="bottom-nav-btn relative flex flex-col items-center gap-1 py-1.5 text-slate-400 font-black text-[10px]"><i class="fas fa-user text-lg"></i><span>حسابي</span><span class="nav-dot absolute top-0 w-1.5 h-1.5 bg-islamic-500 rounded-full"></span></button>
         </div>
     </div>
 
@@ -371,19 +433,22 @@
         };
         firebase.initializeApp(firebaseConfig);
         const dbRef = firebase.database().ref('sharia_platform');
+        const usersRef = firebase.database().ref('sharia_platform_users');
 
         const state = {
             db: { categories: [], books: [], chapters: [], lessons: [], quizzes: [], settings: {} },
             currentCat: null, currentChap: null, currentLesson: null,
             quizData: null, quizBaseData: null, qIdx: 0, answers: [], quizReturnLocation: 'category',
             dhikrIntervalId: null, hasCountedVisit: false, initialLoadDone: false, lessonFontLevel: 0,
-            local: { completedLessons: [], favorites: [], quizHistory: [], lastLessonId: null }
+            local: { completedLessons: [], favorites: [], quizHistory: [], lastLessonId: null },
+            auth: { user: null, profile: null, mode: 'login', syncing: false, hydrated: false, syncTimer: null, profileRef: null }
         };
 
         const app = {
             init: () => {
                 app.loadLocalState();
                 app.applySavedTheme();
+                app.initAuth();
                 if (!state.hasCountedVisit) { dbRef.child('stats/visitors').set(firebase.database.ServerValue.increment(1)); state.hasCountedVisit = true; }
                 dbRef.on('value', snap => {
                     const data = snap.val();
@@ -408,6 +473,7 @@
                     app.renderPlatformAnnouncement();
                     app.renderQuizLibrary();
                     app.renderSavedLessons();
+                    app.renderAccount();
                     app.initDhikr();
                 });
             },
@@ -422,12 +488,223 @@
                 } catch (e) { console.warn('تعذر قراءة بيانات التقدم المحلية', e); }
             },
 
-            saveLocalState: () => {
+            saveLocalState: (syncCloud = true) => {
                 localStorage.setItem('ahmed_completed_lessons', JSON.stringify(state.local.completedLessons));
                 localStorage.setItem('ahmed_favorite_lessons', JSON.stringify(state.local.favorites));
                 localStorage.setItem('ahmed_quiz_history', JSON.stringify(state.local.quizHistory));
                 if (state.local.lastLessonId) localStorage.setItem('ahmed_last_lesson', state.local.lastLessonId);
+                else localStorage.removeItem('ahmed_last_lesson');
+                if (syncCloud && state.auth.user && state.auth.hydrated) app.syncCloudProgress();
+                app.renderAccount();
             },
+
+            initAuth: () => {
+                if (!firebase.auth) return;
+                firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
+                firebase.auth().onAuthStateChanged(async user => {
+                    state.auth.user = user || null;
+                    state.auth.hydrated = false;
+                    if (state.auth.profileRef) { state.auth.profileRef.off(); state.auth.profileRef = null; }
+                    if (user) {
+                        await app.loadCloudProfileAndProgress(user);
+                        app.watchCurrentProfile(user.uid);
+                    } else {
+                        state.auth.profile = null;
+                        state.auth.hydrated = false;
+                    }
+                    app.renderAuthUI();
+                    app.renderAccount();
+                    app.renderDashboard();
+                });
+            },
+
+            loadCloudProfileAndProgress: async (user) => {
+                try {
+                    const ref = usersRef.child(user.uid);
+                    const snap = await ref.once('value');
+                    const data = snap.val() || {};
+                    const fallbackName = user.displayName || (user.email ? user.email.split('@')[0] : 'طالب');
+                    const profile = data.profile || { name: fallbackName, email: user.email || '', createdAt: Date.now() };
+                    if (!data.profile) await ref.child('profile').set({ name: fallbackName, email: user.email || '', createdAt: Date.now(), lastLoginAt: Date.now(), lastActivityAt: Date.now() });
+                    else await ref.child('profile').update({ email: user.email || profile.email || '', lastLoginAt: Date.now(), lastActivityAt: Date.now() });
+                    if (profile.status === 'blocked') {
+                        alert('هذا الحساب موقوف حاليًا. تواصل مع إدارة المنصة.');
+                        await firebase.auth().signOut();
+                        return;
+                    }
+                    state.auth.profile = { ...profile, email: user.email || profile.email || '' };
+                    const cloud = data.progress || {};
+                    const uniq = arr => [...new Set((arr || []).filter(Boolean))];
+                    state.local.completedLessons = uniq([...(state.local.completedLessons || []), ...(cloud.completedLessons || [])]);
+                    state.local.favorites = uniq([...(state.local.favorites || []), ...(cloud.favorites || [])]);
+                    const mergedHistory = [...(cloud.quizHistory || []), ...(state.local.quizHistory || [])];
+                    const seen = new Set();
+                    state.local.quizHistory = mergedHistory.filter(item => {
+                        const key = `${item.quizId || ''}_${item.date || ''}_${item.percentage ?? ''}`;
+                        if (seen.has(key)) return false; seen.add(key); return true;
+                    }).sort((a,b) => (b.date || 0) - (a.date || 0)).slice(0, 100);
+                    state.local.lastLessonId = cloud.lastLessonId || state.local.lastLessonId || null;
+                    state.auth.hydrated = true;
+                    app.saveLocalState(false);
+                    await app.syncCloudProgress(true);
+                    app.renderSavedLessons();
+                    app.renderCategories();
+                } catch (e) {
+                    console.warn('تعذر تحميل بيانات الحساب السحابية', e);
+                    state.auth.hydrated = true;
+                }
+            },
+
+            watchCurrentProfile: (uid) => {
+                if (state.auth.profileRef) state.auth.profileRef.off();
+                const ref = usersRef.child(`${uid}/profile`);
+                state.auth.profileRef = ref;
+                ref.on('value', snap => {
+                    const p = snap.val();
+                    if (!p || !state.auth.user) return;
+                    state.auth.profile = p;
+                    if (p.status === 'blocked') {
+                        alert('تم إيقاف هذا الحساب بواسطة إدارة المنصة.');
+                        firebase.auth().signOut();
+                        return;
+                    }
+                    app.renderAuthUI();
+                    app.renderAccount();
+                });
+            },
+
+            syncCloudProgress: async (immediate = false) => {
+                if (!state.auth.user || !state.auth.hydrated) return;
+                if (!immediate) {
+                    clearTimeout(state.auth.syncTimer);
+                    state.auth.syncTimer = setTimeout(() => app.syncCloudProgress(true), 350);
+                    return;
+                }
+                if (state.auth.syncing) return;
+                state.auth.syncing = true;
+                try {
+                    const now = Date.now();
+                    await usersRef.child(state.auth.user.uid).update({
+                        progress: {
+                            completedLessons: state.local.completedLessons || [],
+                            favorites: state.local.favorites || [],
+                            quizHistory: (state.local.quizHistory || []).slice(0,100),
+                            lastLessonId: state.local.lastLessonId || null,
+                            updatedAt: now
+                        },
+                        'profile/lastActivityAt': now
+                    });
+                    const el = document.getElementById('profile-sync-time');
+                    if (el) el.innerText = 'آخر مزامنة الآن';
+                } catch (e) {
+                    console.warn('فشلت المزامنة السحابية', e);
+                    if (immediate) app.showAuthMessage('تعذر المزامنة الآن. تحقق من الإنترنت.', 'error');
+                } finally { state.auth.syncing = false; }
+            },
+
+            renderAuthUI: () => {
+                const label = document.getElementById('account-nav-label');
+                const avatar = document.getElementById('account-nav-avatar');
+                if (state.auth.user) {
+                    const name = state.auth.profile?.name || state.auth.user.displayName || 'حسابي';
+                    if (label) label.innerText = name.split(' ')[0] || 'حسابي';
+                    if (avatar) avatar.innerHTML = app.escapeHtml((name.trim()[0] || 'ط').toUpperCase());
+                } else {
+                    if (label) label.innerText = 'دخول';
+                    if (avatar) avatar.innerHTML = '<i class="fas fa-user"></i>';
+                }
+            },
+
+            openAccount: () => { app.renderAccount(); app.showSection('account-view'); app.setBottomNav('account'); },
+
+            renderAccount: () => {
+                const guest = document.getElementById('account-guest-card');
+                const userCard = document.getElementById('account-user-card');
+                if (!guest || !userCard) return;
+                if (!state.auth.user) { guest.classList.remove('hidden'); userCard.classList.add('hidden'); return; }
+                guest.classList.add('hidden'); userCard.classList.remove('hidden');
+                const profile = state.auth.profile || {};
+                const name = profile.name || state.auth.user.displayName || 'طالب';
+                const email = state.auth.user.email || profile.email || '';
+                const history = state.local.quizHistory || [];
+                const best = history.length ? Math.max(...history.map(h => Number(h.percentage) || 0)) : null;
+                const setText = (id,val) => { const el=document.getElementById(id); if(el) el.innerText=val; };
+                setText('profile-name', name); setText('profile-email', email);
+                setText('profile-avatar', (name.trim()[0] || 'ط').toUpperCase());
+                setText('profile-plan', profile.plan === 'subscriber' ? 'طالب مشترك' : 'طالب مجاني');
+                setText('account-completed', (state.local.completedLessons || []).length);
+                setText('account-favorites', (state.local.favorites || []).length);
+                setText('account-quizzes', history.length);
+                setText('account-best', best === null ? '—' : `${best}%`);
+                const historyBox = document.getElementById('account-history');
+                if (historyBox) historyBox.innerHTML = history.slice(0,8).map(h => `<div class="flex items-center justify-between gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100"><div class="min-w-0"><div class="font-black text-slate-700 truncate">${app.escapeHtml(h.name || 'اختبار')}</div><div class="text-[11px] font-bold text-slate-400 mt-1">${h.date ? new Date(h.date).toLocaleDateString('ar-EG') : ''}</div></div><span class="shrink-0 font-black ${Number(h.percentage)>=70?'text-emerald-600':'text-amber-600'}">${Number(h.percentage)||0}%</span></div>`).join('') || '<div class="text-center p-7 bg-slate-50 rounded-2xl text-slate-400 font-bold">لم تُسجل نتائج اختبارات بعد.</div>';
+            },
+
+            openAuthModal: (mode = 'login') => {
+                app.switchAuthMode(mode);
+                const modal = document.getElementById('auth-modal');
+                if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+                setTimeout(() => document.getElementById(mode === 'register' ? 'auth-name' : 'auth-email')?.focus(), 80);
+            },
+            closeAuthModal: () => { const m=document.getElementById('auth-modal'); if(m){m.classList.add('hidden');m.classList.remove('flex');} app.showAuthMessage('', 'clear'); },
+            switchAuthMode: (mode) => {
+                state.auth.mode = mode;
+                const reg = mode === 'register';
+                document.getElementById('auth-name-wrap')?.classList.toggle('hidden', !reg);
+                document.getElementById('forgot-password-btn')?.classList.toggle('hidden', reg);
+                document.getElementById('auth-login-tab')?.classList.toggle('active', !reg);
+                document.getElementById('auth-register-tab')?.classList.toggle('active', reg);
+                const title=document.getElementById('auth-modal-title'), sub=document.getElementById('auth-modal-subtitle'), btn=document.getElementById('auth-submit-btn');
+                if(title) title.innerText = reg ? 'إنشاء حساب طالب' : 'تسجيل الدخول';
+                if(sub) sub.innerText = reg ? 'أنشئ حسابًا مجانيًا واحفظ تقدمك.' : 'أكمل من حيث توقفت على أي جهاز.';
+                if(btn) btn.innerText = reg ? 'إنشاء الحساب' : 'تسجيل الدخول';
+                app.showAuthMessage('', 'clear');
+            },
+            showAuthMessage: (msg, type='info') => {
+                const box=document.getElementById('auth-message'); if(!box) return;
+                if(!msg || type==='clear'){box.classList.add('hidden');box.innerText='';return;}
+                box.className = `mb-4 p-3 rounded-xl text-sm font-bold ${type==='error'?'bg-red-50 text-red-600 border border-red-100':'bg-emerald-50 text-emerald-700 border border-emerald-100'}`;
+                box.innerText=msg; box.classList.remove('hidden');
+            },
+            authErrorText: (e) => {
+                const map={
+                    'auth/email-already-in-use':'هذا البريد مسجل بالفعل.', 'auth/invalid-email':'البريد الإلكتروني غير صحيح.',
+                    'auth/weak-password':'كلمة المرور يجب أن تكون 6 أحرف على الأقل.', 'auth/wrong-password':'البريد أو كلمة المرور غير صحيحة.',
+                    'auth/user-not-found':'البريد أو كلمة المرور غير صحيحة.', 'auth/invalid-login-credentials':'البريد أو كلمة المرور غير صحيحة.',
+                    'auth/too-many-requests':'محاولات كثيرة. حاول مرة أخرى لاحقًا.', 'auth/network-request-failed':'تعذر الاتصال بالإنترنت.', 'auth/operation-not-allowed':'تسجيل البريد وكلمة المرور غير مفعّل في Firebase بعد.'
+                }; return map[e?.code] || 'حدث خطأ. حاول مرة أخرى.';
+            },
+            submitAuth: async () => {
+                const email=(document.getElementById('auth-email')?.value||'').trim();
+                const password=document.getElementById('auth-password')?.value||'';
+                const name=(document.getElementById('auth-name')?.value||'').trim();
+                if(!email || !password) return app.showAuthMessage('اكتب البريد الإلكتروني وكلمة المرور.', 'error');
+                if(state.auth.mode==='register' && name.length<2) return app.showAuthMessage('اكتب اسم الطالب.', 'error');
+                const btn=document.getElementById('auth-submit-btn'); const old=btn?.innerText;
+                if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin ml-2"></i>جاري التنفيذ...';}
+                try {
+                    if(state.auth.mode==='register'){
+                        const cred=await firebase.auth().createUserWithEmailAndPassword(email,password);
+                        await cred.user.updateProfile({displayName:name});
+                        await usersRef.child(`${cred.user.uid}/profile`).set({name,email,createdAt:Date.now(),lastLoginAt:Date.now(),lastActivityAt:Date.now()});
+                    } else await firebase.auth().signInWithEmailAndPassword(email,password);
+                    app.closeAuthModal();
+                    app.openAccount();
+                } catch(e){app.showAuthMessage(app.authErrorText(e),'error');}
+                finally {if(btn){btn.disabled=false;btn.innerText=state.auth.mode==='register'?'إنشاء الحساب':'تسجيل الدخول';}}
+            },
+            resetPassword: async () => {
+                const email=(document.getElementById('auth-email')?.value||'').trim();
+                if(!email) return app.showAuthMessage('اكتب بريدك الإلكتروني أولًا.', 'error');
+                try { await firebase.auth().sendPasswordResetEmail(email); app.showAuthMessage('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك.','success'); }
+                catch(e){ app.showAuthMessage(app.authErrorText(e),'error'); }
+            },
+            toggleAuthPassword: () => {
+                const input=document.getElementById('auth-password'), icon=document.getElementById('auth-password-icon'); if(!input) return;
+                const show=input.type==='password'; input.type=show?'text':'password'; if(icon) icon.className=`fas ${show?'fa-eye-slash':'fa-eye'}`;
+            },
+            logout: async () => { try { await app.syncCloudProgress(true); await firebase.auth().signOut(); app.resetUrlAndGo('landing'); } catch(e){ console.warn(e); } },
+            escapeHtml: (str='') => String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])),
 
             applySavedTheme: () => {
                 const dark = localStorage.getItem('ahmed_theme') === 'dark';
@@ -469,6 +746,7 @@
                 if (target === 'sections') { app.scrollToCategories(); app.setBottomNav('sections'); }
                 if (target === 'quizzes') { app.openQuizLibrary(); app.setBottomNav('quizzes'); }
                 if (target === 'saved') { app.openSaved(); app.setBottomNav('saved'); }
+                if (target === 'account') { app.openAccount(); app.setBottomNav('account'); }
             },
 
             renderPlatformAnnouncement: () => {
@@ -674,6 +952,7 @@
                 document.getElementById(id)?.classList.remove('hidden'); 
                 if(id !== 'search-view') { const d = document.getElementById('search-input'); const m = document.getElementById('mobile-search-input'); if(d) d.value = ''; if(m) m.value = ''; }
                 if (id === 'landing') app.setBottomNav('home');
+                if (id === 'account-view') app.setBottomNav('account');
                 window.scrollTo(0, 0); 
             },
 
