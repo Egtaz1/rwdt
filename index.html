@@ -402,6 +402,16 @@
 
 
 
+    <div id="access-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[210] hidden items-center justify-center p-4" onclick="if(event.target===this) app.closeAccessModal()">
+        <div class="auth-modal-card w-full max-w-md rounded-[2rem] p-7 relative text-center">
+            <button onclick="app.closeAccessModal()" class="absolute top-4 left-4 w-10 h-10 rounded-xl bg-slate-100 text-slate-500"><i class="fas fa-xmark"></i></button>
+            <span id="access-modal-icon" class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-4"><i class="fas fa-lock"></i></span>
+            <h3 id="access-modal-title" class="text-2xl font-black text-slate-800">محتوى للمشتركين</h3>
+            <p id="access-modal-text" class="text-slate-500 font-bold leading-8 mt-3">هذا المحتوى متاح للمشتركين فقط.</p>
+            <div id="access-modal-actions" class="flex flex-col sm:flex-row gap-3 mt-6 justify-center"></div>
+        </div>
+    </div>
+
     <div id="auth-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[200] hidden items-center justify-center p-4" onclick="if(event.target===this) app.closeAuthModal()">
         <div class="auth-modal-card w-full max-w-md rounded-[2rem] p-6 md:p-8 relative max-h-[92vh] overflow-y-auto">
             <button onclick="app.closeAuthModal()" class="absolute top-4 left-4 w-10 h-10 rounded-xl bg-slate-100 text-slate-500 hover:text-red-500"><i class="fas fa-xmark"></i></button>
@@ -669,6 +679,62 @@
                 } finally { state.auth.syncing = false; }
             },
 
+            isSubscriptionActive: () => {
+                const p = state.auth.profile || {};
+                if (p.plan !== 'subscriber') return false;
+                return !p.subscriptionEndsAt || Number(p.subscriptionEndsAt) > Date.now();
+            },
+            effectiveAccess: (type, item) => {
+                if (!item) return 'hidden';
+                const levels = [];
+                if (type === 'category') levels.push(item.access || 'free');
+                if (type === 'chapter') {
+                    const cat = state.db.categories.find(c => c.id === item.categoryId);
+                    levels.push(cat?.access || 'free', item.access || 'free');
+                }
+                if (type === 'lesson') {
+                    const ch = state.db.chapters.find(c => c.id === item.chapterId);
+                    const cat = ch ? state.db.categories.find(c => c.id === ch.categoryId) : null;
+                    levels.push(cat?.access || 'free', ch?.access || 'free', item.access || 'free');
+                }
+                if (type === 'quiz') {
+                    levels.push(item.access || 'free');
+                    const linked = state.db.lessons.find(l => l.quizId === item.id);
+                    if (linked) levels.push(app.effectiveAccess('lesson', linked));
+                }
+                if (levels.includes('hidden')) return 'hidden';
+                if (levels.includes('subscriber')) return 'subscriber';
+                return 'free';
+            },
+            guardAccess: (type, item) => {
+                const access = app.effectiveAccess(type, item);
+                if (access === 'free') return true;
+                if (access === 'hidden') {
+                    app.showAccessModal('غير متاح حاليًا','هذا المحتوى مخفي مؤقتًا بواسطة إدارة المنصة.','hidden');
+                    return false;
+                }
+                if (app.isSubscriptionActive()) return true;
+                if (!state.auth.user) app.showAccessModal('محتوى للمشتركين','سجّل الدخول أولًا، وإذا كان حسابك مشتركًا سيفتح المحتوى مباشرة.','login');
+                else if (state.auth.profile?.plan === 'subscriber') app.showAccessModal('انتهى الاشتراك','انتهت مدة اشتراكك. جدّد الاشتراك للوصول إلى هذا المحتوى.','expired');
+                else app.showAccessModal('محتوى للمشتركين','هذا المحتوى متاح للمشتركين فقط. يمكنك التواصل مع الإدارة لتفعيل اشتراكك.','subscribe');
+                return false;
+            },
+            showAccessModal: (title,text,mode='subscribe') => {
+                const m=document.getElementById('access-modal'); if(!m) return alert(text);
+                document.getElementById('access-modal-title').innerText=title;
+                document.getElementById('access-modal-text').innerText=text;
+                const a=document.getElementById('access-modal-actions');
+                if(mode==='login') a.innerHTML='<button onclick="app.closeAccessModal();app.openAuthModal(\'login\')" class="flex-1 bg-islamic-600 text-white py-3 rounded-2xl font-black">تسجيل الدخول</button><button onclick="app.closeAccessModal();app.openAuthModal(\'register\')" class="flex-1 bg-slate-100 text-slate-700 py-3 rounded-2xl font-black">إنشاء حساب</button>';
+                else a.innerHTML='<button onclick="app.closeAccessModal();app.openAccount()" class="flex-1 bg-islamic-600 text-white py-3 rounded-2xl font-black">عرض حسابي</button><button onclick="app.closeAccessModal()" class="flex-1 bg-slate-100 text-slate-700 py-3 rounded-2xl font-black">إغلاق</button>';
+                m.classList.remove('hidden');m.classList.add('flex');
+            },
+            closeAccessModal: () => { const m=document.getElementById('access-modal'); if(m){m.classList.add('hidden');m.classList.remove('flex');} },
+            accessBadge: (type,item) => {
+                const a=app.effectiveAccess(type,item);
+                if(a==='subscriber') return '<span class="text-[10px] font-black bg-amber-50 text-amber-700 border border-amber-100 px-2 py-1 rounded-lg"><i class="fas fa-lock ml-1"></i>مشترك</span>';
+                return '';
+            },
+
             renderAuthUI: () => {
                 const label = document.getElementById('account-nav-label');
                 const avatar = document.getElementById('account-nav-avatar');
@@ -714,7 +780,7 @@
                 const setText = (id,val) => { const el=document.getElementById(id); if(el) el.innerText=val; };
                 setText('profile-name', name); setText('profile-email', email);
                 setText('profile-avatar', (name.trim()[0] || 'ط').toUpperCase());
-                setText('profile-plan', profile.plan === 'subscriber' ? 'طالب مشترك' : 'طالب مجاني');
+                setText('profile-plan', profile.plan === 'subscriber' ? (app.isSubscriptionActive() ? (profile.subscriptionEndsAt ? 'مشترك حتى '+new Date(profile.subscriptionEndsAt).toLocaleDateString('ar-EG') : 'طالب مشترك') : 'انتهى الاشتراك') : 'طالب مجاني');
                 setText('account-completed', (state.local.completedLessons || []).length);
                 setText('account-favorites', (state.local.favorites || []).length);
                 setText('account-quizzes', history.length);
@@ -925,19 +991,19 @@
                 } else if (continueCard) continueCard.classList.add('hidden');
 
                 const featuredQuiz = document.getElementById('featured-quiz');
-                const q = state.db.quizzes.find(q => q.questions && q.questions.length) || state.db.quizzes[0];
+                const q = state.db.quizzes.find(q => q.questions && q.questions.length && app.effectiveAccess('quiz',q)!=='hidden') || state.db.quizzes.find(q=>app.effectiveAccess('quiz',q)!=='hidden');
                 if (featuredQuiz) featuredQuiz.innerHTML = q ? `<div class="flex items-center justify-between gap-4"><div><strong class="text-lg font-black text-slate-800 block">${q.name || 'اختبار متاح'}</strong><span class="text-sm text-slate-400 font-bold">${q.questions?.length || 0} سؤال</span></div><button onclick="app.startQuiz('${q.id}','landing')" class="bg-amber-500 text-white px-5 py-2.5 rounded-xl font-black">ابدأ الآن</button></div>` : '<span>لا توجد اختبارات متاحة حاليًا.</span>';
 
                 const featuredLesson = document.getElementById('featured-lesson');
-                const l = state.db.lessons[state.db.lessons.length - 1] || state.db.lessons[0];
+                const visibleLessons = state.db.lessons.filter(x=>app.effectiveAccess('lesson',x)!=='hidden'); const l = visibleLessons[visibleLessons.length - 1] || visibleLessons[0];
                 if (featuredLesson) featuredLesson.innerHTML = l ? `<div class="flex items-center justify-between gap-4"><div><strong class="text-lg font-black text-slate-800 block">${l.title}</strong><span class="text-sm text-slate-400 font-bold">جاهز للقراءة الآن</span></div><button onclick="app.openLesson('${l.id}')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-black">قراءة</button></div>` : '<span>لا توجد دروس متاحة حاليًا.</span>';
             },
 
             openQuizLibrary: () => { app.renderQuizLibrary(); app.showSection('quizzes-library'); app.setBottomNav('quizzes'); },
             renderQuizLibrary: () => {
                 const box = document.getElementById('all-quizzes-grid'); if (!box) return;
-                const quizzes = state.db.quizzes.filter(q => q.questions && q.questions.length);
-                box.innerHTML = quizzes.length ? quizzes.map(q => `<div class="modern-card rounded-3xl p-5 flex flex-col gap-4"><div class="flex items-start justify-between gap-3"><span class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg"><i class="fas fa-clipboard-question"></i></span><span class="text-xs font-black text-slate-400 bg-slate-50 px-3 py-1 rounded-full">${q.questions.length} سؤال</span></div><div><h3 class="font-black text-lg text-slate-800 leading-relaxed">${q.name || 'اختبار'}</h3></div><button onclick="app.startQuiz('${q.id}','landing')" class="mt-auto bg-islamic-600 text-white py-3 rounded-2xl font-black">ابدأ الاختبار <i class="fas fa-arrow-left mr-2"></i></button></div>`).join('') : `<div class="md:col-span-2 lg:col-span-3 text-center p-12 modern-card rounded-3xl"><i class="fas fa-clipboard text-4xl text-slate-300 mb-4"></i><p class="font-black text-slate-500">لا توجد اختبارات متاحة حاليًا.</p></div>`;
+                const quizzes = state.db.quizzes.filter(q => q.questions && q.questions.length && app.effectiveAccess('quiz',q)!=='hidden');
+                box.innerHTML = quizzes.length ? quizzes.map(q => `<div class="modern-card rounded-3xl p-5 flex flex-col gap-4"><div class="flex items-start justify-between gap-3"><span class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg"><i class="fas fa-clipboard-question"></i></span><span class="text-xs font-black text-slate-400 bg-slate-50 px-3 py-1 rounded-full">${q.questions.length} سؤال</span></div><div><div class="flex items-center gap-2 flex-wrap"><h3 class="font-black text-lg text-slate-800 leading-relaxed">${q.name || 'اختبار'}</h3>${app.accessBadge('quiz',q)}</div></div><button onclick="app.startQuiz('${q.id}','landing')" class="mt-auto bg-islamic-600 text-white py-3 rounded-2xl font-black">ابدأ الاختبار <i class="fas fa-arrow-left mr-2"></i></button></div>`).join('') : `<div class="md:col-span-2 lg:col-span-3 text-center p-12 modern-card rounded-3xl"><i class="fas fa-clipboard text-4xl text-slate-300 mb-4"></i><p class="font-black text-slate-500">لا توجد اختبارات متاحة حاليًا.</p></div>`;
             },
 
             openSaved: () => { app.renderSavedLessons(); app.showSection('saved-view'); app.setBottomNav('saved'); },
@@ -1079,19 +1145,22 @@
 
             renderCategories: () => {
                 const icons = ['fa-book-quran','fa-mosque','fa-scale-balanced','fa-book-open','fa-lightbulb','fa-graduation-cap','fa-feather','fa-star-and-crescent'];
-                document.getElementById('categories-grid').innerHTML = state.db.categories.map((cat, i) => {
-                    const chCount = state.db.chapters.filter(ch => ch.categoryId === cat.id).length;
-                    const lessonCount = state.db.lessons.filter(l => state.db.chapters.some(ch => ch.id === l.chapterId && ch.categoryId === cat.id)).length;
-                    return `<button onclick="app.openCategory('${cat.id}')" class="gradient-card modern-card text-right p-5 md:p-6 rounded-[1.7rem] hover:-translate-y-1 transition-all group"><div class="flex items-start justify-between gap-3 mb-5"><span class="soft-icon w-12 h-12 md:w-14 md:h-14 bg-islamic-50 text-islamic-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl group-hover:bg-islamic-600 group-hover:text-white transition-all"><i class="fas ${icons[i % icons.length]}"></i></span><i class="fas fa-arrow-left text-slate-300 group-hover:text-islamic-500 transition"></i></div><h3 class="text-lg md:text-xl font-black text-slate-800 mb-2">${cat.name}</h3><div class="flex gap-2 text-[11px] font-bold text-slate-400"><span>${chCount} باب</span><span>•</span><span>${lessonCount} درس</span></div></button>`;
+                const visibleCats = state.db.categories.filter(cat => app.effectiveAccess('category',cat) !== 'hidden');
+                document.getElementById('categories-grid').innerHTML = visibleCats.map((cat, i) => {
+                    const chCount = state.db.chapters.filter(ch => ch.categoryId === cat.id && app.effectiveAccess('chapter',ch)!=='hidden').length;
+                    const lessonCount = state.db.lessons.filter(l => app.effectiveAccess('lesson',l)!=='hidden' && state.db.chapters.some(ch => ch.id === l.chapterId && ch.categoryId === cat.id)).length;
+                    const locked=app.effectiveAccess('category',cat)==='subscriber'&&!app.isSubscriptionActive();
+                    return `<button onclick="app.openCategory('${cat.id}')" class="gradient-card modern-card text-right p-5 md:p-6 rounded-[1.7rem] hover:-translate-y-1 transition-all group ${locked?'opacity-90':''}"><div class="flex items-start justify-between gap-3 mb-5"><span class="soft-icon w-12 h-12 md:w-14 md:h-14 bg-islamic-50 text-islamic-600 rounded-2xl flex items-center justify-center text-xl md:text-2xl group-hover:bg-islamic-600 group-hover:text-white transition-all"><i class="fas ${locked?'fa-lock':icons[i % icons.length]}"></i></span>${app.accessBadge('category',cat) || '<i class="fas fa-arrow-left text-slate-300 group-hover:text-islamic-500 transition"></i>'}</div><h3 class="text-lg md:text-xl font-black text-slate-800 mb-2">${cat.name}</h3><div class="flex gap-2 text-[11px] font-bold text-slate-400"><span>${chCount} باب</span><span>•</span><span>${lessonCount} درس</span></div></button>`;
                 }).join('');
             },
 
             openCategory: (catId) => {
                 const cat = state.db.categories.find(c => c.id === catId); if(!cat) return;
+                if(!app.guardAccess('category',cat)) return;
                 state.currentCat = cat;
                 document.getElementById('cat-title').innerText = cat.name;
-                const chapters = state.db.chapters.filter(ch => ch.categoryId === catId);
-                const categoryLessons = state.db.lessons.filter(l => chapters.some(ch => ch.id === l.chapterId));
+                const chapters = state.db.chapters.filter(ch => ch.categoryId === catId && app.effectiveAccess('chapter',ch)!=='hidden');
+                const categoryLessons = state.db.lessons.filter(l => app.effectiveAccess('lesson',l)!=='hidden' && chapters.some(ch => ch.id === l.chapterId));
                 const completedCount = categoryLessons.filter(l => state.local.completedLessons.includes(l.id)).length;
                 const categoryProgress = categoryLessons.length ? Math.round((completedCount / categoryLessons.length) * 100) : 0;
                 document.getElementById('cat-chapters-count').innerText = chapters.length;
@@ -1108,7 +1177,7 @@
                         const progress = lessons.length ? Math.round((completed / lessons.length) * 100) : 0;
                         const quizCount = lessons.filter(l => l.quizId).length;
                         const hasQuizzes = quizCount > 0;
-                        return `<div class="chapter-card modern-card rounded-[1.8rem] p-5 md:p-6 flex flex-col gap-5 group"><div class="flex items-start justify-between gap-3 relative z-10"><div class="flex items-center gap-3"><span class="w-12 h-12 rounded-2xl bg-islamic-50 text-islamic-600 flex items-center justify-center font-black">${String(idx+1).padStart(2,'0')}</span><div><h3 class="font-black text-xl text-slate-800 leading-relaxed">${ch.title}</h3><div class="flex gap-2 text-[11px] font-bold text-slate-400 mt-1"><span>${lessons.length} درس</span><span>•</span><span>${quizCount} اختبار</span></div></div></div><i class="fas fa-folder-open text-islamic-500 text-xl"></i></div><div class="relative z-10"><div class="flex justify-between text-[11px] font-black text-slate-400 mb-2"><span>التقدم</span><span>${progress}%</span></div><div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-islamic-500 rounded-full" style="width:${progress}%"></div></div></div><div class="flex gap-2 relative z-10"><button onclick="app.openChapter('${ch.id}')" class="flex-1 bg-slate-900 text-white py-3 rounded-xl font-black text-sm">فتح الباب <i class="fas fa-arrow-left mr-1"></i></button>${hasQuizzes ? `<button onclick="app.startComprehensiveQuiz('${ch.id}')" class="px-4 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl font-black text-sm" title="اختبار شامل"><i class="fas fa-clipboard-check"></i></button>` : ''}</div></div>`;
+                        return `<div class="chapter-card modern-card rounded-[1.8rem] p-5 md:p-6 flex flex-col gap-5 group"><div class="flex items-start justify-between gap-3 relative z-10"><div class="flex items-center gap-3"><span class="w-12 h-12 rounded-2xl bg-islamic-50 text-islamic-600 flex items-center justify-center font-black">${String(idx+1).padStart(2,'0')}</span><div><div class="flex items-center gap-2 flex-wrap"><h3 class="font-black text-xl text-slate-800 leading-relaxed">${ch.title}</h3>${app.accessBadge('chapter',ch)}</div><div class="flex gap-2 text-[11px] font-bold text-slate-400 mt-1"><span>${lessons.length} درس</span><span>•</span><span>${quizCount} اختبار</span></div></div></div><i class="fas fa-folder-open text-islamic-500 text-xl"></i></div><div class="relative z-10"><div class="flex justify-between text-[11px] font-black text-slate-400 mb-2"><span>التقدم</span><span>${progress}%</span></div><div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-islamic-500 rounded-full" style="width:${progress}%"></div></div></div><div class="flex gap-2 relative z-10"><button onclick="app.openChapter('${ch.id}')" class="flex-1 bg-slate-900 text-white py-3 rounded-xl font-black text-sm">فتح الباب <i class="fas fa-arrow-left mr-1"></i></button>${hasQuizzes ? `<button onclick="app.startComprehensiveQuiz('${ch.id}')" class="px-4 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl font-black text-sm" title="اختبار شامل"><i class="fas fa-clipboard-check"></i></button>` : ''}</div></div>`;
                     }).join('');
                 } else {
                     chapGrid.innerHTML = `<div class="md:col-span-2 modern-card rounded-3xl p-12 text-center"><i class="far fa-folder-open text-5xl text-slate-300 mb-4"></i><p class="text-slate-500 font-black">لم يتم إضافة أبواب بعد.</p></div>`;
@@ -1119,13 +1188,14 @@
 
             openChapter: (chapId) => {
                 const chap = state.db.chapters.find(c => c.id === chapId); if(!chap) return;
+                if(!app.guardAccess('chapter',chap)) return;
                 state.currentChap = chap;
                 state.currentCat = state.db.categories.find(c => c.id === chap.categoryId);
                 document.getElementById('chap-parent-cat').innerText = state.currentCat ? `قسم ${state.currentCat.name}` : 'قسم';
                 document.getElementById('chap-title').innerText = chap.title;
                 document.getElementById('back-to-cat-btn').onclick = () => state.currentCat ? app.openCategory(state.currentCat.id) : app.resetUrlAndGo('landing');
 
-                const lessons = state.db.lessons.filter(l => l.chapterId === chapId);
+                const lessons = state.db.lessons.filter(l => l.chapterId === chapId && app.effectiveAccess('lesson',l)!=='hidden');
                 const completed = lessons.filter(l => state.local.completedLessons.includes(l.id)).length;
                 const quizCount = lessons.filter(l => l.quizId).length;
                 const progress = lessons.length ? Math.round((completed / lessons.length) * 100) : 0;
@@ -1146,7 +1216,7 @@
                     list.innerHTML = lessons.map((l, index) => {
                         const isDone = state.local.completedLessons.includes(l.id);
                         const isFav = state.local.favorites.includes(l.id);
-                        return `<div class="lesson-row modern-card rounded-[1.6rem] p-4 md:p-5 border ${isDone ? 'border-emerald-200' : 'border-slate-100'} flex flex-col md:flex-row md:items-center justify-between gap-4"><div class="flex items-center gap-4 min-w-0 cursor-pointer flex-1" onclick="app.openLesson('${l.id}')"><span class="w-12 h-12 rounded-2xl ${isDone ? 'bg-emerald-500 text-white' : 'bg-islamic-50 text-islamic-600'} flex items-center justify-center font-black shrink-0">${isDone ? '<i class="fas fa-check"></i>' : index+1}</span><div class="min-w-0"><div class="flex items-center gap-2"><h4 class="font-black text-lg md:text-xl text-slate-800 truncate">${l.title}</h4>${isFav ? '<i class="fas fa-bookmark text-rose-400 text-xs"></i>' : ''}</div><div class="flex flex-wrap gap-2 mt-2"><span class="text-[11px] font-bold text-slate-400"><i class="fas fa-book-open ml-1"></i> شرح</span>${l.quizId ? '<span class="text-[11px] font-bold text-amber-600"><i class="fas fa-clipboard-question ml-1"></i> اختبار متاح</span>' : ''}${isDone ? '<span class="text-[11px] font-black text-emerald-600">مكتمل ✓</span>' : ''}</div></div></div><div class="flex gap-2 w-full md:w-auto">${l.quizId ? `<button onclick="app.startQuiz('${l.quizId}', 'chapter')" class="flex-1 md:flex-none bg-amber-50 text-amber-700 border border-amber-200 px-4 py-2.5 rounded-xl font-black text-sm">اختبار</button>` : ''}<button onclick="app.openLesson('${l.id}')" class="flex-1 md:flex-none bg-slate-900 text-white px-5 py-2.5 rounded-xl font-black text-sm">قراءة <i class="fas fa-arrow-left mr-1"></i></button></div></div>`;
+                        return `<div class="lesson-row modern-card rounded-[1.6rem] p-4 md:p-5 border ${isDone ? 'border-emerald-200' : 'border-slate-100'} flex flex-col md:flex-row md:items-center justify-between gap-4"><div class="flex items-center gap-4 min-w-0 cursor-pointer flex-1" onclick="app.openLesson('${l.id}')"><span class="w-12 h-12 rounded-2xl ${isDone ? 'bg-emerald-500 text-white' : 'bg-islamic-50 text-islamic-600'} flex items-center justify-center font-black shrink-0">${isDone ? '<i class="fas fa-check"></i>' : index+1}</span><div class="min-w-0"><div class="flex items-center gap-2"><h4 class="font-black text-lg md:text-xl text-slate-800 truncate">${l.title}</h4>${app.accessBadge('lesson',l)}${isFav ? '<i class="fas fa-bookmark text-rose-400 text-xs"></i>' : ''}</div><div class="flex flex-wrap gap-2 mt-2"><span class="text-[11px] font-bold text-slate-400"><i class="fas fa-book-open ml-1"></i> شرح</span>${l.quizId ? '<span class="text-[11px] font-bold text-amber-600"><i class="fas fa-clipboard-question ml-1"></i> اختبار متاح</span>' : ''}${isDone ? '<span class="text-[11px] font-black text-emerald-600">مكتمل ✓</span>' : ''}</div></div></div><div class="flex gap-2 w-full md:w-auto">${l.quizId ? `<button onclick="app.startQuiz('${l.quizId}', 'chapter')" class="flex-1 md:flex-none bg-amber-50 text-amber-700 border border-amber-200 px-4 py-2.5 rounded-xl font-black text-sm">اختبار</button>` : ''}<button onclick="app.openLesson('${l.id}')" class="flex-1 md:flex-none bg-slate-900 text-white px-5 py-2.5 rounded-xl font-black text-sm">قراءة <i class="fas fa-arrow-left mr-1"></i></button></div></div>`;
                     }).join('');
                 } else {
                     list.innerHTML = `<div class="modern-card rounded-3xl p-12 text-center"><i class="fas fa-book-open text-5xl text-slate-300 mb-4"></i><p class="text-slate-500 font-black">لا توجد دروس مضافة حالياً.</p></div>`;
@@ -1189,6 +1259,7 @@
 
             openLesson: (lessonId) => {
                 const lesson = state.db.lessons.find(l => l.id === lessonId); if(!lesson) return;
+                if(!app.guardAccess('lesson',lesson)) return;
                 state.currentLesson = lesson;
                 state.currentChap = state.db.chapters.find(c => c.id === lesson.chapterId);
                 state.currentCat = state.currentChap ? state.db.categories.find(c => c.id === state.currentChap.categoryId) : null;
@@ -1224,6 +1295,7 @@
             // --- دوال الاختبارات ---
             startComprehensiveQuiz: (chapterId) => {
                 const targetChapter = state.db.chapters.find(c => c.id === chapterId);
+                if (targetChapter && !app.guardAccess('chapter',targetChapter)) return;
                 if (targetChapter) {
                     state.currentChap = targetChapter;
                     state.currentCat = state.db.categories.find(c => c.id === targetChapter.categoryId) || state.currentCat;
@@ -1239,6 +1311,7 @@
 
             startQuiz: (quizId, returnLocation = 'lesson') => {
                 const quiz = state.db.quizzes.find(q => q.id === quizId);
+                if(quiz && !app.guardAccess('quiz',quiz)) return;
                 if(!quiz || !quiz.questions || quiz.questions.length === 0) return alert('غير متوفر حالياً.');
                 state.quizData = quiz; state.quizBaseData = quiz; state.quizReturnLocation = returnLocation;
                 window.history.pushState({}, document.title, `?quiz=${quiz.id}`);
