@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="app-build" content="V8.1-LIBRARY-PRO-20260917">
     <meta name="theme-color" content="#064e3b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="manifest" href="manifest.webmanifest">
-    <link rel="icon" href="icon-192.png" type="image/png">
-    <title>منصة أستاذ أحمد عيد للعلوم الشرعية</title>
+    <link rel="manifest" href="manifest.webmanifest?v=8.1.20260917">
+    <link rel="icon" href="icon-192.png?v=8.1.20260917" type="image/png">
+    <title>المكتبة العلمية التفاعلية | منصة العلوم الشرعية والعربية</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
     <script>
         tailwind.config = {
@@ -142,6 +146,38 @@
         .legacy-content-note{border:1px dashed #cbd5e1;background:#f8fafc;border-radius:1.2rem;padding:14px}
         @media(max-width:1100px){.featured-book-slide{flex-basis:calc((100% - 32px)/3)}}
         @media(max-width:640px){.featured-books-track{gap:12px}.featured-book-slide{flex-basis:82%}.book-cover-wrap{height:235px}.carousel-arrow{width:38px;height:38px}.book-hero-cover{width:130px}.category-image-card{min-height:180px}}
+
+
+        /* V8.1 PRO — واجهة المكتبة العلمية الجديدة */
+        :root{--library-ink:#062f2a;--library-emerald:#0b725a;--library-gold:#c8922e;--library-paper:#fcfaf4}
+        .library-hero{position:relative;overflow:hidden;border-radius:2.5rem;min-height:430px;background:linear-gradient(115deg,rgba(4,47,42,.98),rgba(6,78,59,.94) 52%,rgba(13,96,78,.90)),radial-gradient(circle at 85% 10%,rgba(216,177,83,.28),transparent 32%);box-shadow:0 30px 90px rgba(6,78,59,.24)}
+        .library-hero::before{content:'';position:absolute;inset:0;opacity:.14;background-image:radial-gradient(circle at 15px 15px,rgba(255,255,255,.85) 1.2px,transparent 1.3px);background-size:32px 32px;mask-image:linear-gradient(to left,#000,transparent 76%)}
+        .library-hero::after{content:'';position:absolute;width:420px;height:420px;border:1px solid rgba(216,177,83,.25);border-radius:50%;left:-170px;top:-170px;box-shadow:0 0 0 42px rgba(216,177,83,.05),0 0 0 86px rgba(216,177,83,.025)}
+        .hero-kicker{display:inline-flex;align-items:center;gap:.55rem;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);padding:.55rem .9rem;border-radius:999px;color:#fde9b1;font-size:.78rem;font-weight:900}
+        .hero-book-stack{position:relative;min-height:300px;display:flex;align-items:center;justify-content:center}
+        .hero-book-main{width:190px;aspect-ratio:2/3;border-radius:1.25rem;background:linear-gradient(145deg,#0a5b49,#062f2a);border:1px solid rgba(255,220,140,.45);box-shadow:0 30px 65px rgba(0,0,0,.32);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:1.4rem;transform:rotate(-2deg);position:relative;z-index:3}
+        .hero-book-main::before{content:'';position:absolute;inset:12px;border:1px solid rgba(230,187,87,.55);border-radius:.85rem}
+        .hero-book-shadow{position:absolute;width:165px;aspect-ratio:2/3;border-radius:1.1rem;border:1px solid rgba(255,255,255,.12);background:linear-gradient(145deg,#174d44,#0f3d36);box-shadow:0 22px 50px rgba(0,0,0,.20)}
+        .hero-book-shadow.one{transform:translateX(62px) rotate(8deg);opacity:.74}.hero-book-shadow.two{transform:translateX(-62px) rotate(-9deg);opacity:.54}
+        .library-mini-stat{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(12px);border-radius:1.2rem;padding:1rem}
+        .library-section-shell{background:#fff;border:1px solid #ebe9e2;border-radius:2rem;box-shadow:0 18px 52px rgba(15,23,42,.055);padding:1.25rem}
+        .library-section-header{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin-bottom:1.25rem}
+        .library-eyebrow{font-size:.72rem;font-weight:900;color:#a06d10;background:#fff8e8;border:1px solid #f3dfad;padding:.35rem .7rem;border-radius:999px;display:inline-flex;align-items:center;gap:.35rem}
+        .library-heading{font-size:clamp(1.45rem,2.3vw,2rem);font-weight:900;color:#172033;margin-top:.55rem}
+        .library-muted{color:#8a94a5;font-weight:700;font-size:.86rem;margin-top:.35rem}
+        .featured-books-empty{min-height:285px;border:1px dashed #d9d5c9;border-radius:1.6rem;background:linear-gradient(145deg,#fffdf7,#f8fbf9);display:grid;place-items:center;text-align:center;padding:2rem;color:#77808f}
+        .empty-book-shelf{display:flex;align-items:end;justify-content:center;gap:9px;margin-bottom:1rem}.empty-book-shelf span{display:block;width:36px;border-radius:6px 6px 3px 3px;background:linear-gradient(#0f766e,#064e3b);box-shadow:0 8px 20px rgba(6,78,59,.18)}.empty-book-shelf span:nth-child(1){height:88px}.empty-book-shelf span:nth-child(2){height:110px;background:linear-gradient(#c8922e,#9b6812)}.empty-book-shelf span:nth-child(3){height:96px}.empty-book-shelf span:nth-child(4){height:118px;background:linear-gradient(#1f5b4f,#0c3d35)}.empty-book-shelf span:nth-child(5){height:82px;background:linear-gradient(#d5a747,#a87718)}
+        .journey-strip{background:linear-gradient(135deg,#072f2a,#0b5d4c);border-radius:2rem;padding:1.25rem;color:#fff;box-shadow:0 20px 55px rgba(6,78,59,.16)}
+        .journey-stat{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);border-radius:1.25rem;padding:1rem;min-height:95px}
+        .recent-book-shell .book-card{box-shadow:none;border-color:#eceae4}
+        .desktop-library-nav{display:none;align-items:center;gap:.25rem;padding:.3rem;background:#f6f8f7;border:1px solid #e8ecea;border-radius:1rem}.desktop-library-nav button{padding:.58rem .85rem;border-radius:.75rem;font-size:.78rem;font-weight:900;color:#50605b;transition:.2s}.desktop-library-nav button:hover{background:#fff;color:#0b725a;box-shadow:0 5px 14px rgba(15,23,42,.06)}
+        .version-pill{font-size:.62rem;font-weight:900;color:#fff8df;background:rgba(200,146,46,.18);border:1px solid rgba(234,198,116,.24);padding:.3rem .55rem;border-radius:999px}
+        .category-image-card.no-image{background:linear-gradient(145deg,var(--cat-a,#064e3b),var(--cat-b,#0f766e))}.category-image-card.no-image::before{content:'';position:absolute;inset:0;opacity:.16;background-image:radial-gradient(circle at 12px 12px,#fff 1px,transparent 1.2px);background-size:26px 26px;z-index:-1}.category-large-icon{font-size:3.2rem;color:rgba(255,255,255,.18);position:absolute;left:18px;top:18px;z-index:0}
+        .learning-method-card{background:linear-gradient(180deg,#fff,#fbfcfa);border:1px solid #e9edea;border-radius:1.6rem;padding:1.1rem;display:flex;align-items:center;gap:.9rem}.learning-method-card .step{width:42px;height:42px;border-radius:14px;background:#ecfdf5;color:#047857;display:grid;place-items:center;font-weight:900;flex:none}
+        body.dark-mode .library-section-shell{background:#101c19;border-color:#2b3d37}.dark-mode .library-heading{color:#f3f5f4}.dark-mode .library-muted{color:#9aa9a4}.dark-mode .featured-books-empty{background:#13231f;border-color:#31443e;color:#a8b5b0}.dark-mode .desktop-library-nav{background:#13231f;border-color:#31443e}.dark-mode .desktop-library-nav button{color:#bdc9c5}.dark-mode .learning-method-card{background:#101c19;border-color:#31443e}
+        @media(min-width:1280px){.desktop-library-nav{display:flex}}
+        @media(max-width:767px){.library-hero{min-height:auto;border-radius:1.8rem}.hero-book-stack{min-height:220px}.hero-book-main{width:132px}.hero-book-shadow{width:118px}.library-section-shell{border-radius:1.55rem;padding:1rem}.journey-strip{border-radius:1.55rem}.library-section-header{align-items:flex-start}}
+
     </style>
     <!-- build: student-auth-cta-v2 -->
 </head>
@@ -166,12 +202,19 @@
                 </span>
             </button>
 
+            <div class="desktop-library-nav">
+                <button onclick="app.resetUrlAndGo('landing')"><i class="fas fa-house ml-1"></i>الرئيسية</button>
+                <button onclick="app.scrollToCategories()"><i class="fas fa-layer-group ml-1"></i>الأقسام</button>
+                <button onclick="app.openSaved()"><i class="fas fa-bookmark ml-1"></i>مكتبتي</button>
+                <button onclick="app.openQuizLibrary()"><i class="fas fa-clipboard-check ml-1"></i>المراجعة</button>
+            </div>
+
             <div class="hidden md:flex items-center gap-2 flex-1 justify-end">
                 <div class="relative w-full max-w-md">
                     <i class="fas fa-search absolute top-1/2 -translate-y-1/2 right-4 text-slate-400"></i>
-                    <input type="text" id="search-input" onkeyup="app.handleSearch()" placeholder="ابحث في الدروس والأبواب والاختبارات..." class="w-full bg-slate-50 border border-slate-200 py-3 pr-11 pl-4 rounded-2xl font-bold focus:border-islamic-500 focus:ring-4 focus:ring-islamic-50 focus:outline-none transition-all">
+                    <input type="text" id="search-input" onkeyup="app.handleSearch()" placeholder="ابحث عن كتاب، قسم، درس، أو موضوع..." class="w-full bg-slate-50 border border-slate-200 py-3 pr-11 pl-4 rounded-2xl font-bold focus:border-islamic-500 focus:ring-4 focus:ring-islamic-50 focus:outline-none transition-all">
                 </div>
-                <button id="account-nav-btn" onclick="app.handleTopAccountButton()" class="hidden h-12 px-4 rounded-2xl bg-islamic-600 border border-islamic-600 text-white hover:bg-islamic-700 transition-all flex items-center gap-2 shadow-sm whitespace-nowrap" title="تسجيل الدخول أو فتح حساب الطالب">
+                <button id="account-nav-btn" onclick="app.handleTopAccountButton()" class="h-12 px-4 rounded-2xl bg-islamic-600 border border-islamic-600 text-white hover:bg-islamic-700 transition-all flex items-center gap-2 shadow-sm whitespace-nowrap" title="تسجيل الدخول أو فتح حساب الطالب">
                     <span id="account-nav-avatar" class="w-8 h-8 rounded-xl bg-white/15 border border-white/20 text-white flex items-center justify-center text-xs font-black"><i class="fas fa-user"></i></span>
                     <span id="account-nav-label" class="font-black text-sm">تسجيل الدخول / إنشاء حساب</span>
                 </button>
@@ -187,7 +230,7 @@
                 <button onclick="app.toggleTheme()" class="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600"><i id="theme-icon-mobile" class="fas fa-moon"></i></button>
             </div>
         </div>
-        <div id="account-cta-bar" class="container mx-auto px-4 pb-3">
+        <div id="account-cta-bar" class="md:hidden container mx-auto px-4 pb-3">
             <button id="mobile-account-cta" onclick="app.handleTopAccountButton()" class="w-full md:max-w-md md:mr-auto min-h-12 px-4 py-2.5 rounded-2xl bg-islamic-600 text-white shadow-lg flex items-center justify-between gap-3 text-right">
                 <span class="flex items-center gap-3 min-w-0">
                     <span id="account-mobile-avatar" class="w-9 h-9 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0 font-black"><i class="fas fa-user"></i></span>
@@ -221,77 +264,86 @@
             <div id="search-results" class="space-y-4"></div>
         </section>
 
-        <section id="landing" class="view-section space-y-8 md:space-y-10 animate-fadeIn hidden">
+        <section id="landing" class="view-section space-y-6 md:space-y-8 animate-fadeIn hidden">
             <div id="platform-announcement" class="hidden"></div>
-            <div class="hero-shell relative overflow-hidden rounded-[2rem] md:rounded-[2.7rem] p-6 md:p-10 lg:p-12 text-white shadow-2xl">
-                <div class="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-white/10 blur-2xl pulse-soft"></div>
-                <div class="absolute -bottom-24 right-1/4 w-72 h-72 rounded-full bg-amber-300/10 blur-3xl"></div>
-                <div class="relative z-10 grid lg:grid-cols-[1.4fr_.8fr] gap-8 items-center">
-                    <div>
-                        <span class="inline-flex items-center gap-2 bg-white/10 border border-white/15 px-4 py-2 rounded-full text-xs md:text-sm font-black mb-5"><i class="fas fa-sparkles text-amber-300"></i> رحلة علمية منظمة في مكان واحد</span>
-                        <h2 id="platform-hero-title" class="text-3xl md:text-5xl lg:text-6xl font-black leading-[1.25] mb-4">تعلّم بهدوء، راجع بذكاء، واختبر فهمك باستمرار.</h2>
-                        <p id="platform-hero-description" class="text-emerald-50/80 font-bold text-base md:text-lg max-w-2xl leading-loose">الكتب مقسمة إلى أبواب ودروس قصيرة، ومع كل درس اختبار يساعدك على تثبيت المعلومة ومتابعة تقدمك من أي جهاز.</p>
-                        <div class="flex flex-wrap gap-3 mt-7">
-                            <button onclick="app.scrollToCategories()" class="bg-white text-islamic-900 px-6 py-3.5 rounded-2xl font-black shadow-lg hover:-translate-y-1 transition-all">ابدأ التعلّم <i class="fas fa-arrow-left mr-2"></i></button>
-                            <button onclick="app.openQuizLibrary()" class="bg-white/10 border border-white/20 text-white px-6 py-3.5 rounded-2xl font-black hover:bg-white/15 transition-all"><i class="fas fa-clipboard-question ml-2"></i> بنك الاختبارات</button>
-                        </div>
-                    </div>
-                    <div class="hidden lg:block">
-                        <div class="glass rounded-[2rem] p-5 text-slate-800 float-soft">
-                            <div class="flex items-center justify-between mb-5"><span class="font-black text-islamic-900">تقدمك في المنصة</span><span class="w-10 h-10 rounded-xl bg-islamic-50 text-islamic-600 flex items-center justify-center"><i class="fas fa-chart-simple"></i></span></div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div class="bg-white rounded-2xl p-4 shadow-sm"><span id="hero-completed" class="text-3xl font-black text-islamic-700 block">0</span><small class="font-bold text-slate-400">درس مكتمل</small></div>
-                                <div class="bg-white rounded-2xl p-4 shadow-sm"><span id="hero-quizzes" class="text-3xl font-black text-amber-600 block">0</span><small class="font-bold text-slate-400">اختبار منجز</small></div>
-                            </div>
-                            <div class="mt-4 bg-white rounded-2xl p-4 shadow-sm"><div class="flex justify-between text-xs font-black mb-2"><span>نسبة الإنجاز</span><span id="hero-progress-label">0%</span></div><div class="h-2.5 rounded-full bg-slate-100 overflow-hidden"><div id="hero-progress-bar" class="h-full bg-gradient-to-l from-islamic-500 to-emerald-300 rounded-full transition-all duration-700" style="width:0%"></div></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <section id="featured-books-section" class="hidden featured-books-shell rounded-[2rem] md:rounded-[2.5rem] p-5 md:p-7">
-                <div class="flex items-end justify-between gap-4 mb-5">
-                    <div><span class="text-xs font-black text-amber-600 bg-amber-50 px-3 py-1 rounded-full"><i class="fas fa-star ml-1"></i>اختيارات المنصة</span><h3 id="featured-books-title" class="text-2xl md:text-3xl font-black text-slate-800 mt-3">كتب مميزة</h3><p class="text-slate-400 font-bold mt-1">مجموعة مختارة من الكتب التي نوصي ببدء رحلتك منها.</p></div>
-                    <button onclick="app.scrollToCategories()" class="hidden sm:inline-flex text-islamic-700 bg-islamic-50 border border-islamic-100 px-4 py-2.5 rounded-xl font-black text-sm">استعرض الأقسام</button>
-                </div>
-                <div class="relative">
-                    <button id="featured-prev" onclick="app.carouselPrev()" class="carousel-arrow prev" aria-label="السابق"><i class="fas fa-chevron-right"></i></button>
-                    <div id="featured-books-viewport" class="featured-books-viewport">
-                        <div id="featured-books-track" class="featured-books-track"></div>
+            <section class="library-hero p-6 md:p-9 lg:p-11 text-white">
+                <div class="relative z-10 grid lg:grid-cols-[1.35fr_.65fr] gap-8 items-center">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-5">
+                            <span class="hero-kicker"><i class="fas fa-book-quran"></i> مكتبة علمية تفاعلية</span>
+                            <span class="version-pill">الواجهة الجديدة</span>
+                        </div>
+                        <h1 id="platform-hero-title" class="text-3xl md:text-5xl lg:text-[3.4rem] font-black leading-[1.35] max-w-4xl">رحلة في طلب العلم… كتابًا بعد كتاب، ودرسًا بعد درس.</h1>
+                        <p id="platform-hero-description" class="text-white/75 font-bold text-base md:text-lg max-w-3xl leading-8 md:leading-9 mt-4">اختر القسم، افتح الكتاب، تابع أبوابه ودروسه، شاهد الشرح أو اقرأ التفريغ، ثم ثبّت ما تعلمته باختبار قصير.</p>
+                        <div class="flex flex-wrap gap-3 mt-7">
+                            <button onclick="document.getElementById('featured-books-section')?.scrollIntoView({behavior:'smooth',block:'start'})" class="bg-amber-300 text-emerald-950 px-6 py-3.5 rounded-2xl font-black shadow-lg hover:-translate-y-1 transition-all"><i class="fas fa-book-open ml-2"></i>ابدأ من الكتب</button>
+                            <button onclick="app.scrollToCategories()" class="bg-white/10 border border-white/20 text-white px-6 py-3.5 rounded-2xl font-black hover:bg-white/15 transition-all"><i class="fas fa-layer-group ml-2"></i>استعرض الأقسام</button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 md:gap-3 max-w-2xl mt-7">
+                            <div class="library-mini-stat"><strong id="hero-completed" class="text-2xl md:text-3xl font-black block">0</strong><span class="text-[10px] md:text-xs font-bold text-white/65">درس مكتمل</span></div>
+                            <div class="library-mini-stat"><strong id="hero-quizzes" class="text-2xl md:text-3xl font-black block">0</strong><span class="text-[10px] md:text-xs font-bold text-white/65">اختبار منجز</span></div>
+                            <div class="library-mini-stat"><strong id="hero-progress-label" class="text-2xl md:text-3xl font-black block">0%</strong><span class="text-[10px] md:text-xs font-bold text-white/65">تقدمك العام</span></div>
+                        </div>
+                        <div class="max-w-2xl mt-3 h-2 rounded-full bg-white/10 overflow-hidden"><div id="hero-progress-bar" class="h-full bg-gradient-to-l from-amber-300 to-emerald-300 rounded-full transition-all duration-700" style="width:0%"></div></div>
                     </div>
+                    <div class="hero-book-stack hidden md:flex">
+                        <div class="hero-book-shadow one"></div><div class="hero-book-shadow two"></div>
+                        <div class="hero-book-main"><i class="fas fa-book-quran text-4xl text-amber-300 mb-4"></i><strong class="text-xl font-black leading-8">اقرأ<br>افهم<br>اختبر نفسك</strong><span class="text-[10px] text-white/55 font-bold mt-4">العلم خطوة بخطوة</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="featured-books-section" class="library-section-shell featured-books-shell scroll-mt-28">
+                <div class="library-section-header">
+                    <div><span class="library-eyebrow"><i class="fas fa-star"></i> مختارات المكتبة</span><h2 id="featured-books-title" class="library-heading">كتب مميزة</h2><p class="library-muted">كتب مختارة تظهر في سلايدر متحرك، ويمكن التحكم فيها بالكامل من لوحة الإدارة.</p></div>
+                    <button onclick="app.scrollToCategories()" class="hidden sm:inline-flex text-islamic-700 bg-islamic-50 border border-islamic-100 px-4 py-2.5 rounded-xl font-black text-sm">كل الأقسام <i class="fas fa-arrow-left mr-2"></i></button>
+                </div>
+                <div id="featured-books-empty" class="featured-books-empty hidden">
+                    <div><div class="empty-book-shelf"><span></span><span></span><span></span><span></span><span></span></div><h3 class="font-black text-lg text-slate-600">المكتبة جاهزة لاستقبال الكتب</h3><p class="text-sm font-bold text-slate-400 mt-2">عند إضافة الكتب ستظهر المختارات هنا تلقائيًا.</p></div>
+                </div>
+                <div id="featured-books-carousel" class="relative">
+                    <button id="featured-prev" onclick="app.carouselPrev()" class="carousel-arrow prev" aria-label="السابق"><i class="fas fa-chevron-right"></i></button>
+                    <div id="featured-books-viewport" class="featured-books-viewport"><div id="featured-books-track" class="featured-books-track"></div></div>
                     <button id="featured-next" onclick="app.carouselNext()" class="carousel-arrow next" aria-label="التالي"><i class="fas fa-chevron-left"></i></button>
                 </div>
                 <div id="featured-books-dots" class="carousel-dots"></div>
             </section>
 
-            <div id="categories-section" class="scroll-mt-28 pt-2">
-                <div class="flex items-end justify-between gap-4 mb-5 md:mb-7">
-                    <div><h3 class="section-title text-2xl md:text-3xl font-black text-slate-800">الأقسام العلمية</h3><p class="text-slate-400 font-bold mt-2">اختر المجال العلمي، ثم تصفح كتبه ودروسه خطوة بخطوة.</p></div>
+            <section id="categories-section" class="library-section-shell scroll-mt-28">
+                <div class="library-section-header">
+                    <div><span class="library-eyebrow"><i class="fas fa-layer-group"></i> أبواب المعرفة</span><h2 class="library-heading">الأقسام العلمية</h2><p class="library-muted">كل قسم يجمع كتبه الخاصة: الفقه، المواريث، الحديث، السيرة، العربية، وغيرها.</p></div>
                 </div>
-                <div id="categories-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5"></div>
-            </div>
+                <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5"></div>
+            </section>
 
-
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                <div class="modern-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex items-center gap-3"><span class="soft-icon w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"><i class="fas fa-layer-group"></i></span><div><strong id="stat-categories" class="text-xl md:text-2xl font-black text-slate-800 block">0</strong><small class="text-slate-400 font-bold">قسم علمي</small></div></div>
-                <div class="modern-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex items-center gap-3"><span class="soft-icon w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0"><i class="fas fa-book-open"></i></span><div><strong id="stat-books" class="text-xl md:text-2xl font-black text-slate-800 block">0</strong><small class="text-slate-400 font-bold">كتاب</small></div></div>
-                <div class="modern-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex items-center gap-3"><span class="soft-icon w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0"><i class="fas fa-clipboard-check"></i></span><div><strong id="stat-quizzes" class="text-xl md:text-2xl font-black text-slate-800 block">0</strong><small class="text-slate-400 font-bold">اختبار</small></div></div>
-                <div class="modern-card rounded-2xl md:rounded-3xl p-4 md:p-5 flex items-center gap-3"><span class="soft-icon w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0"><i class="fas fa-star"></i></span><div><strong id="stat-best-score" class="text-xl md:text-2xl font-black text-slate-800 block">—</strong><small class="text-slate-400 font-bold">أفضل نتيجة</small></div></div>
-            </div>
+            <section class="journey-strip">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-4"><div><span class="text-amber-200 text-xs font-black">رحلتك العلمية</span><h2 class="text-2xl md:text-3xl font-black mt-2">كل تقدم صغير يصنع مسارًا كبيرًا</h2><p class="text-white/60 text-sm font-bold mt-2">تابع ما قرأته وما اختبرته، وارجع دائمًا من النقطة التي توقفت عندها.</p></div><button onclick="app.openAccount()" class="bg-white text-emerald-900 px-5 py-3 rounded-xl font-black">حسابي وتقدمي</button></div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div class="journey-stat"><i class="fas fa-layer-group text-emerald-200"></i><strong id="stat-categories" class="text-2xl font-black block mt-2">0</strong><span class="text-xs text-white/55 font-bold">قسم علمي</span></div>
+                    <div class="journey-stat"><i class="fas fa-book-open text-amber-200"></i><strong id="stat-books" class="text-2xl font-black block mt-2">0</strong><span class="text-xs text-white/55 font-bold">كتاب</span></div>
+                    <div class="journey-stat"><i class="fas fa-clipboard-check text-cyan-200"></i><strong id="stat-quizzes" class="text-2xl font-black block mt-2">0</strong><span class="text-xs text-white/55 font-bold">اختبار تثبيت</span></div>
+                    <div class="journey-stat"><i class="fas fa-star text-yellow-200"></i><strong id="stat-best-score" class="text-2xl font-black block mt-2">—</strong><span class="text-xs text-white/55 font-bold">أفضل نتيجة</span></div>
+                </div>
+            </section>
 
             <div id="continue-card" class="hidden modern-card rounded-[2rem] p-5 md:p-7 border-r-4 border-islamic-500"></div>
 
-            <div class="grid lg:grid-cols-2 gap-5">
-                <div class="modern-card rounded-[2rem] p-5 md:p-7">
-                    <div class="flex items-center justify-between mb-5"><div><span class="text-xs font-black text-islamic-600 bg-islamic-50 px-3 py-1 rounded-full">اقتراح سريع</span><h3 class="text-xl md:text-2xl font-black text-slate-800 mt-3">اختبار مقترح لك</h3></div><span class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl"><i class="fas fa-bolt"></i></span></div>
-                    <div id="featured-quiz" class="text-slate-500 font-bold">سيظهر هنا اختبار بعد تحميل المحتوى.</div>
-                </div>
-                <div class="modern-card rounded-[2rem] p-5 md:p-7">
-                    <div class="flex items-center justify-between mb-5"><div><span class="text-xs font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">آخر إضافة</span><h3 class="text-xl md:text-2xl font-black text-slate-800 mt-3">درس مقترح للقراءة</h3></div><span class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl"><i class="fas fa-book-open-reader"></i></span></div>
-                    <div id="featured-lesson" class="text-slate-500 font-bold">سيظهر هنا درس بعد تحميل المحتوى.</div>
-                </div>
-            </div>
+            <section id="recent-books-section" class="library-section-shell recent-book-shell">
+                <div class="library-section-header"><div><span class="library-eyebrow"><i class="fas fa-clock"></i> أحدث الإضافات</span><h2 class="library-heading">أحدث الكتب في المكتبة</h2><p class="library-muted">ابدأ كتابًا جديدًا أو أكمل ما سبق أن بدأته.</p></div></div>
+                <div id="recent-books-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+            </section>
 
+            <section class="grid lg:grid-cols-2 gap-5">
+                <div class="library-section-shell"><div class="flex items-center justify-between mb-5"><div><span class="library-eyebrow"><i class="fas fa-book-open-reader"></i> اقرأ الآن</span><h3 class="text-xl md:text-2xl font-black text-slate-800 mt-3">آخر درس متاح</h3></div><span class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl"><i class="fas fa-feather-pointed"></i></span></div><div id="featured-lesson" class="text-slate-500 font-bold">سيظهر هنا أحدث درس بعد تحميل المحتوى.</div></div>
+                <div class="library-section-shell"><div class="flex items-center justify-between mb-5"><div><span class="library-eyebrow"><i class="fas fa-brain"></i> ثبّت المعلومة</span><h3 class="text-xl md:text-2xl font-black text-slate-800 mt-3">اختبار مراجعة مقترح</h3></div><span class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl"><i class="fas fa-bolt"></i></span></div><div id="featured-quiz" class="text-slate-500 font-bold">سيظهر هنا اختبار بعد تحميل المحتوى.</div></div>
+            </section>
+
+            <section class="grid md:grid-cols-3 gap-3">
+                <div class="learning-method-card"><span class="step">1</span><div><strong class="font-black text-slate-800">اختر الكتاب</strong><p class="text-xs text-slate-400 font-bold mt-1">ابدأ من القسم والكتاب المناسبين لك.</p></div></div>
+                <div class="learning-method-card"><span class="step">2</span><div><strong class="font-black text-slate-800">تعلّم على أجزاء</strong><p class="text-xs text-slate-400 font-bold mt-1">فيديو أو نص مفرغ وشرح منظم لكل درس.</p></div></div>
+                <div class="learning-method-card"><span class="step">3</span><div><strong class="font-black text-slate-800">ثبّت المعلومة</strong><p class="text-xs text-slate-400 font-bold mt-1">اختبار قصير بعد كل درس ثم مراجعات شاملة.</p></div></div>
+            </section>
         </section>
 
         <section id="quizzes-library" class="view-section space-y-6 animate-fadeIn hidden max-w-6xl mx-auto">
@@ -768,7 +820,7 @@
 
             safeUrl: (value) => { try { const u=new URL(String(value||'')); return ['http:','https:'].includes(u.protocol)?u.href:''; } catch(e){return '';} },
             applyBranding: () => {
-                const b=state.db.settings?.branding||{}; const name=b.name||'منصة أستاذ أحمد عيد', desc=b.description||'تعلم • اختبر نفسك • تابع تقدمك';
+                const b=state.db.settings?.branding||{}; const name=b.name||'منصة العلم', desc=b.description||'تعلم • اختبر نفسك • تابع تقدمك';
                 const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val}; set('platform-name-nav',name);set('platform-description-nav',desc);set('platform-hero-title',b.heroTitle||'رحلة في طلب العلم… كتابًا بعد كتاب، ودرسًا بعد درس.');set('platform-hero-description',b.heroDescription||'مكتبة علمية تفاعلية للعلوم الشرعية والعربية: كتب منظمة، دروس مبسطة، فيديوهات وتفريغات، واختبارات قصيرة لتثبيت المعلومة.');set('platform-footer',`جميع الحقوق محفوظة © ${new Date().getFullYear()} ${name}`); document.title=name;
                 const dock=document.getElementById('social-dock'); if(!dock)return; const items=[['facebook',b.facebook,'fa-facebook-f'],['youtube',b.youtube,'fa-youtube'],['tiktok',b.tiktok,'fa-tiktok'],['whatsapp',b.whatsapp,'fa-whatsapp']].filter(x=>app.safeUrl(x[1])); dock.innerHTML=items.map(([k,url,icon])=>`<a href="${app.safeUrl(url)}" target="_blank" rel="noopener" title="${k}" class="text-slate-700"><i class="fab ${icon}"></i></a>`).join(''); dock.classList.toggle('hidden',!items.length);
             },
@@ -859,7 +911,24 @@
             getBookLessons: bookId => { const ids=new Set(app.getBookChapters(bookId).map(ch=>ch.id)); return state.db.lessons.filter(l=>ids.has(l.chapterId)&&app.effectiveAccess('lesson',l)!=='hidden'); },
             getBookProgress: book => { const lessons=app.getBookLessons(book.id),done=lessons.filter(l=>state.local.completedLessons.includes(l.id)).length; return {lessons,done,percent:lessons.length?Math.round(done/lessons.length*100):0}; },
             bookCardHtml: (book,{featured=false}={}) => { const cat=state.db.categories.find(c=>c.id===book.categoryId),pr=app.getBookProgress(book),locked=app.effectiveAccess('book',book)==='subscriber'&&!app.isSubscriptionActive(); return `<article class="book-card h-full flex flex-col ${locked?'opacity-90':''}"><div class="book-cover-wrap">${app.imageHtml(book.coverImage||book.coverUrl||'',book.title)}<div class="absolute top-3 right-3 flex gap-1">${app.accessBadge('book',book)}${book.featured?'<span class="text-[10px] font-black bg-amber-400 text-amber-950 px-2 py-1 rounded-lg"><i class="fas fa-star"></i></span>':''}</div></div><div class="p-4 flex flex-col flex-1"><span class="text-[10px] font-black text-islamic-600">${app.escapeHtml(cat?.name||'كتاب')}</span><h4 class="font-black text-slate-800 text-lg leading-7 mt-1 line-clamp-2">${app.escapeHtml(book.title||'كتاب')}</h4><p class="text-xs font-bold text-slate-400 mt-1 truncate">${app.escapeHtml(book.author||'')}</p><div class="mt-auto pt-4"><div class="flex justify-between text-[10px] font-black text-slate-400 mb-1"><span>${pr.done} / ${pr.lessons.length} درس</span><span>${pr.percent}%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-islamic-500 rounded-full" style="width:${pr.percent}%"></div></div><button onclick="app.openBook('${book.id}')" class="w-full mt-3 ${pr.percent?'bg-islamic-600':'bg-slate-900'} text-white py-2.5 rounded-xl font-black text-sm">${pr.percent?'متابعة الكتاب':'ابدأ الكتاب'} <i class="fas fa-arrow-left mr-1"></i></button></div></div></article>`; },
-            renderFeaturedBooks: () => { const section=document.getElementById('featured-books-section'),track=document.getElementById('featured-books-track'); if(!section||!track)return; const books=state.db.books.filter(b=>b.featured&&app.effectiveAccess('book',b)!=='hidden').sort((a,b)=>(Number(a.featuredOrder)||9999)-(Number(b.featuredOrder)||9999)); if(!books.length){section.classList.add('hidden');track.innerHTML='';app.stopCarousel();return;} section.classList.remove('hidden'); const cfg=state.db.settings?.featuredCarousel||{}; const title=document.getElementById('featured-books-title');if(title)title.innerText=cfg.title||'كتب مميزة'; track.innerHTML=books.map(b=>`<div class="featured-book-slide">${app.bookCardHtml(b,{featured:true})}</div>`).join(''); app.bindCarouselGestures(); app.startCarousel(); app.renderCarouselDots(); },
+            renderFeaturedBooks: () => {
+                const section=document.getElementById('featured-books-section'),track=document.getElementById('featured-books-track'),empty=document.getElementById('featured-books-empty'),carousel=document.getElementById('featured-books-carousel');
+                if(!section||!track)return;
+                const visible=state.db.books.filter(b=>app.effectiveAccess('book',b)!=='hidden');
+                const featured=visible.filter(b=>b.featured).sort((a,b)=>(Number(a.featuredOrder)||9999)-(Number(b.featuredOrder)||9999));
+                const books=(featured.length?featured:[...visible].sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0))).slice(0,30);
+                section.classList.remove('hidden');
+                const cfg=state.db.settings?.featuredCarousel||{},title=document.getElementById('featured-books-title');if(title)title.innerText=cfg.title||'كتب مميزة';
+                if(!books.length){track.innerHTML='';empty?.classList.remove('hidden');carousel?.classList.add('hidden');document.getElementById('featured-books-dots')?.classList.add('hidden');app.stopCarousel();return;}
+                empty?.classList.add('hidden');carousel?.classList.remove('hidden');document.getElementById('featured-books-dots')?.classList.remove('hidden');
+                track.innerHTML=books.map(b=>`<div class="featured-book-slide">${app.bookCardHtml(b,{featured:true})}</div>`).join('');
+                app.bindCarouselGestures();app.startCarousel();app.renderCarouselDots();
+            },
+            renderRecentBooks: () => {
+                const box=document.getElementById('recent-books-grid');if(!box)return;
+                const books=state.db.books.filter(b=>app.effectiveAccess('book',b)!=='hidden').sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0)).slice(0,4);
+                box.innerHTML=books.length?books.map(b=>app.bookCardHtml(b)).join(''):`<div class="sm:col-span-2 lg:col-span-4 featured-books-empty"><div><div class="empty-book-shelf"><span></span><span></span><span></span></div><h3 class="font-black text-slate-600">لا توجد كتب مضافة بعد</h3><p class="text-sm text-slate-400 font-bold mt-2">ستظهر أحدث الكتب هنا بمجرد إضافتها إلى المكتبة.</p></div></div>`;
+            },
             carouselStep: () => { const track=document.getElementById('featured-books-track');if(!track||!track.children.length)return 0;const first=track.children[0];return first.getBoundingClientRect().width+parseFloat(getComputedStyle(track).gap||0); },
             carouselNext: () => {const track=document.getElementById('featured-books-track');if(!track||track.children.length<2||state.carousel.moving)return;state.carousel.moving=true;track.style.transition='transform .62s cubic-bezier(.22,.61,.36,1)';track.style.transform=`translateX(-${app.carouselStep()}px)`;setTimeout(()=>{track.appendChild(track.firstElementChild);track.style.transition='none';track.style.transform='translateX(0)';requestAnimationFrame(()=>requestAnimationFrame(()=>{track.style.transition='transform .62s cubic-bezier(.22,.61,.36,1)';state.carousel.moving=false;app.renderCarouselDots();}));},640);},
             carouselPrev: () => {const track=document.getElementById('featured-books-track');if(!track||track.children.length<2||state.carousel.moving)return;state.carousel.moving=true;track.insertBefore(track.lastElementChild,track.firstElementChild);const step=app.carouselStep();track.style.transition='none';track.style.transform=`translateX(-${step}px)`;requestAnimationFrame(()=>requestAnimationFrame(()=>{track.style.transition='transform .62s cubic-bezier(.22,.61,.36,1)';track.style.transform='translateX(0)';setTimeout(()=>{state.carousel.moving=false;app.renderCarouselDots();},640);}));},
@@ -1136,6 +1205,7 @@
                 const featuredLesson = document.getElementById('featured-lesson');
                 const l = visibleLessons[visibleLessons.length - 1] || visibleLessons[0];
                 if (featuredLesson) featuredLesson.innerHTML = l ? `<div class="flex items-center justify-between gap-4"><div><strong class="text-lg font-black text-slate-800 block">${app.escapeHtml(l.title)}</strong><span class="text-sm text-slate-400 font-bold">جاهز للقراءة الآن</span></div><button onclick="app.openLesson('${l.id}')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-black">قراءة</button></div>` : '<span>لا توجد دروس متاحة حاليًا.</span>';
+                app.renderRecentBooks();
             },
 
             openQuizLibrary: () => { app.renderQuizLibrary(); app.showSection('quizzes-library'); app.setBottomNav('quizzes'); },
@@ -1290,7 +1360,8 @@
             renderCategories: () => {
                 const visibleCats=state.db.categories.filter(cat=>app.effectiveAccess('category',cat)!=='hidden');
                 const box=document.getElementById('categories-grid');if(!box)return;
-                box.innerHTML=visibleCats.length?visibleCats.map(cat=>{const books=state.db.books.filter(b=>b.categoryId===cat.id&&app.effectiveAccess('book',b)!=='hidden'),chapters=state.db.chapters.filter(ch=>ch.categoryId===cat.id&&app.effectiveAccess('chapter',ch)!=='hidden'),lessons=state.db.lessons.filter(l=>chapters.some(ch=>ch.id===l.chapterId)&&app.effectiveAccess('lesson',l)!=='hidden'),locked=app.effectiveAccess('category',cat)==='subscriber'&&!app.isSubscriptionActive(),img=cat.image||cat.imageUrl||'';return `<button onclick="app.openCategory('${cat.id}')" class="category-image-card text-right p-5 md:p-6 flex flex-col justify-end group ${locked?'opacity-90':''}">${img?`<img class="cat-bg" src="${app.escapeHtml(img)}" alt="${app.escapeHtml(cat.name)}" loading="lazy">`:''}<div class="relative z-10"><div class="flex items-center justify-between gap-3 mb-3"><span class="w-11 h-11 rounded-xl bg-white/15 border border-white/20 text-white grid place-items-center"><i class="fas ${locked?'fa-lock':'fa-book-open'}"></i></span>${app.accessBadge('category',cat)||'<i class="fas fa-arrow-left text-white/70"></i>'}</div><h3 class="text-xl md:text-2xl font-black text-white">${app.escapeHtml(cat.name)}</h3><p class="text-white/70 text-xs font-bold mt-2 line-clamp-2">${app.escapeHtml(cat.description||'تصفح الكتب والدروس المرتبة في هذا القسم.')}</p><div class="flex gap-2 text-[11px] font-black text-white/75 mt-4"><span>${books.length} كتاب</span><span>•</span><span>${lessons.length} درس</span></div></div></button>`;}).join(''):'<div class="col-span-full modern-card rounded-3xl p-12 text-center text-slate-400 font-black">لم تُضف أقسام علمية بعد.</div>';
+                const themes=[['#064e3b','#0f766e','fa-scale-balanced'],['#5b3a16','#a06d10','fa-book-quran'],['#193b56','#256b87','fa-mosque'],['#4c2b57','#815493','fa-feather-pointed'],['#3b4b1c','#708238','fa-scroll'],['#49321e','#8a623e','fa-book-open-reader'],['#183c36','#2d7a6b','fa-landmark'],['#3a325e','#655aa0','fa-language']];
+                box.innerHTML=visibleCats.length?visibleCats.map((cat,index)=>{const books=state.db.books.filter(b=>b.categoryId===cat.id&&app.effectiveAccess('book',b)!=='hidden'),chapters=state.db.chapters.filter(ch=>ch.categoryId===cat.id&&app.effectiveAccess('chapter',ch)!=='hidden'),lessons=state.db.lessons.filter(l=>chapters.some(ch=>ch.id===l.chapterId)&&app.effectiveAccess('lesson',l)!=='hidden'),locked=app.effectiveAccess('category',cat)==='subscriber'&&!app.isSubscriptionActive(),img=cat.image||cat.imageUrl||'',th=themes[index%themes.length];return `<button onclick="app.openCategory('${cat.id}')" style="--cat-a:${th[0]};--cat-b:${th[1]}" class="category-image-card ${img?'':'no-image'} text-right p-5 md:p-6 flex flex-col justify-end group ${locked?'opacity-90':''}">${img?`<img class="cat-bg" src="${app.escapeHtml(img)}" alt="${app.escapeHtml(cat.name)}" loading="lazy">`:`<i class="fas ${th[2]} category-large-icon"></i>`}<div class="relative z-10"><div class="flex items-center justify-between gap-3 mb-3"><span class="w-11 h-11 rounded-xl bg-white/15 border border-white/20 text-white grid place-items-center"><i class="fas ${locked?'fa-lock':th[2]}"></i></span>${app.accessBadge('category',cat)||'<i class="fas fa-arrow-left text-white/70"></i>'}</div><h3 class="text-xl md:text-2xl font-black text-white">${app.escapeHtml(cat.name)}</h3><p class="text-white/70 text-xs font-bold mt-2 line-clamp-2">${app.escapeHtml(cat.description||'تصفح الكتب والدروس المرتبة في هذا القسم.')}</p><div class="flex gap-2 text-[11px] font-black text-white/75 mt-4"><span>${books.length} كتاب</span><span>•</span><span>${lessons.length} درس</span></div></div></button>`;}).join(''):'<div class="col-span-full featured-books-empty"><div><i class="fas fa-layer-group text-4xl text-emerald-600 mb-4"></i><h3 class="font-black text-slate-600">لم تُضف أقسام علمية بعد</h3><p class="text-sm text-slate-400 font-bold mt-2">ابدأ ببناء المكتبة من لوحة الإدارة.</p></div></div>';
             },
 
             openCategory: (catId) => {
@@ -1582,11 +1653,27 @@
         // PWA
         window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();state.installPrompt=e;document.getElementById('install-app-btn')?.classList.remove('hidden')});
         app.installPwa = async () => {if(state.installPrompt){state.installPrompt.prompt();await state.installPrompt.userChoice;state.installPrompt=null;return;}alert('لو زر التثبيت لم يظهر تلقائيًا: افتح قائمة المتصفح واختر «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق».');};
-        if('serviceWorker'in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('SW',e));
+        const APP_BUILD='V8.1-LIBRARY-PRO-20260917';
+        window.__APP_BUILD__=APP_BUILD;
+        if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
+            window.addEventListener('load', async()=>{
+                try{
+                    const last=localStorage.getItem('library_app_build');
+                    if(last!==APP_BUILD && 'caches' in window){
+                        const keys=await caches.keys();
+                        await Promise.all(keys.filter(k=>k.startsWith('sharia-platform-')).map(k=>caches.delete(k)));
+                        localStorage.setItem('library_app_build',APP_BUILD);
+                    }
+                    const reg=await navigator.serviceWorker.register('./sw.js?v=8.1.20260917',{updateViaCache:'none'});
+                    await reg.update();
+                }catch(e){console.warn('SW update',e)}
+            });
+        }
         // في حالة عدم وجود إنترنت لا نترك شاشة التحميل عالقة.
         setTimeout(()=>{if(!state.initialLoadDone&&!navigator.onLine){document.getElementById('loading')?.classList.add('hidden');state.initialLoadDone=true;app.renderOfflineLessons();app.showSection('saved-view');}},3000);
 
         window.onload = app.init;
     </script>
 
+    <!-- BUILD: V8.1-LIBRARY-PRO-20260917 -->
 </body></html>
