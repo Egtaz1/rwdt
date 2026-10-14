@@ -377,13 +377,14 @@
                 </span>
             </button>
 
-            <div class="desktop-library-nav">
-                <button onclick="app.resetUrlAndGo('landing')"><i class="fas fa-house ml-1"></i>الرئيسية</button>
-                <button onclick="app.filterByTrack('curriculum', true)"><i class="fas fa-mosque ml-1"></i>المواد الشرعية والعربية</button>
-                <button onclick="app.filterByTrack('book', true)"><i class="fas fa-book-open ml-1"></i>الكتب المفرغة</button>
-                <button onclick="app.filterByTrack('course', true)"><i class="fas fa-circle-play ml-1"></i>الدورات المرئية</button>
-                <button onclick="app.openRoadmap()"><i class="fas fa-route ml-1 text-amber-600"></i>خريطة المذاكرة</button>
-                <button onclick="app.openQuizLibrary()"><i class="fas fa-clipboard-check ml-1"></i>بنك المراجعة</button>
+            <div id="desktop-library-nav" class="desktop-library-nav">
+                <button data-nav-item="home" onclick="app.resetUrlAndGo('landing')"><i class="fas fa-house ml-1"></i><span>الرئيسية</span></button>
+                <button data-nav-item="categories" onclick="app.scrollToCategories()"><i class="fas fa-sitemap ml-1"></i><span>الأقسام العلمية</span></button>
+                <button data-nav-item="curriculum" onclick="app.filterByTrack('curriculum', true)"><i class="fas fa-mosque ml-1"></i><span>المواد الشرعية والعربية</span></button>
+                <button data-nav-item="book" onclick="app.filterByTrack('book', true)"><i class="fas fa-book-open ml-1"></i><span>الكتب المفرغة</span></button>
+                <button data-nav-item="course" onclick="app.filterByTrack('course', true)"><i class="fas fa-circle-play ml-1"></i><span>الدورات المرئية</span></button>
+                <button data-nav-item="roadmap" onclick="app.openRoadmap()"><i class="fas fa-route ml-1 text-amber-600"></i><span>خريطة المذاكرة</span></button>
+                <button data-nav-item="quizzes" onclick="app.openQuizLibrary()"><i class="fas fa-clipboard-check ml-1"></i><span>بنك المراجعة</span></button>
             </div>
 
             <div class="hidden md:flex items-center gap-2 flex-1 justify-end max-w-md">
@@ -459,10 +460,10 @@
 
         <!-- الصفحة الرئيسية (Landing) -->
         <section id="landing" class="view-section space-y-7 md:space-y-9 animate-fadeIn hidden">
-            <div id="platform-announcement" class="hidden"></div>
+            <div id="platform-announcement" data-home-section="announcement" class="hidden"></div>
 
             <!-- الواجهة الملكية (Hero) -->
-            <section class="library-hero p-6 md:p-10 lg:p-12 text-white">
+            <section id="hero-main-section" data-home-section="hero" class="library-hero p-6 md:p-10 lg:p-12 text-white">
                 <div class="relative z-10 grid lg:grid-cols-[1.35fr_.65fr] gap-8 items-center">
                     <div>
                         <div class="flex flex-wrap items-center gap-2 mb-5">
@@ -540,16 +541,16 @@
             </section>
 
             <!-- بطاقة مهمة اليوم (من خريطة المذاكرة أو آخر درس) -->
-            <div id="continue-card" class="hidden modern-card rounded-[2rem] p-5 md:p-7 border-r-8 border-islamic-gold"></div>
+            <div id="continue-card" data-home-section="continue_card" class="hidden modern-card rounded-[2rem] p-5 md:p-7 border-r-8 border-islamic-gold"></div>
 
             <!-- بوابة المسارات الثلاثة الكبرى (المواد المنهجية / الكتب المفرغة / الدورات المرئية) -->
-            <section id="tracks-hub-section" class="modern-card rounded-[2.2rem] p-5 md:p-8 scroll-mt-24">
+            <section id="tracks-hub-section" data-home-section="tracks_hub" class="modern-card rounded-[2.2rem] p-5 md:p-8 scroll-mt-24">
                 <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-6">
                     <div>
                         <span class="inline-flex items-center gap-1.5 text-xs font-black text-amber-800 bg-amber-50 border border-amber-200 px-3.5 py-1.5 rounded-full">
                             <i class="fas fa-compass"></i> مسارات الأكاديمية والمكتبة التفاعلية
                         </span>
-                        <h2 class="text-2xl md:text-3xl font-black text-slate-800 mt-3">اختر مسار التعلم المناسب لك</h2>
+                        <h2 id="tracks-hub-heading" class="text-2xl md:text-3xl font-black text-slate-800 mt-3">اختر مسار التعلم المناسب لك</h2>
                         <p class="text-slate-500 font-bold text-sm mt-1">جميع الكتب والدورات والمواد مقسمة إلى دروس يومية مركزة وتحت كل درس اختباره الإلكتروني.</p>
                     </div>
                     <!-- فلتر المستوى العلمي -->
@@ -582,7 +583,7 @@
             </section>
 
             <!-- سلايدر المختارات المميزة ثلاثي الأبعاد -->
-            <section id="featured-books-section" class="modern-card featured-books-shell rounded-[2.2rem] p-5 md:p-8 scroll-mt-28">
+            <section id="featured-books-section" data-home-section="featured_carousel" class="modern-card featured-books-shell rounded-[2.2rem] p-5 md:p-8 scroll-mt-28">
                 <div class="flex items-end justify-between gap-4 mb-6">
                     <div>
                         <span class="inline-flex items-center gap-1.5 text-xs font-black text-amber-800 bg-amber-50 border border-amber-200 px-3.5 py-1.5 rounded-full"><i class="fas fa-star text-amber-500"></i> مختارات الأكاديمية</span>
@@ -605,11 +606,11 @@
             </section>
 
             <!-- الأقسام العلمية (الشريعة واللغة العربية والدورات) -->
-            <section id="categories-section" class="modern-card rounded-[2.2rem] p-5 md:p-8 scroll-mt-28">
+            <section id="categories-section" data-home-section="categories" class="modern-card rounded-[2.2rem] p-5 md:p-8 scroll-mt-28">
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
                     <div>
                         <span class="inline-flex items-center gap-1.5 text-xs font-black text-emerald-800 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full"><i class="fas fa-sitemap"></i> التفرع العلمي للمنصة</span>
-                        <h2 class="text-2xl md:text-3xl font-black text-slate-800 mt-3">الأقسام الشرعية والعربية</h2>
+                        <h2 id="categories-heading" class="text-2xl md:text-3xl font-black text-slate-800 mt-3">الأقسام الشرعية والعربية</h2>
                         <p class="text-slate-500 font-bold text-sm mt-1">العقيدة، الفقه، الحديث ومصطلحه، التفسير، القرآن الكريم، واللغة العربية بجميع فروعها.</p>
                     </div>
                 </div>
@@ -617,7 +618,7 @@
             </section>
 
             <!-- شريط رحلتك العلمية وخريطة المذاكرة -->
-            <section class="section-hero rounded-[2.2rem] p-6 md:p-8 text-white">
+            <section id="journey-banner-section" data-home-section="journey_banner" class="section-hero rounded-[2.2rem] p-6 md:p-8 text-white">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-6">
                     <div>
                         <span class="text-amber-300 text-xs font-black"><i class="fas fa-award ml-1"></i> منهج القليل الدائم</span>
@@ -638,15 +639,15 @@
             </section>
 
             <!-- أحدث الإضافات + آخر درس واختبار -->
-            <section id="recent-books-section" class="modern-card rounded-[2.2rem] p-5 md:p-8">
+            <section id="recent-books-section" data-home-section="recent_books" class="modern-card rounded-[2.2rem] p-5 md:p-8">
                 <div class="mb-5">
                     <span class="inline-flex items-center gap-1.5 text-xs font-black text-amber-800 bg-amber-50 border border-amber-200 px-3.5 py-1.5 rounded-full"><i class="fas fa-clock"></i> مضاف حديثاً</span>
-                    <h2 class="text-2xl font-black text-slate-800 mt-2">أحدث الكتب والدورات في المنصة</h2>
+                    <h2 id="recent-books-heading" class="text-2xl font-black text-slate-800 mt-2">أحدث الكتب والدورات في المنصة</h2>
                 </div>
                 <div id="recent-books-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
             </section>
 
-            <section class="grid lg:grid-cols-2 gap-5">
+            <section id="latest-lesson-quiz-section" data-home-section="latest_lesson_quiz" class="grid lg:grid-cols-2 gap-5">
                 <div class="modern-card rounded-[2rem] p-6">
                     <div class="flex items-center justify-between mb-4">
                         <div>
@@ -1145,7 +1146,7 @@
             </div>
 
             <!-- ورقة الدرس والشرح -->
-            <article class="reader-shell rounded-[2.2rem] overflow-hidden">
+            <article id="lesson-reader-article" data-lesson-block="reader_article" class="reader-shell rounded-[2.2rem] overflow-hidden">
                 <div class="p-6 md:p-10 border-b border-amber-900/10 bg-gradient-to-bl from-emerald-950/[0.04] via-amber-50/40 to-transparent">
                     <div class="flex flex-wrap items-center gap-2 mb-4">
                         <span id="lesson-order-pill" class="text-xs font-black text-white bg-islamic-900 px-3.5 py-1.5 rounded-full">الدرس</span>
@@ -1158,19 +1159,19 @@
 
                 <div class="p-6 md:p-10 lg:p-12">
                     <!-- الفيديو العلوي -->
-                    <div id="lesson-video-top" class="hidden mb-8"></div>
+                    <div id="lesson-video-top" data-inner-lesson="video" class="hidden mb-8"></div>
 
                     <!-- فهرس عناصر الدرس السريع (يظهر تلقائياً إن وجد عناوين فرعية) -->
-                    <div id="lesson-toc-box" class="hidden mb-7 p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80"></div>
+                    <div id="lesson-toc-box" data-inner-lesson="toc" class="hidden mb-7 p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80"></div>
 
                     <!-- متن الدرس والتفريغ المشروح -->
-                    <div id="lesson-content" class="lesson-reading-text prose prose-slate prose-lg rtl:prose-invert max-w-none text-slate-800 font-bold text-justify whitespace-pre-wrap"></div>
+                    <div id="lesson-content" data-inner-lesson="content" class="lesson-reading-text prose prose-slate prose-lg rtl:prose-invert max-w-none text-slate-800 font-bold text-justify whitespace-pre-wrap"></div>
 
                     <!-- الفيديو السفلي -->
                     <div id="lesson-video-bottom" class="hidden mt-8"></div>
 
                     <!-- كشكول الفوائد والملاحظات الشخصية على الدرس -->
-                    <div id="lesson-note-wrap" class="bg-amber-50/70 border-2 border-amber-200/80 rounded-2xl p-5 mt-9">
+                    <div id="lesson-note-wrap" data-inner-lesson="notes" class="bg-amber-50/70 border-2 border-amber-200/80 rounded-2xl p-5 mt-9">
                         <div class="flex items-center justify-between gap-3 mb-2">
                             <strong class="text-amber-950 font-black"><i class="fas fa-feather-pointed ml-1.5 text-amber-700"></i>قيّد فائدة أو ملاحظة في كشكولك العلمي</strong>
                             <span id="lesson-note-status" class="text-xs font-black text-emerald-700">تُحفظ تلقائياً في ملفك الشخصي</span>
@@ -1195,34 +1196,33 @@
                 </div>
             </article>
 
-            <!-- الاختبار الإلكتروني المدمج مباشرة أسفل الدرس (Inline Interactive Quiz) -->
-            <div id="lesson-quiz-action" class="hidden space-y-4 mt-6">
-                <div class="section-hero rounded-[2rem] p-6 md:p-8 text-white">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
-                        <div class="flex items-center gap-4">
-                            <span class="w-14 h-14 rounded-2xl bg-amber-400/20 border border-amber-300/40 flex items-center justify-center text-2xl shrink-0">
-                                <i class="fas fa-clipboard-check text-amber-300"></i>
-                            </span>
-                            <div>
-                                <span class="text-xs font-black text-amber-200">الخطوة المكملة للدرس</span>
-                                <h4 id="inline-quiz-banner-title" class="font-black text-2xl mt-1">الاختبار التفاعلي لتثبيت الدرس</h4>
-                                <p class="text-white/80 font-bold text-sm mt-1">طبّق على ما قرأته أو سمعته الآن مباشرة تحت الدرس لتثبيت المعلومة قبل الانتقال للدرس التالي.</p>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <button id="start-quiz-btn" class="bg-amber-400 text-emerald-950 hover:bg-amber-300 transition px-5 py-3 rounded-xl font-black text-xs shadow-lg">
-                                <i class="fas fa-expand ml-1.5"></i>فتح في شاشة مستقلة
-                            </button>
-                            <button onclick="app.shareCurrent('quiz')" class="bg-white/10 border border-white/20 px-4 py-3 rounded-xl font-black text-xs">مشاركة الاختبار</button>
+            <!-- بطاقة بدء الاختبار الإلكتروني (تفتح في صفحة الاختبار المستقلة عند الضغط) -->
+            <div id="lesson-quiz-action" data-lesson-block="quiz_cta" class="hidden section-hero rounded-[2.2rem] p-6 md:p-9 text-white overflow-hidden relative mt-6 shadow-2xl">
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div class="flex items-start sm:items-center gap-4">
+                        <span class="w-16 h-16 rounded-2xl bg-amber-400/20 border border-amber-300/40 flex items-center justify-center text-3xl shrink-0 shadow-lg">
+                            <i class="fas fa-clipboard-check text-amber-300"></i>
+                        </span>
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 text-xs font-black bg-amber-400/20 border border-amber-300/30 text-amber-200 px-3 py-1 rounded-full">الخطوة الأهم بعد قراءة أو سماع الدرس</span>
+                            <h4 id="inline-quiz-banner-title" class="font-black text-2xl md:text-3xl mt-2">اختبر فهمك وثبّت ما تعلمته الآن</h4>
+                            <p id="inline-quiz-banner-meta" class="text-white/80 font-bold text-sm mt-1">انتقل إلى صفحة الاختبار التفاعلي للإجابة عن أسئلة هذا الدرس ومراجعة التعليلات العلمية.</p>
                         </div>
                     </div>
+                    <div class="flex flex-col sm:flex-row gap-2.5 shrink-0">
+                        <button id="start-quiz-btn" class="bg-gradient-to-l from-amber-300 to-amber-400 text-emerald-950 hover:from-amber-400 hover:to-amber-300 transition-all px-7 py-4 rounded-2xl font-black text-base shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                            <i class="fas fa-play-circle text-lg"></i>
+                            <span>ابدأ الاختبار الآن</span>
+                            <i class="fas fa-arrow-left mr-1"></i>
+                        </button>
+                        <button onclick="app.shareCurrent('quiz')" class="bg-white/12 hover:bg-white/20 border border-white/25 px-5 py-4 rounded-2xl font-black text-xs">
+                            <i class="fas fa-share-nodes ml-1.5"></i>مشاركة الاختبار
+                        </button>
+                    </div>
                 </div>
-
-                <!-- صندوق الأسئلة المدمج تحت الدرس -->
-                <div id="inline-lesson-quiz-box" class="modern-card rounded-[2rem] p-6 md:p-9 border-2 border-amber-200/80"></div>
             </div>
 
-            <div id="lesson-resource-book" class="hidden modern-card rounded-[2rem] p-5 md:p-6 border-r-8 border-amber-500"></div>
+            <div id="lesson-resource-book" data-lesson-block="resource" class="hidden modern-card rounded-[2rem] p-5 md:p-6 border-r-8 border-amber-500"></div>
         </section>
 
         <!-- شاشة الاختبار المستقل والشامل -->
@@ -1509,6 +1509,7 @@
                     app.renderRoadmapView();
                     app.renderAccount();
                     app.applyBranding();
+                    app.applyLayoutSettings();
                     app.renderNotifications();
                     app.initDhikr();
                 });
@@ -1775,6 +1776,121 @@
 
             safeUrl: (value) => { try { const u = new URL(String(value || '')); return ['http:', 'https:'].includes(u.protocol) ? u.href : ''; } catch (e) { return ''; } },
             escapeHtml: (str = '') => String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c])),
+
+
+            // ================= محرك التحكم الكامل في تخطيط وترتيب واجهة الطالب =================
+            defaultLayoutConfig: () => ({
+                homeSections: [
+                    { id: 'announcement', visible: true, title: '' },
+                    { id: 'hero', visible: true, title: '' },
+                    { id: 'continue_card', visible: true, title: '' },
+                    { id: 'categories', visible: true, title: 'الأقسام الشرعية والعربية' },
+                    { id: 'tracks_hub', visible: true, title: 'اختر مسار التعلم المناسب لك' },
+                    { id: 'featured_carousel', visible: true, title: 'كتب ودورات مرشحة للبدء' },
+                    { id: 'journey_banner', visible: true, title: '' },
+                    { id: 'recent_books', visible: true, title: 'أحدث الكتب والدورات في المنصة' },
+                    { id: 'latest_lesson_quiz', visible: true, title: '' }
+                ],
+                navItems: [
+                    { id: 'home', visible: true, label: 'الرئيسية' },
+                    { id: 'categories', visible: true, label: 'الأقسام العلمية' },
+                    { id: 'curriculum', visible: true, label: 'المواد الشرعية والعربية' },
+                    { id: 'book', visible: true, label: 'الكتب المفرغة' },
+                    { id: 'course', visible: true, label: 'الدورات المرئية' },
+                    { id: 'roadmap', visible: true, label: 'خريطة المذاكرة' },
+                    { id: 'quizzes', visible: true, label: 'بنك المراجعة' }
+                ],
+                lessonBlocks: [
+                    { id: 'video', visible: true },
+                    { id: 'toc', visible: true },
+                    { id: 'content', visible: true },
+                    { id: 'notes', visible: true }
+                ],
+                lessonOuterOrder: ['reader_article', 'quiz_cta', 'resource'],
+                cardsPerRow: 4
+            }),
+
+            applyLayoutSettings: () => {
+                const def = app.defaultLayoutConfig();
+                const cfg = state.db.settings?.layoutConfig || {};
+                const homeSections = Array.isArray(cfg.homeSections) && cfg.homeSections.length ? cfg.homeSections : def.homeSections;
+                const navItems = Array.isArray(cfg.navItems) && cfg.navItems.length ? cfg.navItems : def.navItems;
+                const lessonBlocks = Array.isArray(cfg.lessonBlocks) && cfg.lessonBlocks.length ? cfg.lessonBlocks : def.lessonBlocks;
+                const outerOrder = Array.isArray(cfg.lessonOuterOrder) && cfg.lessonOuterOrder.length ? cfg.lessonOuterOrder : def.lessonOuterOrder;
+                const cols = Number(cfg.cardsPerRow) || 4;
+
+                // 1. ترتيب وإظهار/إخفاء أقسام الصفحة الرئيسية
+                const landing = document.getElementById('landing');
+                if (landing) {
+                    const knownIds = new Set(homeSections.map(s => s.id));
+                    def.homeSections.forEach(d => { if (!knownIds.has(d.id)) homeSections.push(d); });
+
+                    homeSections.forEach(sec => {
+                        const el = landing.querySelector(`[data-home-section="${sec.id}"]`);
+                        if (!el) return;
+                        landing.appendChild(el);
+                        if (sec.visible === false) {
+                            el.dataset.layoutHidden = '1';
+                            el.classList.add('hidden');
+                        } else {
+                            delete el.dataset.layoutHidden;
+                            if (sec.id !== 'announcement' && sec.id !== 'continue_card') {
+                                el.classList.remove('hidden');
+                            }
+                        }
+                        if (sec.title && sec.title.trim()) {
+                            if (sec.id === 'categories') { const h = document.getElementById('categories-heading'); if (h) h.innerText = sec.title.trim(); }
+                            if (sec.id === 'tracks_hub') { const h = document.getElementById('tracks-hub-heading'); if (h) h.innerText = sec.title.trim(); }
+                            if (sec.id === 'featured_carousel') { const h = document.getElementById('featured-books-title'); if (h) h.innerText = sec.title.trim(); }
+                            if (sec.id === 'recent_books') { const h = document.getElementById('recent-books-heading'); if (h) h.innerText = sec.title.trim(); }
+                        }
+                    });
+                }
+
+                // 2. التحكم في عدد البطاقات في الصف الواحد
+                const colCls = cols === 3
+                    ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'
+                    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5';
+                ['tracks-books-grid', 'categories-grid', 'recent-books-grid', 'category-books-grid'].forEach(gid => {
+                    const g = document.getElementById(gid);
+                    if (g) g.className = colCls;
+                });
+
+                // 3. ترتيب وإظهار/إخفاء عناصر الشريط العلوي
+                const navBar = document.getElementById('desktop-library-nav');
+                if (navBar) {
+                    navItems.forEach(item => {
+                        const btn = navBar.querySelector(`[data-nav-item="${item.id}"]`);
+                        if (!btn) return;
+                        navBar.appendChild(btn);
+                        btn.classList.toggle('hidden', item.visible === false);
+                        if (item.label && item.label.trim()) {
+                            const sp = btn.querySelector('span');
+                            if (sp) sp.innerText = item.label.trim();
+                        }
+                    });
+                }
+
+                // 4. ترتيب عناصر صفحة الدرس الداخلية والخارجية
+                const lessonView = document.getElementById('lesson-view');
+                if (lessonView) {
+                    outerOrder.forEach(blockId => {
+                        const el = lessonView.querySelector(`[data-lesson-block="${blockId}"]`);
+                        if (el) lessonView.appendChild(el);
+                    });
+                }
+                const innerContainer = document.getElementById('lesson-content')?.parentElement;
+                if (innerContainer) {
+                    lessonBlocks.forEach(b => {
+                        const el = innerContainer.querySelector(`[data-inner-lesson="${b.id}"]`);
+                        if (!el) return;
+                        innerContainer.appendChild(el);
+                        if (b.id === 'notes') el.classList.toggle('hidden', b.visible === false);
+                    });
+                    const bottomVid = document.getElementById('lesson-video-bottom');
+                    if (bottomVid) innerContainer.appendChild(bottomVid);
+                }
+            },
 
             applyBranding: () => {
                 const b = state.db.settings?.branding || {};
@@ -2533,12 +2649,19 @@
                     else app.resetUrlAndGo('landing');
                 };
 
-                // تحميل وعرض الاختبار المدمج مباشرة أسفل الدرس
+                // إعداد بطاقة زر بدء الاختبار (يفتح في صفحة الاختبار المستقلة عند الضغط)
                 const quizAction = document.getElementById('lesson-quiz-action');
                 if (lesson.quizId) {
                     quizAction.classList.remove('hidden');
+                    const qMeta = state.db.quizzes.find(q => q.id === lesson.quizId);
+                    const bannerTitle = document.getElementById('inline-quiz-banner-title');
+                    const bannerMeta = document.getElementById('inline-quiz-banner-meta');
+                    if (bannerTitle) bannerTitle.innerText = qMeta?.name || `اختبار تثبيت: ${lesson.title}`;
+                    if (bannerMeta) {
+                        const qCount = Array.isArray(qMeta?.questions) ? qMeta.questions.length : null;
+                        bannerMeta.innerText = qCount ? `يتكون هذا الاختبار من (${qCount} سؤال) لتثبيت أهم فوائد ومسائل الدرس — اضغط «ابدأ الاختبار الآن» لفتحه في صفحة الاختبار.` : 'اضغط «ابدأ الاختبار الآن» للانتقال إلى صفحة الاختبار التفاعلي وتثبيت معلومات الدرس.';
+                    }
                     document.getElementById('start-quiz-btn').onclick = () => { app.stopLessonVideos(); app.startQuiz(lesson.quizId, 'lesson'); };
-                    await app.loadAndRenderInlineQuiz(lesson.quizId, nextLes);
                 } else {
                     quizAction.classList.add('hidden');
                 }
@@ -3322,7 +3445,7 @@
                 // بطاقة المتابعة أو مهمة اليوم من خريطة المذاكرة
                 const continueCard = document.getElementById('continue-card');
                 const lastLesson = visibleLessons.find(l => l.id === state.local.lastLessonId);
-                if (continueCard && lastLesson) {
+                if (continueCard && lastLesson && continueCard.dataset.layoutHidden !== "1") {
                     const chap = state.db.chapters.find(c => c.id === lastLesson.chapterId);
                     const book = chap?.bookId ? state.db.books.find(b => b.id === chap.bookId) : null;
                     continueCard.classList.remove('hidden');
@@ -3625,7 +3748,7 @@
                 const box = document.getElementById('auth-message'); if (!box) return;
                 if (!msg || type === 'clear') { box.classList.add('hidden'); box.innerText = ''; return; }
                 box.className = `mb-4 p-3 rounded-xl text-sm font-bold ${type === 'error' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-100'}`;
-                box.innerText = msg; box.classList.remove('hidden');
+                box.innerText = msg; if (box.dataset.layoutHidden !== "1") box.classList.remove('hidden');
             },
             authErrorText: (e) => ({
                 'auth/email-already-in-use': 'هذا البريد مسجل بالفعل.',
@@ -3831,7 +3954,7 @@
                 }
                 box.className = 'modern-card rounded-3xl border-r-8 border-islamic-gold p-4 md:p-5';
                 box.innerHTML = `<div class="flex items-start justify-between gap-4"><div class="flex items-start gap-3"><span class="w-11 h-11 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0"><i class="fas fa-bullhorn"></i></span><div><strong class="font-black text-lg text-slate-900">${app.escapeHtml(a.title || 'تنويه من إدارة المنصة')}</strong><p class="font-bold text-slate-600 text-sm mt-1 leading-7">${app.escapeHtml(a.text)}</p></div></div><button onclick="app.dismissAnnouncement('${a.updatedAt || ''}')" class="w-9 h-9 rounded-xl bg-slate-100 text-slate-500"><i class="fas fa-times"></i></button></div>`;
-                box.classList.remove('hidden');
+                if (box.dataset.layoutHidden !== "1") box.classList.remove('hidden');
             },
             dismissAnnouncement: (updatedAt) => {
                 if (updatedAt) localStorage.setItem('ahmed_dismissed_announcement', String(updatedAt));
