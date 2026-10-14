@@ -6,19 +6,22 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-build" content="V8.1-LIBRARY-PRO-20260917">
+    <meta name="app-build" content="V8.2-WAQF-PRO-20261014">
     <meta name="theme-color" content="#064e3b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="manifest" href="manifest.webmanifest?v=8.1.20260917">
-    <link rel="icon" href="icon-192.png?v=8.1.20260917" type="image/png">
+    <link rel="manifest" href="manifest.webmanifest?v=8.2.20261014">
+    <link rel="icon" href="icon-192.png?v=8.2.20261014" type="image/png">
     <title>المكتبة العلمية التفاعلية | منصة العلوم الشرعية والعربية</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
+                    fontFamily: { 
+                        sans: ['Cairo', 'sans-serif'],
+                        quran: ['Amiri Quran', 'Amiri', 'serif']
+                    },
                     colors: {
                         islamic: {
                             50: '#f0fdf4', 100: '#dcfce7', 500: '#10b981',
@@ -31,7 +34,7 @@
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -41,6 +44,7 @@
         body { font-family: 'Cairo', sans-serif; background: #f6f8fb; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; transition: background .3s ease, color .3s ease; }
         main { flex: 1; }
         .hidden { display: none !important; }
+        .font-quran { font-family: 'Amiri Quran', 'Amiri', serif; line-height: 2.5 !important; }
         .animate-fadeIn { animation: fadeIn 0.45s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes floatSoft { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
@@ -164,7 +168,7 @@
         .journey-stat{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);border-radius:1.25rem;padding:1rem;min-height:95px}
         .recent-book-shell .book-card{box-shadow:none;border-color:#eceae4}
         .desktop-library-nav{display:none;align-items:center;gap:.25rem;padding:.3rem;background:#f6f8f7;border:1px solid #e8ecea;border-radius:1rem}.desktop-library-nav button{padding:.58rem .85rem;border-radius:.75rem;font-size:.78rem;font-weight:900;color:#50605b;transition:.2s}.desktop-library-nav button:hover{background:#fff;color:#0b725a;box-shadow:0 5px 14px rgba(15,23,42,.06)}
-        .version-pill{font-size:.62rem;font-weight:900;color:#fff8df;background:rgba(200,146,46,.18);border:1px solid rgba(234,198,116,.24);padding:.3rem .55rem;border-radius:999px}
+        .version-pill{font-size:.68rem;font-weight:900;color:#d1fae5;background:rgba(16,185,129,.22);border:1px solid rgba(52,211,153,.35);padding:.35rem .75rem;border-radius:999px;display:inline-flex;align-items:center;gap:.35rem}
         .category-image-card.no-image{background:linear-gradient(145deg,var(--cat-a,#064e3b),var(--cat-b,#0f766e))}.category-image-card.no-image::before{content:'';position:absolute;inset:0;opacity:.16;background-image:radial-gradient(circle at 12px 12px,#fff 1px,transparent 1.2px);background-size:26px 26px;z-index:-1}.category-large-icon{font-size:3.2rem;color:rgba(255,255,255,.18);position:absolute;left:18px;top:18px;z-index:0}
         .learning-method-card{background:linear-gradient(180deg,#fff,#fbfcfa);border:1px solid #e9edea;border-radius:1.6rem;padding:1.1rem;display:flex;align-items:center;gap:.9rem}.learning-method-card .step{width:42px;height:42px;border-radius:14px;background:#ecfdf5;color:#047857;display:grid;place-items:center;font-weight:900;flex:none}
         body.dark-mode .library-section-shell{background:#101c19;border-color:#2b3d37}.dark-mode .library-heading{color:#f3f5f4}.dark-mode .library-muted{color:#9aa9a4}.dark-mode .featured-books-empty{background:#13231f;border-color:#31443e;color:#a8b5b0}.dark-mode .desktop-library-nav{background:#13231f;border-color:#31443e}.dark-mode .desktop-library-nav button{color:#bdc9c5}.dark-mode .learning-method-card{background:#101c19;border-color:#31443e}
@@ -204,7 +208,7 @@
             <div class="hidden md:flex items-center gap-2 flex-1 justify-end">
                 <div class="relative w-full max-w-md">
                     <i class="fas fa-search absolute top-1/2 -translate-y-1/2 right-4 text-slate-400"></i>
-                    <input type="text" id="search-input" onkeyup="app.handleSearch()" placeholder="ابحث عن كتاب، قسم، درس، أو موضوع..." class="w-full bg-slate-50 border border-slate-200 py-3 pr-11 pl-4 rounded-2xl font-bold focus:border-islamic-500 focus:ring-4 focus:ring-islamic-50 focus:outline-none transition-all">
+                    <input type="text" id="search-input" onkeyup="app.handleSearch()" placeholder="ابحث عن كتاب، دورة، قسم، أو درس..." class="w-full bg-slate-50 border border-slate-200 py-3 pr-11 pl-4 rounded-2xl font-bold focus:border-islamic-500 focus:ring-4 focus:ring-islamic-50 focus:outline-none transition-all">
                 </div>
                 <button id="account-nav-btn" onclick="app.handleTopAccountButton()" class="h-12 px-4 rounded-2xl bg-islamic-600 border border-islamic-600 text-white hover:bg-islamic-700 transition-all flex items-center gap-2 shadow-sm whitespace-nowrap" title="تسجيل الدخول أو فتح حساب الطالب">
                     <span id="account-nav-avatar" class="w-8 h-8 rounded-xl bg-white/15 border border-white/20 text-white flex items-center justify-center text-xs font-black"><i class="fas fa-user"></i></span>
@@ -228,7 +232,7 @@
                     <span id="account-mobile-avatar" class="w-9 h-9 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0 font-black"><i class="fas fa-user"></i></span>
                     <span class="min-w-0">
                         <strong id="account-mobile-label" class="block text-sm font-black truncate">تسجيل الدخول أو إنشاء حساب</strong>
-                        <small id="account-mobile-subtitle" class="block text-[10px] font-bold text-white/70 mt-0.5 truncate">احفظ تقدمك ونتائجك على حسابك</small>
+                        <small id="account-mobile-subtitle" class="block text-[10px] font-bold text-white/70 mt-0.5 truncate">احفظ تقدمك ونتائجك على حسابك مجاناً</small>
                     </span>
                 </span>
                 <i class="fas fa-chevron-left text-white/70 text-xs"></i>
@@ -244,7 +248,7 @@
 
     <div id="loading" class="fixed inset-0 bg-white z-[999] flex flex-col items-center justify-center transition-opacity duration-500">
         <i class="fas fa-circle-notch fa-spin text-5xl text-islamic-500 mb-4"></i>
-        <p class="font-bold text-slate-500 mt-4">جاري تحميل المحتوى...</p>
+        <p class="font-bold text-slate-500 mt-4">جاري تحميل المحتوى العلمي...</p>
     </div>
 
     <main class="container mx-auto px-4 py-8 space-y-8 relative">
@@ -264,12 +268,12 @@
                     <div>
                         <div class="flex flex-wrap items-center gap-2 mb-5">
                             <span class="hero-kicker"><i class="fas fa-book-quran"></i> مكتبة علمية تفاعلية</span>
-                            <span class="version-pill">الواجهة الجديدة</span>
+                            <span class="version-pill"><i class="fas fa-hand-holding-heart"></i> وقف علمي مجاني لوجه الله</span>
                         </div>
                         <h1 id="platform-hero-title" class="text-3xl md:text-5xl lg:text-[3.4rem] font-black leading-[1.35] max-w-4xl">رحلة في طلب العلم… كتابًا بعد كتاب، ودرسًا بعد درس.</h1>
-                        <p id="platform-hero-description" class="text-white/75 font-bold text-base md:text-lg max-w-3xl leading-8 md:leading-9 mt-4">اختر القسم، افتح الكتاب، تابع أبوابه ودروسه، شاهد الشرح أو اقرأ التفريغ، ثم ثبّت ما تعلمته باختبار قصير.</p>
+                        <p id="platform-hero-description" class="text-white/75 font-bold text-base md:text-lg max-w-3xl leading-8 md:leading-9 mt-4">اختر القسم، افتح الكتاب أو الدورة، تابع أبوابها ودروسها، شاهد الشرح أو اقرأ التفريغ، ثم ثبّت ما تعلمته باختبار قصير.</p>
                         <div class="flex flex-wrap gap-3 mt-7">
-                            <button onclick="document.getElementById('featured-books-section')?.scrollIntoView({behavior:'smooth',block:'start'})" class="bg-amber-300 text-emerald-950 px-6 py-3.5 rounded-2xl font-black shadow-lg hover:-translate-y-1 transition-all"><i class="fas fa-book-open ml-2"></i>ابدأ من الكتب</button>
+                            <button onclick="document.getElementById('featured-books-section')?.scrollIntoView({behavior:'smooth',block:'start'})" class="bg-amber-300 text-emerald-950 px-6 py-3.5 rounded-2xl font-black shadow-lg hover:-translate-y-1 transition-all"><i class="fas fa-book-open ml-2"></i>ابدأ من الكتب والدورات</button>
                             <button onclick="app.scrollToCategories()" class="bg-white/10 border border-white/20 text-white px-6 py-3.5 rounded-2xl font-black hover:bg-white/15 transition-all"><i class="fas fa-layer-group ml-2"></i>استعرض الأقسام</button>
                         </div>
                         <div class="grid grid-cols-3 gap-2 md:gap-3 max-w-2xl mt-7">
@@ -288,11 +292,11 @@
 
             <section id="featured-books-section" class="library-section-shell featured-books-shell scroll-mt-28">
                 <div class="library-section-header">
-                    <div><span class="library-eyebrow"><i class="fas fa-star"></i> مختارات المكتبة</span><h2 id="featured-books-title" class="library-heading">كتب مميزة</h2><p class="library-muted">كتب مختارة تظهر في سلايدر متحرك، ويمكن التحكم فيها بالكامل من لوحة الإدارة.</p></div>
+                    <div><span class="library-eyebrow"><i class="fas fa-star"></i> مختارات المكتبة</span><h2 id="featured-books-title" class="library-heading">كتب ودورات مميزة</h2><p class="library-muted">مختارات علمية مرتبة في دروس قصيرة مع اختبارات لتثبيت المعلومة.</p></div>
                     <button onclick="app.scrollToCategories()" class="hidden sm:inline-flex text-islamic-700 bg-islamic-50 border border-islamic-100 px-4 py-2.5 rounded-xl font-black text-sm">كل الأقسام <i class="fas fa-arrow-left mr-2"></i></button>
                 </div>
                 <div id="featured-books-empty" class="featured-books-empty hidden">
-                    <div><div class="empty-book-shelf"><span></span><span></span><span></span><span></span><span></span></div><h3 class="font-black text-lg text-slate-600">المكتبة جاهزة لاستقبال الكتب</h3><p class="text-sm font-bold text-slate-400 mt-2">عند إضافة الكتب ستظهر المختارات هنا تلقائيًا.</p></div>
+                    <div><div class="empty-book-shelf"><span></span><span></span><span></span><span></span><span></span></div><h3 class="font-black text-lg text-slate-600">المكتبة جاهزة لاستقبال الكتب والدورات</h3><p class="text-sm font-bold text-slate-400 mt-2">عند إضافة الكتب والدورات ستظهر المختارات هنا تلقائيًا.</p></div>
                 </div>
                 <div id="featured-books-carousel" class="relative">
                     <button id="featured-prev" onclick="app.carouselPrev()" class="carousel-arrow prev" aria-label="السابق"><i class="fas fa-chevron-right"></i></button>
@@ -304,7 +308,7 @@
 
             <section id="categories-section" class="library-section-shell scroll-mt-28">
                 <div class="library-section-header">
-                    <div><span class="library-eyebrow"><i class="fas fa-layer-group"></i> أبواب المعرفة</span><h2 class="library-heading">الأقسام العلمية</h2><p class="library-muted">كل قسم يجمع كتبه الخاصة: الفقه، المواريث، الحديث، السيرة، العربية، وغيرها.</p></div>
+                    <div><span class="library-eyebrow"><i class="fas fa-layer-group"></i> أبواب المعرفة</span><h2 class="library-heading">الأقسام العلمية</h2><p class="library-muted">كل قسم يجمع كتبه ودوراته الخاصة: الفقه، العقيدة، الحديث، التفسير، اللغة العربية، وغيرها.</p></div>
                 </div>
                 <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5"></div>
             </section>
@@ -313,7 +317,7 @@
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-4"><div><span class="text-amber-200 text-xs font-black">رحلتك العلمية</span><h2 class="text-2xl md:text-3xl font-black mt-2">كل تقدم صغير يصنع مسارًا كبيرًا</h2><p class="text-white/60 text-sm font-bold mt-2">تابع ما قرأته وما اختبرته، وارجع دائمًا من النقطة التي توقفت عندها.</p></div><button onclick="app.openAccount()" class="bg-white text-emerald-900 px-5 py-3 rounded-xl font-black">حسابي وتقدمي</button></div>
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
                     <div class="journey-stat"><i class="fas fa-layer-group text-emerald-200"></i><strong id="stat-categories" class="text-2xl font-black block mt-2">0</strong><span class="text-xs text-white/55 font-bold">قسم علمي</span></div>
-                    <div class="journey-stat"><i class="fas fa-book-open text-amber-200"></i><strong id="stat-books" class="text-2xl font-black block mt-2">0</strong><span class="text-xs text-white/55 font-bold">كتاب</span></div>
+                    <div class="journey-stat"><i class="fas fa-book-open text-amber-200"></i><strong id="stat-books" class="text-2xl font-black block mt-2">0</strong><span class="text-xs text-white/55 font-bold">كتاب ودورة</span></div>
                     <div class="journey-stat"><i class="fas fa-clipboard-check text-cyan-200"></i><strong id="stat-quizzes" class="text-2xl font-black block mt-2">0</strong><span class="text-xs text-white/55 font-bold">اختبار تثبيت</span></div>
                     <div class="journey-stat"><i class="fas fa-star text-yellow-200"></i><strong id="stat-best-score" class="text-2xl font-black block mt-2">—</strong><span class="text-xs text-white/55 font-bold">أفضل نتيجة</span></div>
                 </div>
@@ -322,7 +326,7 @@
             <div id="continue-card" class="hidden modern-card rounded-[2rem] p-5 md:p-7 border-r-4 border-islamic-500"></div>
 
             <section id="recent-books-section" class="library-section-shell recent-book-shell">
-                <div class="library-section-header"><div><span class="library-eyebrow"><i class="fas fa-clock"></i> أحدث الإضافات</span><h2 class="library-heading">أحدث الكتب في المكتبة</h2><p class="library-muted">ابدأ كتابًا جديدًا أو أكمل ما سبق أن بدأته.</p></div></div>
+                <div class="library-section-header"><div><span class="library-eyebrow"><i class="fas fa-clock"></i> أحدث الإضافات</span><h2 class="library-heading">أحدث الكتب والدورات في المكتبة</h2><p class="library-muted">ابدأ كتابًا أو دورة جديدة أو أكمل ما سبق أن بدأته.</p></div></div>
                 <div id="recent-books-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
             </section>
 
@@ -332,8 +336,8 @@
             </section>
 
             <section class="grid md:grid-cols-3 gap-3">
-                <div class="learning-method-card"><span class="step">1</span><div><strong class="font-black text-slate-800">اختر الكتاب</strong><p class="text-xs text-slate-400 font-bold mt-1">ابدأ من القسم والكتاب المناسبين لك.</p></div></div>
-                <div class="learning-method-card"><span class="step">2</span><div><strong class="font-black text-slate-800">تعلّم على أجزاء</strong><p class="text-xs text-slate-400 font-bold mt-1">فيديو أو نص مفرغ وشرح منظم لكل درس.</p></div></div>
+                <div class="learning-method-card"><span class="step">1</span><div><strong class="font-black text-slate-800">اختر الكتاب أو الدورة</strong><p class="text-xs text-slate-400 font-bold mt-1">ابدأ من القسم والمسار المناسبين لك.</p></div></div>
+                <div class="learning-method-card"><span class="step">2</span><div><strong class="font-black text-slate-800">تعلّم على أجزاء</strong><p class="text-xs text-slate-400 font-bold mt-1">فيديو مشروح وتحته تفريغ نصي منظم لكل درس.</p></div></div>
                 <div class="learning-method-card"><span class="step">3</span><div><strong class="font-black text-slate-800">ثبّت المعلومة</strong><p class="text-xs text-slate-400 font-bold mt-1">اختبار قصير بعد كل درس ثم مراجعات شاملة.</p></div></div>
             </section>
         </section>
@@ -346,23 +350,23 @@
         <section id="saved-view" class="view-section space-y-6 animate-fadeIn hidden max-w-5xl mx-auto">
             <div class="flex items-center justify-between gap-4"><div><span class="text-xs font-black text-rose-600 bg-rose-50 px-3 py-1 rounded-full">محفوظاتي</span><h2 class="text-3xl font-black text-slate-800 mt-3">الدروس المحفوظة</h2><p class="text-slate-400 font-bold mt-1">كل ما حفظته للرجوع إليه لاحقًا.</p></div><button onclick="app.resetUrlAndGo('landing')" class="w-11 h-11 bg-slate-100 rounded-2xl"><i class="fas fa-arrow-right"></i></button></div>
             <div id="saved-lessons-list" class="space-y-3"></div>
-            <div class="modern-card rounded-[2rem] p-5 md:p-7 mt-7"><div class="flex items-center justify-between gap-3 mb-4"><div><span class="text-xs font-black text-cyan-600">بدون إنترنت</span><h3 class="text-xl font-black text-slate-800 mt-1">الدروس المحفوظة أوفلاين</h3><p class="text-xs font-bold text-slate-400 mt-1">تُحفظ على هذا الجهاز فقط. المحتوى المدفوع يظل مرتبطًا بتاريخ اشتراكك المحفوظ.</p></div><i class="fas fa-cloud-arrow-down text-cyan-500 text-2xl"></i></div><div id="offline-lessons-list" class="space-y-3"></div></div>
+            <div class="modern-card rounded-[2rem] p-5 md:p-7 mt-7"><div class="flex items-center justify-between gap-3 mb-4"><div><span class="text-xs font-black text-cyan-600">بدون إنترنت</span><h3 class="text-xl font-black text-slate-800 mt-1">الدروس المحفوظة أوفلاين</h3><p class="text-xs font-bold text-slate-400 mt-1">تُحفظ على هذا الجهاز فقط لقراءتها في أي وقت بدون اتصال بالإنترنت.</p></div><i class="fas fa-cloud-arrow-down text-cyan-500 text-2xl"></i></div><div id="offline-lessons-list" class="space-y-3"></div></div>
         </section>
 
         <section id="account-view" class="view-section space-y-6 animate-fadeIn hidden max-w-5xl mx-auto">
-            <div class="flex items-center justify-between gap-4"><div><span class="text-xs font-black text-islamic-600 bg-islamic-50 px-3 py-1 rounded-full">حساب الطالب</span><h2 class="text-3xl font-black text-slate-800 mt-3">حسابي وتقدمي</h2><p class="text-slate-400 font-bold mt-1">سجّل الدخول لمزامنة تقدمك ونتائجك بين أجهزتك.</p></div><button onclick="app.resetUrlAndGo('landing')" class="w-11 h-11 bg-slate-100 rounded-2xl"><i class="fas fa-arrow-right"></i></button></div>
+            <div class="flex items-center justify-between gap-4"><div><span class="text-xs font-black text-islamic-600 bg-islamic-50 px-3 py-1 rounded-full">حساب الطالب</span><h2 class="text-3xl font-black text-slate-800 mt-3">حسابي وتقدمي</h2><p class="text-slate-400 font-bold mt-1">سجّل الدخول لمزامنة تقدمك ونتائجك بين أجهزتك مجانًا.</p></div><button onclick="app.resetUrlAndGo('landing')" class="w-11 h-11 bg-slate-100 rounded-2xl"><i class="fas fa-arrow-right"></i></button></div>
 
             <div id="account-guest-card" class="modern-card rounded-[2rem] p-6 md:p-10 text-center">
                 <span class="w-20 h-20 rounded-[1.7rem] bg-islamic-50 text-islamic-600 flex items-center justify-center text-3xl mx-auto mb-5"><i class="fas fa-user-graduate"></i></span>
                 <h3 class="text-2xl md:text-3xl font-black text-slate-800">أنت تستخدم المنصة كزائر</h3>
-                <p class="text-slate-500 font-bold max-w-2xl mx-auto mt-3 leading-8">تقدمك محفوظ على هذا الجهاز. أنشئ حسابًا مجانيًا لمزامنة الدروس المكتملة والمحفوظات ونتائج الاختبارات على Firebase.</p>
+                <p class="text-slate-500 font-bold max-w-2xl mx-auto mt-3 leading-8">تقدمك محفوظ على هذا الجهاز. أنشئ حسابًا مجانيًا لمزامنة الدروس المكتملة والمحفوظات ونتائج الاختبارات على جميع أجهزتك.</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-3 mt-7"><button onclick="app.openAuthModal('register')" class="bg-islamic-600 text-white px-7 py-3.5 rounded-2xl font-black shadow">إنشاء حساب مجاني</button><button onclick="app.openAuthModal('login')" class="bg-slate-100 text-slate-700 px-7 py-3.5 rounded-2xl font-black">تسجيل الدخول</button></div>
             </div>
 
             <div id="account-user-card" class="hidden space-y-5">
                 <div class="section-hero rounded-[2rem] p-6 md:p-8 text-white">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
-                        <div class="flex items-center gap-4"><span id="profile-avatar" class="w-16 h-16 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-2xl font-black">ط</span><div><span id="profile-plan" class="inline-flex bg-white/10 border border-white/15 px-3 py-1 rounded-full text-xs font-black">طالب مجاني</span><h3 id="profile-name" class="text-2xl md:text-3xl font-black mt-2">الطالب</h3><p id="profile-email" class="text-white/70 font-bold text-sm mt-1"></p></div></div>
+                        <div class="flex items-center gap-4"><span id="profile-avatar" class="w-16 h-16 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-2xl font-black">ط</span><div><span id="profile-plan" class="inline-flex bg-white/10 border border-white/15 px-3 py-1 rounded-full text-xs font-black">طالب علم</span><h3 id="profile-name" class="text-2xl md:text-3xl font-black mt-2">الطالب</h3><p id="profile-email" class="text-white/70 font-bold text-sm mt-1"></p></div></div>
                         <div class="flex flex-col items-start md:items-end gap-2"><span class="sync-badge px-3 py-1.5 rounded-xl text-xs font-black"><i class="fas fa-cloud-arrow-up ml-1"></i> مزامنة سحابية مفعلة</span><span id="profile-sync-time" class="text-white/60 text-xs font-bold">آخر مزامنة الآن</span></div>
                     </div>
                 </div>
@@ -373,11 +377,15 @@
                     <div class="account-stat rounded-2xl p-5"><span id="account-best" class="text-3xl font-black text-indigo-600 block">—</span><span class="text-xs font-bold text-slate-400">أفضل نتيجة</span></div>
                 </div>
                 <div class="grid md:grid-cols-[1fr_1.5fr] gap-4"><div class="modern-card rounded-[2rem] p-5 flex items-center gap-4"><div id="study-level-ring" class="study-level-ring relative w-20 h-20 rounded-full flex items-center justify-center shrink-0" style="--level-deg:0deg"><span id="account-level-number" class="font-black text-xl text-emerald-700">1</span></div><div><span class="text-xs font-black text-emerald-600">مستواك الحالي</span><h3 id="account-level-name" class="text-xl font-black text-slate-800 mt-1">مبتدئ</h3><p id="account-level-progress" class="text-xs font-bold text-slate-400 mt-1">ابدأ أول درس لتتقدم.</p></div></div><div class="grid grid-cols-3 gap-3"><div class="account-stat rounded-2xl p-4 text-center"><i class="fas fa-fire text-orange-500 mb-2"></i><strong id="account-streak" class="block text-2xl font-black text-slate-800">0</strong><span class="text-[10px] font-bold text-slate-400">أيام متتالية</span></div><div class="account-stat rounded-2xl p-4 text-center"><i class="fas fa-chart-line text-blue-500 mb-2"></i><strong id="account-average" class="block text-2xl font-black text-slate-800">—</strong><span class="text-[10px] font-bold text-slate-400">متوسط الدرجات</span></div><div class="account-stat rounded-2xl p-4 text-center"><i class="fas fa-bullseye text-rose-500 mb-2"></i><strong id="account-mistakes" class="block text-2xl font-black text-slate-800">0</strong><span class="text-[10px] font-bold text-slate-400">خطأ للمراجعة</span></div></div></div><div class="modern-card rounded-[2rem] p-5 md:p-7"><div class="flex items-center justify-between mb-4"><div><h3 class="text-xl font-black text-slate-800">الشارات والإنجازات</h3><p class="text-xs font-bold text-slate-400 mt-1">تُفتح تلقائيًا مع تقدمك.</p></div><i class="fas fa-medal text-amber-500 text-2xl"></i></div><div id="account-badges" class="flex flex-wrap gap-2"></div></div>
-                <div class="grid lg:grid-cols-2 gap-4">
-                    <div class="modern-card rounded-[2rem] p-5 md:p-7 border-t-4 border-violet-500"><div class="flex items-center justify-between gap-3 mb-4"><div><span class="text-xs font-black text-violet-600">الاشتراك</span><h3 class="text-xl font-black text-slate-800 mt-1">تفعيل كود اشتراك</h3></div><i class="fas fa-ticket text-violet-500 text-2xl"></i></div><div class="flex gap-2"><input id="student-subscription-code" dir="ltr" placeholder="XXXX-XXXX-XXXX" class="flex-1 min-w-0 border-2 border-slate-200 rounded-xl p-3 font-black tracking-wider text-left uppercase"><button onclick="app.redeemSubscriptionCode()" class="bg-violet-600 text-white px-5 rounded-xl font-black">تفعيل</button></div><div id="subscription-plans-preview" class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4"></div><p id="subscription-code-status" class="text-xs font-bold text-slate-400 mt-3"></p></div>
-                    <div class="modern-card rounded-[2rem] p-5 md:p-7 border-t-4 border-blue-500"><div class="flex items-center justify-between gap-3 mb-4"><div><span class="text-xs font-black text-blue-600">التطبيق</span><h3 class="text-xl font-black text-slate-800 mt-1">تثبيت المنصة والأوفلاين</h3></div><i class="fas fa-mobile-screen-button text-blue-500 text-2xl"></i></div><p class="text-sm font-bold text-slate-500 leading-7">ثبّت المنصة كتطبيق على الهاتف، واحفظ الدروس التي تحتاجها من زر التنزيل داخل الدرس.</p><button id="install-app-btn" onclick="app.installPwa()" class="w-full mt-4 bg-blue-50 border border-blue-100 text-blue-700 py-3 rounded-xl font-black"><i class="fas fa-download ml-2"></i>تثبيت المنصة كتطبيق</button></div>
+                
+                <!-- تم إخفاء صندوق أكواد الاشتراك المدفوعة ليتناسب مع الوقف المجاني -->
+                <div class="hidden">
+                    <input id="student-subscription-code"><div id="subscription-plans-preview"></div><p id="subscription-code-status"></p>
                 </div>
-                <div class="modern-card rounded-[2rem] p-5 md:p-7 border-t-4 border-emerald-500"><div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5"><div><span class="text-xs font-black text-emerald-600">خطة المذاكرة</span><h3 class="text-xl font-black text-slate-800 mt-1">قسّم الدروس حتى موعد الامتحان</h3><p class="text-xs font-bold text-slate-400 mt-1">سنوزع الدروس غير المكتملة المتاحة لحسابك على الأيام المتبقية.</p></div><div class="flex gap-2"><input id="study-exam-date" type="date" class="border-2 border-slate-200 p-2.5 rounded-xl font-bold"><button onclick="app.generateStudyPlan()" class="bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-black">إنشاء الخطة</button></div></div><div id="study-plan-summary" class="hidden bg-emerald-50 border border-emerald-100 p-4 rounded-2xl mb-4"></div><div id="study-plan-list" class="space-y-2"></div><button id="clear-study-plan-btn" onclick="app.clearStudyPlan()" class="hidden mt-4 text-red-500 font-black text-xs">حذف الخطة الحالية</button></div>
+
+                <div class="modern-card rounded-[2rem] p-5 md:p-7 border-t-4 border-blue-500"><div class="flex items-center justify-between gap-3 mb-4"><div><span class="text-xs font-black text-blue-600">التطبيق والعمل بدون إنترنت</span><h3 class="text-xl font-black text-slate-800 mt-1">تثبيت المنصة على جهازك</h3></div><i class="fas fa-mobile-screen-button text-blue-500 text-2xl"></i></div><p class="text-sm font-bold text-slate-500 leading-7">ثبّت المنصة كتطبيق على الهاتف أو الكمبيوتر، واحفظ الدروس التي تحتاجها من زر التنزيل داخل كل درس لقراءتها بدون إنترنت.</p><button id="install-app-btn" onclick="app.installPwa()" class="w-full mt-4 bg-blue-50 border border-blue-100 text-blue-700 py-3 rounded-xl font-black"><i class="fas fa-download ml-2"></i>تثبيت المنصة كتطبيق</button></div>
+
+                <div class="modern-card rounded-[2rem] p-5 md:p-7 border-t-4 border-emerald-500"><div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5"><div><span class="text-xs font-black text-emerald-600">خطة المذاكرة</span><h3 class="text-xl font-black text-slate-800 mt-1">قسّم الدروس على أيامك</h3><p class="text-xs font-bold text-slate-400 mt-1">حدد تاريخاً مستهدفاً وسنوزع الدروس غير المكتملة على الأيام المتبقية بشكل ميسر.</p></div><div class="flex gap-2"><input id="study-exam-date" type="date" class="border-2 border-slate-200 p-2.5 rounded-xl font-bold"><button onclick="app.generateStudyPlan()" class="bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-black">إنشاء الخطة</button></div></div><div id="study-plan-summary" class="hidden bg-emerald-50 border border-emerald-100 p-4 rounded-2xl mb-4"></div><div id="study-plan-list" class="space-y-2"></div><button id="clear-study-plan-btn" onclick="app.clearStudyPlan()" class="hidden mt-4 text-red-500 font-black text-xs">حذف الخطة الحالية</button></div>
                 <div class="modern-card rounded-[2rem] p-5 md:p-7 border-t-4 border-amber-500"><div class="flex items-center justify-between gap-3 mb-4"><div><span class="text-xs font-black text-amber-600">الشهادات</span><h3 class="text-xl font-black text-slate-800 mt-1">شهادات الإنجاز المتاحة</h3><p class="text-xs font-bold text-slate-400 mt-1">تظهر تلقائيًا بعد إكمال قسم أو اجتياز اختبار.</p></div><i class="fas fa-certificate text-amber-500 text-2xl"></i></div><div id="certificates-list" class="grid md:grid-cols-2 gap-3"></div></div>
                 <div class="modern-card rounded-[2rem] p-5 md:p-7"><div class="flex items-center justify-between gap-3 mb-5"><div><h3 class="text-xl font-black text-slate-800">آخر نتائج الاختبارات</h3><p class="text-xs font-bold text-slate-400 mt-1">آخر محاولات محفوظة على حسابك.</p></div><i class="fas fa-chart-line text-islamic-500 text-xl"></i></div><div id="account-history" class="space-y-3"></div></div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3"><button onclick="app.syncCloudProgress(true)" class="bg-islamic-50 border border-islamic-100 text-islamic-700 py-3 rounded-2xl font-black"><i class="fas fa-arrows-rotate ml-2"></i>مزامنة الآن</button><button onclick="app.resetCurrentProgress()" class="bg-amber-50 border border-amber-100 text-amber-700 py-3 rounded-2xl font-black"><i class="fas fa-rotate-left ml-2"></i>تصفير تقدمي</button><button onclick="app.logout()" class="bg-red-50 border border-red-100 text-red-600 py-3 rounded-2xl font-black"><i class="fas fa-right-from-bracket ml-2"></i>تسجيل الخروج</button></div>
@@ -391,17 +399,17 @@
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-7 relative z-10">
                     <div class="flex items-start gap-4">
                         <button onclick="app.resetUrlAndGo('landing')" class="w-11 h-11 rounded-2xl bg-white/10 border border-white/15 hover:bg-white/20 flex items-center justify-center shrink-0"><i class="fas fa-arrow-right"></i></button>
-                        <div><span class="inline-flex items-center gap-2 text-xs font-black bg-white/10 border border-white/15 px-3 py-1.5 rounded-full"><i class="fas fa-layer-group"></i> قسم علمي</span><h2 id="cat-title" class="text-3xl md:text-5xl font-black mt-4 leading-tight"></h2><p id="cat-description" class="text-emerald-50/80 font-bold mt-2 max-w-2xl">تصفح كتب القسم وابدأ التعلم من الكتاب المناسب.</p></div>
+                        <div><span class="inline-flex items-center gap-2 text-xs font-black bg-white/10 border border-white/15 px-3 py-1.5 rounded-full"><i class="fas fa-layer-group"></i> قسم علمي</span><h2 id="cat-title" class="text-3xl md:text-5xl font-black mt-4 leading-tight"></h2><p id="cat-description" class="text-emerald-50/80 font-bold mt-2 max-w-2xl">تصفح كتب ودورات القسم وابدأ التعلم من المسار المناسب.</p></div>
                     </div>
                     <div class="grid grid-cols-3 gap-2 md:gap-3 min-w-0 lg:min-w-[420px]">
-                        <div class="metric-chip rounded-2xl p-3 md:p-4 text-center"><strong id="cat-books-count" class="text-2xl font-black block">0</strong><span class="text-[11px] md:text-xs font-bold text-white/70">كتاب</span></div>
+                        <div class="metric-chip rounded-2xl p-3 md:p-4 text-center"><strong id="cat-books-count" class="text-2xl font-black block">0</strong><span class="text-[11px] md:text-xs font-bold text-white/70">كتاب / دورة</span></div>
                         <div class="metric-chip rounded-2xl p-3 md:p-4 text-center"><strong id="cat-lessons-count" class="text-2xl font-black block">0</strong><span class="text-[11px] md:text-xs font-bold text-white/70">درس</span></div>
                         <div class="metric-chip rounded-2xl p-3 md:p-4 text-center"><strong id="cat-completed-count" class="text-2xl font-black block">0</strong><span class="text-[11px] md:text-xs font-bold text-white/70">مكتمل</span></div>
                     </div>
                 </div>
                 <div class="mt-7 relative z-10"><div class="flex justify-between text-xs font-black mb-2"><span>تقدمك في القسم</span><span id="cat-progress-label">0%</span></div><div class="h-2.5 bg-black/15 rounded-full overflow-hidden"><div id="cat-progress-bar" class="h-full bg-white rounded-full transition-all duration-700" style="width:0%"></div></div></div>
             </div>
-            <div><div class="flex items-center justify-between gap-4 mb-5"><div><h3 class="section-title text-2xl md:text-3xl font-black text-slate-800">كتب القسم</h3><p class="text-slate-400 font-bold mt-2">اختر كتابًا لتظهر أبوابه والدروس المرتبة بداخله.</p></div></div><div id="category-books-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5"></div><div id="legacy-category-content" class="hidden mt-6"></div></div>
+            <div><div class="flex items-center justify-between gap-4 mb-5"><div><h3 class="section-title text-2xl md:text-3xl font-black text-slate-800">كتب ودورات القسم</h3><p class="text-slate-400 font-bold mt-2">اختر كتابًا أو دورة لتظهر أبوابها والدروس المرتبة بداخلها.</p></div></div><div id="category-books-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5"></div><div id="legacy-category-content" class="hidden mt-6"></div></div>
         </section>
 
         <section id="book-view" class="view-section space-y-6 md:space-y-8 animate-fadeIn hidden max-w-6xl mx-auto">
@@ -409,12 +417,12 @@
                 <div class="absolute inset-0 bg-gradient-to-bl from-white/5 to-transparent"></div>
                 <div class="relative z-10 flex flex-col md:flex-row gap-6 md:gap-8 items-start">
                     <div id="book-view-cover" class="book-hero-cover"><div class="h-full grid place-items-center text-white/50 text-5xl"><i class="fas fa-book-open"></i></div></div>
-                    <div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap"><button id="book-back-category" class="w-10 h-10 bg-white/10 border border-white/15 rounded-xl"><i class="fas fa-arrow-right"></i></button><span id="book-category-label" class="text-xs font-black bg-white/10 border border-white/15 px-3 py-1.5 rounded-full">القسم</span><span id="book-access-badge"></span></div><h2 id="book-view-title" class="text-3xl md:text-5xl font-black mt-5 leading-tight">الكتاب</h2><p id="book-view-author" class="text-emerald-100 font-black mt-2"></p><p id="book-view-description" class="text-white/75 font-bold leading-8 mt-4 max-w-3xl"></p><div class="flex flex-wrap gap-2 mt-5"><a id="book-source-link" target="_blank" rel="noopener" class="hidden bg-white text-islamic-900 px-5 py-3 rounded-xl font-black"><i class="fas fa-file-pdf ml-2"></i>رابط الكتاب / المصدر</a><button onclick="document.getElementById('book-chapters-section')?.scrollIntoView({behavior:'smooth'})" class="bg-white/10 border border-white/20 px-5 py-3 rounded-xl font-black">ابدأ القراءة</button><button id="book-comprehensive-quiz" class="hidden bg-amber-400 text-amber-950 px-5 py-3 rounded-xl font-black"><i class="fas fa-clipboard-check ml-2"></i>اختبار شامل للكتاب</button></div></div>
+                    <div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap"><button id="book-back-category" class="w-10 h-10 bg-white/10 border border-white/15 rounded-xl"><i class="fas fa-arrow-right"></i></button><span id="book-category-label" class="text-xs font-black bg-white/10 border border-white/15 px-3 py-1.5 rounded-full">القسم</span><span id="book-access-badge"></span></div><h2 id="book-view-title" class="text-3xl md:text-5xl font-black mt-5 leading-tight">الكتاب</h2><p id="book-view-author" class="text-emerald-100 font-black mt-2"></p><p id="book-view-description" class="text-white/75 font-bold leading-8 mt-4 max-w-3xl"></p><div class="flex flex-wrap gap-2 mt-5"><a id="book-source-link" target="_blank" rel="noopener" class="hidden bg-white text-islamic-900 px-5 py-3 rounded-xl font-black"><i class="fas fa-file-pdf ml-2"></i>رابط الكتاب / المصدر</a><button onclick="document.getElementById('book-chapters-section')?.scrollIntoView({behavior:'smooth'})" class="bg-white/10 border border-white/20 px-5 py-3 rounded-xl font-black">ابدأ الدراسة</button><button id="book-comprehensive-quiz" class="hidden bg-amber-400 text-amber-950 px-5 py-3 rounded-xl font-black"><i class="fas fa-clipboard-check ml-2"></i>اختبار شامل</button></div></div>
                 </div>
-                <div class="relative z-10 mt-7 grid grid-cols-3 gap-2 md:gap-3"><div class="metric-chip rounded-2xl p-3 text-center"><strong id="book-chapters-count" class="text-2xl font-black block">0</strong><span class="text-[11px] font-bold text-white/70">باب</span></div><div class="metric-chip rounded-2xl p-3 text-center"><strong id="book-lessons-count" class="text-2xl font-black block">0</strong><span class="text-[11px] font-bold text-white/70">درس</span></div><div class="metric-chip rounded-2xl p-3 text-center"><strong id="book-progress-label" class="text-2xl font-black block">0%</strong><span class="text-[11px] font-bold text-white/70">الإنجاز</span></div></div>
+                <div class="relative z-10 mt-7 grid grid-cols-3 gap-2 md:gap-3"><div class="metric-chip rounded-2xl p-3 text-center"><strong id="book-chapters-count" class="text-2xl font-black block">0</strong><span class="text-[11px] font-bold text-white/70">باب / محور</span></div><div class="metric-chip rounded-2xl p-3 text-center"><strong id="book-lessons-count" class="text-2xl font-black block">0</strong><span class="text-[11px] font-bold text-white/70">درس</span></div><div class="metric-chip rounded-2xl p-3 text-center"><strong id="book-progress-label" class="text-2xl font-black block">0%</strong><span class="text-[11px] font-bold text-white/70">الإنجاز</span></div></div>
                 <div class="relative z-10 mt-4 h-2.5 bg-black/15 rounded-full overflow-hidden"><div id="book-progress-bar" class="h-full bg-white rounded-full transition-all duration-700" style="width:0%"></div></div>
             </div>
-            <div id="book-chapters-section"><div class="mb-5"><h3 class="section-title text-2xl md:text-3xl font-black text-slate-800">فهرس الكتاب</h3><p class="text-slate-400 font-bold mt-2">الأبواب مرتبة كما أضافها المشرف، وكل باب يعرض تقدمك ودروسه.</p></div><div id="book-chapters-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5"></div></div>
+            <div id="book-chapters-section"><div class="mb-5"><h3 class="section-title text-2xl md:text-3xl font-black text-slate-800">فهرس الأبواب والمحاور</h3><p class="text-slate-400 font-bold mt-2">المحاور مرتبة بالتسلسل، وكل محور يعرض تقدمك ودروسه.</p></div><div id="book-chapters-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5"></div></div>
         </section>
 
         <section id="chapter-view" class="view-section space-y-6 animate-fadeIn hidden max-w-6xl mx-auto">
@@ -425,7 +433,7 @@
                         <div>
                             <span id="chap-parent-cat" class="text-xs font-black text-islamic-600 bg-islamic-50 px-3 py-1.5 rounded-full"></span>
                             <h2 id="chap-title" class="text-3xl md:text-4xl font-black text-slate-800 mt-3 leading-tight"></h2>
-                            <p class="text-slate-400 font-bold mt-2">اختر درسًا للقراءة أو ابدأ اختبارًا مباشرًا.</p>
+                            <p class="text-slate-400 font-bold mt-2">اختر درسًا للمشاهدة والقراءة أو ابدأ اختبار التثبيت مباشرة.</p>
                         </div>
                     </div>
                     <div class="grid grid-cols-3 gap-2 min-w-0 lg:min-w-[360px]">
@@ -461,14 +469,14 @@
 
             <article class="reader-shell rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 overflow-hidden">
                 <div class="p-6 md:p-10 lg:p-12 border-b border-slate-100 bg-gradient-to-bl from-islamic-50/80 to-white">
-                    <div class="flex flex-wrap gap-2 mb-4"><span class="text-xs font-black text-islamic-600 bg-white border border-islamic-100 px-3 py-1.5 rounded-full"><i class="fas fa-book-open ml-1"></i> شرح مقالي</span><span id="lesson-complete-badge" class="hidden text-xs font-black text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full"><i class="fas fa-circle-check ml-1"></i> تم إكماله</span></div>
+                    <div class="flex flex-wrap gap-2 mb-4"><span class="text-xs font-black text-islamic-600 bg-white border border-islamic-100 px-3 py-1.5 rounded-full"><i class="fas fa-book-open ml-1"></i> درس علمي مشروح</span><span id="lesson-complete-badge" class="hidden text-xs font-black text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full"><i class="fas fa-circle-check ml-1"></i> تم إكماله</span></div>
                     <h2 id="lesson-title" class="text-3xl md:text-5xl font-black text-slate-800 leading-[1.35]"></h2>
                 </div>
                 <div class="p-6 md:p-10 lg:p-12">
                     <div id="lesson-video-top" class="hidden mb-7"></div>
                     <div id="lesson-content" class="lesson-reading-text prose prose-slate prose-lg rtl:prose-invert max-w-none text-slate-700 font-bold text-justify whitespace-pre-wrap"></div>
                     <div id="lesson-video-bottom" class="hidden mt-7"></div>
-                    <div id="lesson-note-wrap" class="lesson-note-box rounded-2xl p-4 mt-7"><div class="flex items-center justify-between gap-3 mb-2"><strong class="text-amber-900"><i class="fas fa-note-sticky ml-1"></i>ملاحظتي الشخصية</strong><span id="lesson-note-status" class="text-[10px] font-black text-amber-600">محفوظة على حسابك</span></div><textarea id="lesson-note" oninput="app.saveLessonNoteDebounced()" placeholder="اكتب ملاحظة خاصة على هذا الدرس..." class="w-full h-24 bg-white/80 border border-amber-200 rounded-xl p-3 font-bold outline-none"></textarea></div>
+                    <div id="lesson-note-wrap" class="lesson-note-box rounded-2xl p-4 mt-7"><div class="flex items-center justify-between gap-3 mb-2"><strong class="text-amber-900"><i class="fas fa-note-sticky ml-1"></i>ملاحظتي الشخصية</strong><span id="lesson-note-status" class="text-[10px] font-black text-amber-600">محفوظة على حسابك</span></div><textarea id="lesson-note" oninput="app.saveLessonNoteDebounced()" placeholder="اكتب فوائدك وملاحظاتك الخاصة على هذا الدرس..." class="w-full h-24 bg-white/80 border border-amber-200 rounded-xl p-3 font-bold outline-none"></textarea></div>
                 </div>
                 <div class="p-6 md:p-8 bg-slate-50 border-t border-slate-100 flex flex-col md:flex-row gap-4 items-center justify-between">
                     <div><h4 class="font-black text-slate-800 text-lg">وصلت لنهاية الدرس</h4><p class="text-sm text-slate-400 font-bold mt-1">سجّل الدرس كمكتمل ليُحتسب ضمن تقدمك.</p></div>
@@ -476,7 +484,6 @@
                 </div>
             </article>
 
-            <!-- التعديل الجديد لقسم الاختبار -->
             <div id="lesson-quiz-action" class="hidden section-hero rounded-[2rem] p-6 md:p-8 text-white overflow-hidden relative mt-8">
                 <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
                     <div class="flex items-center gap-4">
@@ -538,8 +545,8 @@
         <div class="auth-modal-card w-full max-w-md rounded-[2rem] p-7 relative text-center">
             <button onclick="app.closeAccessModal()" class="absolute top-4 left-4 w-10 h-10 rounded-xl bg-slate-100 text-slate-500"><i class="fas fa-xmark"></i></button>
             <span id="access-modal-icon" class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-4"><i class="fas fa-lock"></i></span>
-            <h3 id="access-modal-title" class="text-2xl font-black text-slate-800">محتوى للمشتركين</h3>
-            <p id="access-modal-text" class="text-slate-500 font-bold leading-8 mt-3">هذا المحتوى متاح للمشتركين فقط.</p>
+            <h3 id="access-modal-title" class="text-2xl font-black text-slate-800">تنبيه</h3>
+            <p id="access-modal-text" class="text-slate-500 font-bold leading-8 mt-3">هذا المحتوى غير متاح حالياً.</p>
             <div id="access-modal-actions" class="flex flex-col sm:flex-row gap-3 mt-6 justify-center"></div>
         </div>
     </div>
@@ -547,7 +554,7 @@
     <div id="auth-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[200] hidden items-center justify-center p-4" onclick="if(event.target===this) app.closeAuthModal()">
         <div class="auth-modal-card w-full max-w-md rounded-[2rem] p-6 md:p-8 relative max-h-[92vh] overflow-y-auto">
             <button onclick="app.closeAuthModal()" class="absolute top-4 left-4 w-10 h-10 rounded-xl bg-slate-100 text-slate-500 hover:text-red-500"><i class="fas fa-xmark"></i></button>
-            <div class="text-center mb-6"><span class="w-14 h-14 rounded-2xl account-avatar text-white flex items-center justify-center text-xl mx-auto mb-3"><i class="fas fa-user-graduate"></i></span><h3 id="auth-modal-title" class="text-2xl font-black text-slate-800">تسجيل الدخول</h3><p id="auth-modal-subtitle" class="text-sm font-bold text-slate-400 mt-2">تابع تقدمك من أي جهاز.</p></div>
+            <div class="text-center mb-6"><span class="w-14 h-14 rounded-2xl account-avatar text-white flex items-center justify-center text-xl mx-auto mb-3"><i class="fas fa-user-graduate"></i></span><h3 id="auth-modal-title" class="text-2xl font-black text-slate-800">تسجيل الدخول</h3><p id="auth-modal-subtitle" class="text-sm font-bold text-slate-400 mt-2">تابع تقدمك من أي جهاز مجاناً.</p></div>
             <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-2xl mb-6"><button id="auth-login-tab" onclick="app.switchAuthMode('login')" class="auth-mode-btn active py-2.5 rounded-xl font-black text-sm">دخول</button><button id="auth-register-tab" onclick="app.switchAuthMode('register')" class="auth-mode-btn py-2.5 rounded-xl font-black text-sm text-slate-500">حساب جديد</button></div>
             <div id="auth-name-wrap" class="hidden mb-4"><label class="block text-sm font-black text-slate-600 mb-2">الاسم</label><input id="auth-name" type="text" autocomplete="name" placeholder="اكتب اسمك" class="w-full border-2 border-slate-200 p-3.5 rounded-xl font-bold outline-none focus:border-islamic-500"></div>
             <div class="mb-4"><label class="block text-sm font-black text-slate-600 mb-2">البريد الإلكتروني</label><input id="auth-email" type="email" autocomplete="email" placeholder="name@example.com" dir="ltr" class="w-full border-2 border-slate-200 p-3.5 rounded-xl font-bold outline-none focus:border-islamic-500 text-left"></div>
@@ -571,7 +578,7 @@
 
     <footer class="bg-white border-t-2 border-slate-200 py-8 mt-auto mb-0">
         <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p id="platform-footer" class="text-sm font-bold text-slate-400 text-center">جميع الحقوق محفوظة © 2026</p>
+            <p id="platform-footer" class="text-sm font-bold text-slate-400 text-center">جميع الحقوق محفوظة © 2026 — وقف علمي مجاني لوجه الله تعالى</p>
         </div>
     </footer>
 
@@ -635,6 +642,14 @@
                     app.renderAccount();
                     app.applyBranding(); app.renderNotifications();
                     app.initDhikr();
+                });
+            },
+
+            // دالة إيقاف الفيديوهات عند مغادرة الدرس لمنع استمرار الصوت في الخلفية
+            stopLessonVideos: () => {
+                ['lesson-video-top', 'lesson-video-bottom'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) { el.innerHTML = ''; el.classList.add('hidden'); }
                 });
             },
 
@@ -823,13 +838,12 @@
             safeUrl: (value) => { try { const u=new URL(String(value||'')); return ['http:','https:'].includes(u.protocol)?u.href:''; } catch(e){return '';} },
             applyBranding: () => {
                 const b=state.db.settings?.branding||{}; const name=b.name||'منصة العلم', desc=b.description||'تعلم • اختبر نفسك • تابع تقدمك';
-                const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val}; set('platform-name-nav',name);set('platform-description-nav',desc);set('platform-hero-title',b.heroTitle||'رحلة في طلب العلم… كتابًا بعد كتاب، ودرسًا بعد درس.');set('platform-hero-description',b.heroDescription||'مكتبة علمية تفاعلية للعلوم الشرعية والعربية: كتب منظمة، دروس مبسطة، فيديوهات وتفريغات، واختبارات قصيرة لتثبيت المعلومة.');set('platform-footer',`جميع الحقوق محفوظة © ${new Date().getFullYear()} ${name}`); document.title=name;
+                const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val}; set('platform-name-nav',name);set('platform-description-nav',desc);set('platform-hero-title',b.heroTitle||'رحلة في طلب العلم… كتابًا بعد كتاب، ودرسًا بعد درس.');set('platform-hero-description',b.heroDescription||'مكتبة علمية تفاعلية للعلوم الشرعية والعربية: كتب منظمة، دروس مبسطة، فيديوهات وتفريغات، واختبارات قصيرة لتثبيت المعلومة.');set('platform-footer',`جميع الحقوق محفوظة © ${new Date().getFullYear()} ${name} — وقف علمي مجاني لوجه الله`); document.title=name;
                 const dock=document.getElementById('social-dock'); if(!dock)return; const items=[['facebook',b.facebook,'fa-facebook-f'],['youtube',b.youtube,'fa-youtube'],['tiktok',b.tiktok,'fa-tiktok'],['whatsapp',b.whatsapp,'fa-whatsapp']].filter(x=>app.safeUrl(x[1])); dock.innerHTML=items.map(([k,url,icon])=>`<a href="${app.safeUrl(url)}" target="_blank" rel="noopener" title="${k}" class="text-slate-700"><i class="fab ${icon}"></i></a>`).join(''); dock.classList.toggle('hidden',!items.length);
             },
             notificationReadKey: () => `ahmed_notifications_read_${state.auth.user?.uid||'guest'}`,
             buildNotifications: () => {
                 const out=[]; const a=state.db.settings?.announcement; if(a?.active&&a.text) out.push({id:`ann_${a.updatedAt||a.text}`,title:a.title||'إعلان المنصة',text:a.text,icon:'fa-bullhorn',date:a.updatedAt||Date.now()});
-                const p=state.auth.profile||{}; if(p.plan==='subscriber'&&p.subscriptionEndsAt){const days=Math.ceil((Number(p.subscriptionEndsAt)-Date.now())/86400000);if(days>=0&&days<=7)out.push({id:`sub_${p.subscriptionEndsAt}`,title:'تنبيه الاشتراك',text:days===0?'ينتهي اشتراكك اليوم.':`متبقي ${days} يوم على انتهاء اشتراكك.`,icon:'fa-clock',date:Date.now()});}
                 const recent=[...state.db.lessons.map(x=>({...x,label:x.title,type:'درس',_kind:'lesson'})),...state.db.quizzes.map(x=>({...x,label:x.name,type:'اختبار',_kind:'quiz'}))].filter(x=>app.effectiveAccess(x._kind,x)!=='hidden').filter(x=>{const m=String(x.id||'').match(/(\d{13})/);return m&&Date.now()-Number(m[1])<7*86400000}).sort((a,b)=>String(b.id).localeCompare(String(a.id))).slice(0,4); recent.forEach(x=>out.push({id:`new_${x.id}`,title:`${x.type} جديد`,text:x.label,icon:'fa-sparkles',date:Number(String(x.id).match(/(\d{13})/)?.[1]||Date.now())})); return out.sort((a,b)=>b.date-a.date);
             },
             renderNotifications: () => { const items=app.buildNotifications(); let read=[];try{read=JSON.parse(localStorage.getItem(app.notificationReadKey())||'[]')}catch(e){} const unread=items.filter(x=>!read.includes(x.id)).length; ['notification-dot-desktop','notification-dot-mobile'].forEach(id=>document.getElementById(id)?.classList.toggle('hidden',unread===0)); const box=document.getElementById('notifications-list');if(box)box.innerHTML=items.length?items.map(n=>`<div class="notification-item ${read.includes(n.id)?'':'unread'} border rounded-2xl p-4"><div class="flex gap-3"><span class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"><i class="fas ${n.icon}"></i></span><div><strong class="text-slate-800">${app.escapeHtml(n.title)}</strong><p class="text-sm font-bold text-slate-500 leading-6 mt-1">${app.escapeHtml(n.text)}</p></div></div></div>`).join(''):'<div class="text-center p-8 text-slate-400 font-bold">لا توجد إشعارات جديدة.</div>'; },
@@ -838,13 +852,11 @@
             calcStreak: () => {const set=new Set(state.local.activityDays||[]);let n=0,d=new Date();for(let i=0;i<365;i++){const key=d.toISOString().slice(0,10);if(set.has(key)){n++;d.setDate(d.getDate()-1)}else if(i===0){d.setDate(d.getDate()-1)}else break;}return n;},
             getLevelInfo: () => {const pts=(state.local.completedLessons?.length||0)*10+(state.local.quizHistory?.length||0)*5; const levels=[['مبتدئ',0],['مجتهد',50],['متقدم',150],['متميز',300],['خبير',600]];let idx=0;for(let i=0;i<levels.length;i++)if(pts>=levels[i][1])idx=i;const cur=levels[idx],next=levels[idx+1];return{index:idx+1,name:cur[0],points:pts,next:next?.[1]||cur[1]+300,base:cur[1],progress:next?Math.round((pts-cur[1])/(next[1]-cur[1])*100):100};},
             getBadges: () => {const c=state.local.completedLessons?.length||0,q=state.local.quizHistory?.length||0,best=q?Math.max(...state.local.quizHistory.map(x=>Number(x.percentage)||0)):0,st=app.calcStreak();return[{name:'أول خطوة',ok:c>=1,icon:'fa-shoe-prints'},{name:'قارئ نشيط',ok:c>=10,icon:'fa-book-open'},{name:'محب الاختبارات',ok:q>=5,icon:'fa-clipboard-check'},{name:'درجة كاملة',ok:best>=100,icon:'fa-star'},{name:'استمرار 7 أيام',ok:st>=7,icon:'fa-fire'}]},
-            mediaEmbedHtml: (url) => {const safe=app.safeUrl(url);if(!safe)return'';let embed='';try{const u=new URL(safe);if(u.hostname.includes('youtu.be'))embed=`https://www.youtube.com/embed/${u.pathname.split('/').filter(Boolean)[0]}`;else if(u.hostname.includes('youtube.com')){const id=u.searchParams.get('v')||u.pathname.match(/\/(shorts|embed)\/([^/?]+)/)?.[2];if(id)embed=`https://www.youtube.com/embed/${id}`;}else if(u.hostname.includes('tiktok.com')){const id=u.pathname.match(/video\/(\d+)/)?.[1];if(id)embed=`https://www.tiktok.com/player/v1/${id}`;}else if(u.hostname.includes('facebook.com')||u.hostname.includes('fb.watch'))embed=`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(safe)}&show_text=false&width=800`;}catch(e){} return embed?`<div class="media-frame"><iframe src="${embed}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`:`<a href="${safe}" target="_blank" rel="noopener" class="modern-card p-5 rounded-2xl flex items-center gap-3 text-indigo-600 font-black"><i class="fas fa-play-circle text-2xl"></i>فتح الفيديو</a>`;},
-            getProtectedLessonPayload: async lesson => {if(app.effectiveAccess('lesson',lesson)==='free')return lesson;const snap=await protectedRef.child(`lessons/${lesson.id}`).once('value');return {...lesson,...(snap.val()||{})};},
-            getQuizWithQuestions: async quiz => {if(!quiz)return null;if((quiz.effectiveAccess||quiz.access||'free')==='free'&&Array.isArray(quiz.questions))return quiz;const snap=await protectedRef.child(`quizzes/${quiz.id}/questions`).once('value');return {...quiz,questions:snap.val()||[]};},
+            mediaEmbedHtml: (url) => {const safe=app.safeUrl(url);if(!safe)return'';let embed='';try{const u=new URL(safe);if(u.hostname.includes('youtu.be'))embed=`https://www.youtube.com/embed/${u.pathname.split('/').filter(Boolean)[0]}?rel=0`;else if(u.hostname.includes('youtube.com')){const id=u.searchParams.get('v')||u.pathname.match(/\/(shorts|embed)\/([^/?]+)/)?.[2];if(id)embed=`https://www.youtube.com/embed/${id}?rel=0`;}else if(u.hostname.includes('tiktok.com')){const id=u.pathname.match(/video\/(\d+)/)?.[1];if(id)embed=`https://www.tiktok.com/player/v1/${id}`;}else if(u.hostname.includes('facebook.com')||u.hostname.includes('fb.watch'))embed=`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(safe)}&show_text=false&width=800`;}catch(e){} return embed?`<div class="media-frame"><iframe src="${embed}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`:`<a href="${safe}" target="_blank" rel="noopener" class="modern-card p-5 rounded-2xl flex items-center gap-3 text-indigo-600 font-black"><i class="fas fa-play-circle text-2xl"></i>فتح الفيديو</a>`;},
             shuffle: arr => {const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;},
             questionKey: q => btoa(unescape(encodeURIComponent(String(q?.text||'').trim().slice(0,180)))).replace(/=/g,''),
             updateMistakeBank: () => {const map=new Map((state.local.mistakes||[]).map(m=>[m.key,m]));state.quizData.questions.forEach((q,i)=>{const key=app.questionKey(q);if(state.answers[i]===q.correctIndex)map.delete(key);else map.set(key,{key,text:q.text,options:q.options,correctIndex:q.correctIndex,updatedAt:Date.now()})});state.local.mistakes=[...map.values()].slice(0,300)},
-            startRandomQuiz: async count => {let all=[];for(const q of state.db.quizzes){if(!app.guardAccess('quiz',q,false))continue;try{const full=await app.getQuizWithQuestions(q);all.push(...(full.questions||[]))}catch(e){}}if(!all.length)return alert('لا توجد أسئلة متاحة لحسابك حاليًا.');const qs=app.shuffle(all).slice(0,Math.min(count,all.length));state.quizData={id:'random_'+Date.now(),name:`اختبار عشوائي - ${qs.length} سؤال`,questions:qs};state.quizBaseData=state.quizData;state.quizReturnLocation='category';app.initiateQuizSession();},
+            startRandomQuiz: async count => {let all=[];for(const q of state.db.quizzes){if(!app.guardAccess('quiz',q,false))continue;try{const full=await app.getQuizWithQuestions(q);all.push(...(full.questions||[]))}catch(e){}}if(!all.length)return alert('لا توجد أسئلة متاحة حاليًا.');const qs=app.shuffle(all).slice(0,Math.min(count,all.length));state.quizData={id:'random_'+Date.now(),name:`اختبار عشوائي - ${qs.length} سؤال`,questions:qs};state.quizBaseData=state.quizData;state.quizReturnLocation='category';app.initiateQuizSession();},
             startMistakesBankQuiz: () => {const qs=app.shuffle(state.local.mistakes||[]);if(!qs.length)return alert('لا توجد أخطاء محفوظة للمراجعة.');state.quizData={id:'mistakes_bank',name:'اختبار أخطائي المحفوظة',questions:qs};state.quizBaseData=state.quizData;state.quizReturnLocation='category';app.initiateQuizSession();},
             saveLessonNoteDebounced: () => {clearTimeout(state.noteTimer);state.noteTimer=setTimeout(()=>{if(!state.currentLesson)return;state.local.notes||={};state.local.notes[state.currentLesson.id]=(document.getElementById('lesson-note')?.value||'').slice(0,5000);app.saveLocalState();const x=document.getElementById('lesson-note-status');if(x)x.textContent='تم الحفظ ✓'},400)},
             isSubscriptionActive: () => {
@@ -854,6 +866,7 @@
             },
             effectiveAccess: (type, item) => {
                 if (!item) return 'hidden';
+                if (app.isScheduled(item)) return 'hidden';
                 const levels = [];
                 if (type === 'category') levels.push(item.access || 'free');
                 if (type === 'book') {
@@ -880,6 +893,8 @@
                 return 'free';
             },
             guardAccess: (type, item, showModal = true) => {
+                if(type==='lesson' && state.offlineOverrideId && item?.id===state.offlineOverrideId) return true;
+                if(app.isScheduled(item)){ if(showModal)app.showAccessModal('مجدول للنشر',`سيصبح هذا المحتوى متاحًا في ${new Date(Number(item.publishAt)).toLocaleString('ar-EG')}.`,'hidden'); return false;}
                 const access = app.effectiveAccess(type, item);
                 if (access === 'free') return true;
                 if (access === 'hidden') {
@@ -887,9 +902,8 @@
                     return false;
                 }
                 if (app.isSubscriptionActive()) return true;
-                if(showModal){ if (!state.auth.user) app.showAccessModal('محتوى للمشتركين','سجّل الدخول أولًا، وإذا كان حسابك مشتركًا سيفتح المحتوى مباشرة.','login');
-                else if (state.auth.profile?.plan === 'subscriber') app.showAccessModal('انتهى الاشتراك','انتهت مدة اشتراكك. جدّد الاشتراك للوصول إلى هذا المحتوى.','expired');
-                else app.showAccessModal('محتوى للمشتركين','هذا المحتوى متاح للمشتركين فقط. يمكنك التواصل مع الإدارة لتفعيل اشتراكك.','subscribe'); }
+                if(showModal){ if (!state.auth.user) app.showAccessModal('تسجيل الدخول مطلوب','سجّل الدخول أولًا لحفظ تقدمك والوصول لهذا المحتوى.','login');
+                else app.showAccessModal('محتوى خاص','هذا المحتوى مخصص لحسابات محددة من الإدارة.','subscribe'); }
                 return false;
             },
             showAccessModal: (title,text,mode='subscribe') => {
@@ -904,7 +918,7 @@
             closeAccessModal: () => { const m=document.getElementById('access-modal'); if(m){m.classList.add('hidden');m.classList.remove('flex');} },
             accessBadge: (type,item) => {
                 const a=app.effectiveAccess(type,item);
-                if(a==='subscriber') return '<span class="text-[10px] font-black bg-amber-50 text-amber-700 border border-amber-100 px-2 py-1 rounded-lg"><i class="fas fa-lock ml-1"></i>مشترك</span>';
+                if(a==='subscriber') return '<span class="text-[10px] font-black bg-amber-50 text-amber-700 border border-amber-100 px-2 py-1 rounded-lg"><i class="fas fa-lock ml-1"></i>خاص</span>';
                 return '';
             },
 
@@ -912,7 +926,7 @@
             getBookChapters: bookId => state.db.chapters.filter(ch => ch.bookId === bookId && app.effectiveAccess('chapter',ch)!=='hidden'),
             getBookLessons: bookId => { const ids=new Set(app.getBookChapters(bookId).map(ch=>ch.id)); return state.db.lessons.filter(l=>ids.has(l.chapterId)&&app.effectiveAccess('lesson',l)!=='hidden'); },
             getBookProgress: book => { const lessons=app.getBookLessons(book.id),done=lessons.filter(l=>state.local.completedLessons.includes(l.id)).length; return {lessons,done,percent:lessons.length?Math.round(done/lessons.length*100):0}; },
-            bookCardHtml: (book,{featured=false}={}) => { const cat=state.db.categories.find(c=>c.id===book.categoryId),pr=app.getBookProgress(book),locked=app.effectiveAccess('book',book)==='subscriber'&&!app.isSubscriptionActive(); return `<article class="book-card h-full flex flex-col ${locked?'opacity-90':''}"><div class="book-cover-wrap">${app.imageHtml(book.coverImage||book.coverUrl||'',book.title)}<div class="absolute top-3 right-3 flex gap-1">${app.accessBadge('book',book)}${book.featured?'<span class="text-[10px] font-black bg-amber-400 text-amber-950 px-2 py-1 rounded-lg"><i class="fas fa-star"></i></span>':''}</div></div><div class="p-4 flex flex-col flex-1"><span class="text-[10px] font-black text-islamic-600">${app.escapeHtml(cat?.name||'كتاب')}</span><h4 class="font-black text-slate-800 text-lg leading-7 mt-1 line-clamp-2">${app.escapeHtml(book.title||'كتاب')}</h4><p class="text-xs font-bold text-slate-400 mt-1 truncate">${app.escapeHtml(book.author||'')}</p><div class="mt-auto pt-4"><div class="flex justify-between text-[10px] font-black text-slate-400 mb-1"><span>${pr.done} / ${pr.lessons.length} درس</span><span>${pr.percent}%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-islamic-500 rounded-full" style="width:${pr.percent}%"></div></div><button onclick="app.openBook('${book.id}')" class="w-full mt-3 ${pr.percent?'bg-islamic-600':'bg-slate-900'} text-white py-2.5 rounded-xl font-black text-sm">${pr.percent?'متابعة الكتاب':'ابدأ الكتاب'} <i class="fas fa-arrow-left mr-1"></i></button></div></div></article>`; },
+            bookCardHtml: (book,{featured=false}={}) => { const cat=state.db.categories.find(c=>c.id===book.categoryId),pr=app.getBookProgress(book),locked=app.effectiveAccess('book',book)==='subscriber'&&!app.isSubscriptionActive(); return `<article class="book-card h-full flex flex-col ${locked?'opacity-90':''}"><div class="book-cover-wrap">${app.imageHtml(book.coverImage||book.coverUrl||'',book.title)}<div class="absolute top-3 right-3 flex gap-1">${app.accessBadge('book',book)}${book.featured?'<span class="text-[10px] font-black bg-amber-400 text-amber-950 px-2 py-1 rounded-lg"><i class="fas fa-star"></i></span>':''}</div></div><div class="p-4 flex flex-col flex-1"><span class="text-[10px] font-black text-islamic-600">${app.escapeHtml(cat?.name||'كتاب / دورة')}</span><h4 class="font-black text-slate-800 text-lg leading-7 mt-1 line-clamp-2">${app.escapeHtml(book.title||'كتاب')}</h4><p class="text-xs font-bold text-slate-400 mt-1 truncate">${app.escapeHtml(book.author||'')}</p><div class="mt-auto pt-4"><div class="flex justify-between text-[10px] font-black text-slate-400 mb-1"><span>${pr.done} / ${pr.lessons.length} درس</span><span>${pr.percent}%</span></div><div class="h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-islamic-500 rounded-full" style="width:${pr.percent}%"></div></div><button onclick="app.openBook('${book.id}')" class="w-full mt-3 ${pr.percent?'bg-islamic-600':'bg-slate-900'} text-white py-2.5 rounded-xl font-black text-sm">${pr.percent?'متابعة الدراسة':'ابدأ الآن'} <i class="fas fa-arrow-left mr-1"></i></button></div></div></article>`; },
             renderFeaturedBooks: () => {
                 const section=document.getElementById('featured-books-section'),track=document.getElementById('featured-books-track'),empty=document.getElementById('featured-books-empty'),carousel=document.getElementById('featured-books-carousel');
                 if(!section||!track)return;
@@ -920,7 +934,7 @@
                 const featured=visible.filter(b=>b.featured).sort((a,b)=>(Number(a.featuredOrder)||9999)-(Number(b.featuredOrder)||9999));
                 const books=(featured.length?featured:[...visible].sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0))).slice(0,30);
                 section.classList.remove('hidden');
-                const cfg=state.db.settings?.featuredCarousel||{},title=document.getElementById('featured-books-title');if(title)title.innerText=cfg.title||'كتب مميزة';
+                const cfg=state.db.settings?.featuredCarousel||{},title=document.getElementById('featured-books-title');if(title)title.innerText=cfg.title||'كتب ودورات مميزة';
                 if(!books.length){track.innerHTML='';empty?.classList.remove('hidden');carousel?.classList.add('hidden');document.getElementById('featured-books-dots')?.classList.add('hidden');app.stopCarousel();return;}
                 empty?.classList.add('hidden');carousel?.classList.remove('hidden');document.getElementById('featured-books-dots')?.classList.remove('hidden');
                 track.innerHTML=books.map(b=>`<div class="featured-book-slide">${app.bookCardHtml(b,{featured:true})}</div>`).join('');
@@ -929,7 +943,7 @@
             renderRecentBooks: () => {
                 const box=document.getElementById('recent-books-grid');if(!box)return;
                 const books=state.db.books.filter(b=>app.effectiveAccess('book',b)!=='hidden').sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0)).slice(0,4);
-                box.innerHTML=books.length?books.map(b=>app.bookCardHtml(b)).join(''):`<div class="sm:col-span-2 lg:col-span-4 featured-books-empty"><div><div class="empty-book-shelf"><span></span><span></span><span></span></div><h3 class="font-black text-slate-600">لا توجد كتب مضافة بعد</h3><p class="text-sm text-slate-400 font-bold mt-2">ستظهر أحدث الكتب هنا بمجرد إضافتها إلى المكتبة.</p></div></div>`;
+                box.innerHTML=books.length?books.map(b=>app.bookCardHtml(b)).join(''):`<div class="sm:col-span-2 lg:col-span-4 featured-books-empty"><div><div class="empty-book-shelf"><span></span><span></span><span></span></div><h3 class="font-black text-slate-600">لا توجد كتب أو دورات مضافة بعد</h3><p class="text-sm text-slate-400 font-bold mt-2">ستظهر أحدث الإضافات هنا بمجرد رفعها إلى المكتبة.</p></div></div>`;
             },
             carouselStep: () => { const track=document.getElementById('featured-books-track');if(!track||!track.children.length)return 0;const first=track.children[0];return first.getBoundingClientRect().width+parseFloat(getComputedStyle(track).gap||0); },
             carouselNext: () => {const track=document.getElementById('featured-books-track');if(!track||track.children.length<2||state.carousel.moving)return;state.carousel.moving=true;track.style.transition='transform .62s cubic-bezier(.22,.61,.36,1)';track.style.transform=`translateX(-${app.carouselStep()}px)`;setTimeout(()=>{track.appendChild(track.firstElementChild);track.style.transition='none';track.style.transform='translateX(0)';requestAnimationFrame(()=>requestAnimationFrame(()=>{track.style.transition='transform .62s cubic-bezier(.22,.61,.36,1)';state.carousel.moving=false;app.renderCarouselDots();}));},640);},
@@ -938,8 +952,8 @@
             stopCarousel: () => {if(state.carousel.timer){clearInterval(state.carousel.timer);state.carousel.timer=null;}},
             bindCarouselGestures: () => {const vp=document.getElementById('featured-books-viewport');if(!vp||vp.dataset.bound)return;vp.dataset.bound='1';vp.addEventListener('mouseenter',()=>state.carousel.hover=true);vp.addEventListener('mouseleave',()=>state.carousel.hover=false);vp.addEventListener('pointerdown',e=>{state.carousel.pointerX=e.clientX;});vp.addEventListener('pointerup',e=>{if(state.carousel.pointerX===null)return;const d=e.clientX-state.carousel.pointerX;state.carousel.pointerX=null;if(Math.abs(d)>45)(d<0?app.carouselNext():app.carouselPrev());});},
             renderCarouselDots: () => {const box=document.getElementById('featured-books-dots'),track=document.getElementById('featured-books-track');if(!box||!track)return;const n=Math.min(7,track.children.length);box.innerHTML=Array.from({length:n},(_,i)=>`<span class="carousel-dot ${i===0?'active':''}"></span>`).join('');},
-            openBook: (bookId) => {const book=state.db.books.find(b=>b.id===bookId);if(!book||!app.guardAccess('book',book))return;state.currentBook=book;state.currentCat=state.db.categories.find(c=>c.id===book.categoryId)||null;const pr=app.getBookProgress(book),chaps=app.getBookChapters(book.id);document.getElementById('book-view-title').innerText=book.title||'كتاب';document.getElementById('book-view-author').innerText=book.author?`تأليف / شرح: ${book.author}`:'';document.getElementById('book-view-description').innerText=book.description||'كتاب من المكتبة العلمية للمنصة.';document.getElementById('book-category-label').innerText=state.currentCat?.name||'القسم';document.getElementById('book-access-badge').innerHTML=app.accessBadge('book',book);document.getElementById('book-back-category').onclick=()=>state.currentCat?app.openCategory(state.currentCat.id):app.resetUrlAndGo('landing');const cover=document.getElementById('book-view-cover');cover.innerHTML=app.imageHtml(book.coverImage||book.coverUrl||'',book.title);document.getElementById('book-chapters-count').innerText=chaps.length;document.getElementById('book-lessons-count').innerText=pr.lessons.length;document.getElementById('book-progress-label').innerText=`${pr.percent}%`;document.getElementById('book-progress-bar').style.width=`${pr.percent}%`;const src=document.getElementById('book-source-link');if(book.sourceUrl){src.href=app.safeUrl(book.sourceUrl);src.classList.remove('hidden')}else src.classList.add('hidden');const grid=document.getElementById('book-chapters-grid');grid.innerHTML=chaps.length?chaps.map((ch,idx)=>app.chapterCardHtml(ch,idx)).join(''):'<div class="md:col-span-2 modern-card rounded-3xl p-12 text-center text-slate-400 font-black">لم تُضف أبواب لهذا الكتاب بعد.</div>';const quizBtn=document.getElementById('book-comprehensive-quiz'),quizCount=pr.lessons.filter(l=>l.quizId).length;if(quizBtn){quizBtn.classList.toggle('hidden',!quizCount);quizBtn.onclick=()=>app.startBookComprehensiveQuiz(book.id);}window.history.pushState({},document.title,`${window.location.pathname}?book=${encodeURIComponent(book.id)}`);app.showSection('book-view');},
-            chapterCardHtml: (ch,idx=0) => {const lessons=state.db.lessons.filter(l=>l.chapterId===ch.id&&app.effectiveAccess('lesson',l)!=='hidden'),completed=lessons.filter(l=>state.local.completedLessons.includes(l.id)).length,progress=lessons.length?Math.round(completed/lessons.length*100):0,quizCount=lessons.filter(l=>l.quizId).length;return `<div class="chapter-card modern-card rounded-[1.8rem] p-5 md:p-6 flex flex-col gap-5 group"><div class="flex items-start justify-between gap-3 relative z-10"><div class="flex items-center gap-3"><span class="w-12 h-12 rounded-2xl bg-islamic-50 text-islamic-600 flex items-center justify-center font-black">${String(idx+1).padStart(2,'0')}</span><div><div class="flex items-center gap-2 flex-wrap"><h3 class="font-black text-xl text-slate-800 leading-relaxed">${app.escapeHtml(ch.title)}</h3>${app.accessBadge('chapter',ch)}</div><div class="flex gap-2 text-[11px] font-bold text-slate-400 mt-1"><span>${lessons.length} درس</span><span>•</span><span>${quizCount} اختبار</span></div></div></div><i class="fas fa-folder-open text-islamic-500 text-xl"></i></div><div><div class="flex justify-between text-[11px] font-black text-slate-400 mb-2"><span>التقدم</span><span>${progress}%</span></div><div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-islamic-500 rounded-full" style="width:${progress}%"></div></div></div><div class="flex gap-2"><button onclick="app.openChapter('${ch.id}')" class="flex-1 bg-slate-900 text-white py-3 rounded-xl font-black text-sm">فتح الباب <i class="fas fa-arrow-left mr-1"></i></button>${quizCount?`<button onclick="app.startComprehensiveQuiz('${ch.id}')" class="px-4 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl"><i class="fas fa-clipboard-check"></i></button>`:''}</div></div>`;},
+            openBook: (bookId) => {const book=state.db.books.find(b=>b.id===bookId);if(!book||!app.guardAccess('book',book))return;state.currentBook=book;state.currentCat=state.db.categories.find(c=>c.id===book.categoryId)||null;const pr=app.getBookProgress(book),chaps=app.getBookChapters(book.id);document.getElementById('book-view-title').innerText=book.title||'كتاب';document.getElementById('book-view-author').innerText=book.author?`تأليف / شرح: ${book.author}`:'';document.getElementById('book-view-description').innerText=book.description||'محتوى علمي من المكتبة التفاعلية للمنصة.';document.getElementById('book-category-label').innerText=state.currentCat?.name||'القسم';document.getElementById('book-access-badge').innerHTML=app.accessBadge('book',book);document.getElementById('book-back-category').onclick=()=>state.currentCat?app.openCategory(state.currentCat.id):app.resetUrlAndGo('landing');const cover=document.getElementById('book-view-cover');cover.innerHTML=app.imageHtml(book.coverImage||book.coverUrl||'',book.title);document.getElementById('book-chapters-count').innerText=chaps.length;document.getElementById('book-lessons-count').innerText=pr.lessons.length;document.getElementById('book-progress-label').innerText=`${pr.percent}%`;document.getElementById('book-progress-bar').style.width=`${pr.percent}%`;const src=document.getElementById('book-source-link');if(book.sourceUrl){src.href=app.safeUrl(book.sourceUrl);src.classList.remove('hidden')}else src.classList.add('hidden');const grid=document.getElementById('book-chapters-grid');grid.innerHTML=chaps.length?chaps.map((ch,idx)=>app.chapterCardHtml(ch,idx)).join(''):'<div class="md:col-span-2 modern-card rounded-3xl p-12 text-center text-slate-400 font-black">لم تُضف أبواب أو محاور بعد.</div>';const quizBtn=document.getElementById('book-comprehensive-quiz'),quizCount=pr.lessons.filter(l=>l.quizId).length;if(quizBtn){quizBtn.classList.toggle('hidden',!quizCount);quizBtn.onclick=()=>app.startBookComprehensiveQuiz(book.id);}window.history.pushState({},document.title,`${window.location.pathname}?book=${encodeURIComponent(book.id)}`);app.showSection('book-view');},
+            chapterCardHtml: (ch,idx=0) => {const lessons=state.db.lessons.filter(l=>l.chapterId===ch.id&&app.effectiveAccess('lesson',l)!=='hidden'),completed=lessons.filter(l=>state.local.completedLessons.includes(l.id)).length,progress=lessons.length?Math.round(completed/lessons.length*100):0,quizCount=lessons.filter(l=>l.quizId).length;return `<div class="chapter-card modern-card rounded-[1.8rem] p-5 md:p-6 flex flex-col gap-5 group"><div class="flex items-start justify-between gap-3 relative z-10"><div class="flex items-center gap-3"><span class="w-12 h-12 rounded-2xl bg-islamic-50 text-islamic-600 flex items-center justify-center font-black">${String(idx+1).padStart(2,'0')}</span><div><div class="flex items-center gap-2 flex-wrap"><h3 class="font-black text-xl text-slate-800 leading-relaxed">${app.escapeHtml(ch.title)}</h3>${app.accessBadge('chapter',ch)}</div><div class="flex gap-2 text-[11px] font-bold text-slate-400 mt-1"><span>${lessons.length} درس</span><span>•</span><span>${quizCount} اختبار</span></div></div></div><i class="fas fa-folder-open text-islamic-500 text-xl"></i></div><div><div class="flex justify-between text-[11px] font-black text-slate-400 mb-2"><span>التقدم</span><span>${progress}%</span></div><div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-islamic-500 rounded-full" style="width:${progress}%"></div></div></div><div class="flex gap-2"><button onclick="app.openChapter('${ch.id}')" class="flex-1 bg-slate-900 text-white py-3 rounded-xl font-black text-sm">فتح الباب <i class="fas fa-arrow-left mr-1"></i></button>${quizCount?`<button onclick="app.startComprehensiveQuiz('${ch.id}')" class="px-4 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl" title="اختبار شامل على الباب"><i class="fas fa-clipboard-check"></i></button>`:''}</div></div>`;},
 
             renderAuthUI: () => {
                 const label = document.getElementById('account-nav-label');
@@ -961,7 +975,7 @@
                     if (avatar) avatar.innerHTML = '<i class="fas fa-user"></i>';
                     if (mobileLabel) mobileLabel.innerText = 'تسجيل الدخول أو إنشاء حساب';
                     if (mobileAvatar) mobileAvatar.innerHTML = '<i class="fas fa-user"></i>';
-                    if (mobileSubtitle) mobileSubtitle.innerText = 'احفظ تقدمك ونتائجك على حسابك';
+                    if (mobileSubtitle) mobileSubtitle.innerText = 'احفظ تقدمك ونتائجك على حسابك مجاناً';
                 }
             },
 
@@ -986,7 +1000,7 @@
                 const setText = (id,val) => { const el=document.getElementById(id); if(el) el.innerText=val; };
                 setText('profile-name', name); setText('profile-email', email);
                 setText('profile-avatar', (name.trim()[0] || 'ط').toUpperCase());
-                setText('profile-plan', profile.plan === 'subscriber' ? (app.isSubscriptionActive() ? (profile.subscriptionEndsAt ? 'مشترك حتى '+new Date(profile.subscriptionEndsAt).toLocaleDateString('ar-EG') : 'طالب مشترك') : 'انتهى الاشتراك') : 'طالب مجاني');
+                setText('profile-plan', 'طالب علم');
                 setText('account-completed', (state.local.completedLessons || []).length);
                 setText('account-favorites', (state.local.favorites || []).length);
                 setText('account-quizzes', history.length);
@@ -1035,7 +1049,7 @@
                 const name=(document.getElementById('auth-name')?.value||'').trim();
                 if(!email || !password) return app.showAuthMessage('اكتب البريد الإلكتروني وكلمة المرور.', 'error');
                 if(state.auth.mode==='register' && name.length<2) return app.showAuthMessage('اكتب اسم الطالب.', 'error');
-                const btn=document.getElementById('auth-submit-btn'); const old=btn?.innerText;
+                const btn=document.getElementById('auth-submit-btn');
                 if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin ml-2"></i>جاري التنفيذ...';}
                 try {
                     if(state.auth.mode==='register'){
@@ -1205,7 +1219,7 @@
 
                 const featuredLesson = document.getElementById('featured-lesson');
                 const l = visibleLessons[visibleLessons.length - 1] || visibleLessons[0];
-                if (featuredLesson) featuredLesson.innerHTML = l ? `<div class="flex items-center justify-between gap-4"><div><strong class="text-lg font-black text-slate-800 block">${app.escapeHtml(l.title)}</strong><span class="text-sm text-slate-400 font-bold">جاهز للقراءة الآن</span></div><button onclick="app.openLesson('${l.id}')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-black">قراءة</button></div>` : '<span>لا توجد دروس متاحة حاليًا.</span>';
+                if (featuredLesson) featuredLesson.innerHTML = l ? `<div class="flex items-center justify-between gap-4"><div><strong class="text-lg font-black text-slate-800 block">${app.escapeHtml(l.title)}</strong><span class="text-sm text-slate-400 font-bold">جاهز للدراسة الآن</span></div><button onclick="app.openLesson('${l.id}')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-black">افتح الدرس</button></div>` : '<span>لا توجد دروس متاحة حاليًا.</span>';
                 app.renderRecentBooks();
             },
 
@@ -1213,14 +1227,15 @@
             renderQuizLibrary: () => {
                 const box = document.getElementById('all-quizzes-grid'); if (!box) return;
                 const quizzes = state.db.quizzes.filter(q => app.effectiveAccess('quiz',q)!=='hidden');
-                box.innerHTML = quizzes.length ? quizzes.map(q => `<div class="modern-card rounded-3xl p-5 flex flex-col gap-4"><div class="flex items-start justify-between gap-3"><span class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg"><i class="fas fa-clipboard-question"></i></span><span class="text-xs font-black text-slate-400 bg-slate-50 px-3 py-1 rounded-full">${q.questions?.length || (q.effectiveAccess==='subscriber'?'محمي':'—')} سؤال</span></div><div><div class="flex items-center gap-2 flex-wrap"><h3 class="font-black text-lg text-slate-800 leading-relaxed">${q.name || 'اختبار'}</h3>${app.accessBadge('quiz',q)}</div></div><button onclick="app.startQuiz('${q.id}','landing')" class="mt-auto bg-islamic-600 text-white py-3 rounded-2xl font-black">ابدأ الاختبار <i class="fas fa-arrow-left mr-2"></i></button></div>`).join('') : `<div class="md:col-span-2 lg:col-span-3 text-center p-12 modern-card rounded-3xl"><i class="fas fa-clipboard text-4xl text-slate-300 mb-4"></i><p class="font-black text-slate-500">لا توجد اختبارات متاحة حاليًا.</p></div>`;
+                box.innerHTML = quizzes.length ? quizzes.map(q => `<div class="modern-card rounded-3xl p-5 flex flex-col gap-4"><div class="flex items-start justify-between gap-3"><span class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg"><i class="fas fa-clipboard-question"></i></span><span class="text-xs font-black text-slate-400 bg-slate-50 px-3 py-1 rounded-full">${q.questions?.length || 'متاح'} سؤال</span></div><div><div class="flex items-center gap-2 flex-wrap"><h3 class="font-black text-lg text-slate-800 leading-relaxed">${app.escapeHtml(q.name || 'اختبار')}</h3>${app.accessBadge('quiz',q)}</div></div><button onclick="app.startQuiz('${q.id}','landing')" class="mt-auto bg-islamic-600 text-white py-3 rounded-2xl font-black">ابدأ الاختبار <i class="fas fa-arrow-left mr-2"></i></button></div>`).join('') : `<div class="md:col-span-2 lg:col-span-3 text-center p-12 modern-card rounded-3xl"><i class="fas fa-clipboard text-4xl text-slate-300 mb-4"></i><p class="font-black text-slate-500">لا توجد اختبارات متاحة حاليًا.</p></div>`;
             },
 
             openSaved: () => { app.renderSavedLessons(); app.showSection('saved-view'); app.setBottomNav('saved'); },
             renderSavedLessons: () => {
                 const box = document.getElementById('saved-lessons-list'); if (!box) return;
                 const lessons = state.local.favorites.map(id => state.db.lessons.find(l => l.id === id)).filter(Boolean);
-                box.innerHTML = lessons.length ? lessons.map(l => `<div class="modern-card rounded-2xl p-5 flex items-center justify-between gap-4"><div class="flex items-center gap-3 min-w-0"><span class="w-11 h-11 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center shrink-0"><i class="fas fa-bookmark"></i></span><h3 class="font-black text-slate-800 truncate">${l.title}</h3></div><button onclick="app.openLesson('${l.id}')" class="bg-slate-900 text-white px-4 py-2 rounded-xl font-black text-sm shrink-0">فتح</button></div>`).join('') : `<div class="modern-card rounded-3xl p-12 text-center"><i class="far fa-bookmark text-5xl text-slate-300 mb-4"></i><h3 class="font-black text-slate-600 text-xl">لا توجد دروس محفوظة بعد</h3><p class="text-slate-400 font-bold mt-2">افتح أي درس واضغط علامة الحفظ.</p></div>`;
+                box.innerHTML = lessons.length ? lessons.map(l => `<div class="modern-card rounded-2xl p-5 flex items-center justify-between gap-4"><div class="flex items-center gap-3 min-w-0"><span class="w-11 h-11 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center shrink-0"><i class="fas fa-bookmark"></i></span><h3 class="font-black text-slate-800 truncate">${app.escapeHtml(l.title)}</h3></div><button onclick="app.openLesson('${l.id}')" class="bg-slate-900 text-white px-4 py-2 rounded-xl font-black text-sm shrink-0">فتح</button></div>`).join('') : `<div class="modern-card rounded-3xl p-12 text-center"><i class="far fa-bookmark text-5xl text-slate-300 mb-4"></i><h3 class="font-black text-slate-600 text-xl">لا توجد دروس محفوظة بعد</h3><p class="text-slate-400 font-bold mt-2">افتح أي درس واضغط علامة الحفظ.</p></div>`;
+                app.renderOfflineLessons();
             },
 
             updateLessonActionButtons: () => {
@@ -1339,7 +1354,7 @@
                 state.db.lessons.filter(l=>app.effectiveAccess('lesson',l)!=='hidden').forEach(l => { if((l.title || '').toLowerCase().includes(query) || (l.content || '').toLowerCase().includes(query)) results.push({ type: 'درس', title: l.title, action: `app.openLesson('${l.id}')`, icon: 'fa-file-lines', color: 'text-blue-500' }); });
                 state.db.chapters.filter(c=>app.effectiveAccess('chapter',c)!=='hidden').forEach(c => { if((c.title || '').toLowerCase().includes(query)) results.push({ type: 'باب', title: c.title, action: `app.openChapter('${c.id}')`, icon: 'fa-folder-open', color: 'text-emerald-500' }); });
                 state.db.categories.filter(c=>app.effectiveAccess('category',c)!=='hidden').forEach(c => { if((c.name || '').toLowerCase().includes(query)) results.push({ type: 'قسم', title: c.name, action: `app.openCategory('${c.id}')`, icon: 'fa-layer-group', color: 'text-purple-500' }); });
-                state.db.books.filter(b=>app.effectiveAccess('book',b)!=='hidden').forEach(b => { const hay=((b.title||'')+' '+(b.author||'')+' '+(b.description||'')).toLowerCase(); if(hay.includes(query)) results.push({ type:'كتاب', title:b.title, action:`app.openBook('${b.id}')`, icon:'fa-book-open', color:'text-emerald-600' }); });
+                state.db.books.filter(b=>app.effectiveAccess('book',b)!=='hidden').forEach(b => { const hay=((b.title||'')+' '+(b.author||'')+' '+(b.description||'')).toLowerCase(); if(hay.includes(query)) results.push({ type:'كتاب / دورة', title:b.title, action:`app.openBook('${b.id}')`, icon:'fa-book-open', color:'text-emerald-600' }); });
                 state.db.quizzes.filter(q=>app.effectiveAccess('quiz',q)!=='hidden').forEach(q => { if((q.name || '').toLowerCase().includes(query)) results.push({ type: 'اختبار', title: q.name || 'اختبار', action: `app.startQuiz('${q.id}','landing')`, icon: 'fa-clipboard-question', color: 'text-amber-500' }); });
                 const resContainer = document.getElementById('search-results');
                 resContainer.innerHTML = results.length > 0 ? results.slice(0,30).map(r => `<div onclick="${r.action}" class="modern-card p-5 rounded-2xl flex justify-between items-center cursor-pointer hover:border-islamic-300 transition-all"><div class="flex items-center gap-4"><span class="w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center"><i class="fas ${r.icon} ${r.color} text-xl"></i></span><div><h4 class="font-black text-lg text-slate-800">${app.escapeHtml(r.title)}</h4><span class="text-xs font-bold text-slate-400">${r.type}</span></div></div><i class="fas fa-chevron-left text-slate-300"></i></div>`).join('') : `<div class="text-center p-10 modern-card rounded-3xl"><p class="font-bold text-slate-500">لا توجد نتائج مطابقة.</p></div>`;
@@ -1347,6 +1362,7 @@
             },
 
             showSection: (id) => { 
+                if (id !== 'lesson-view') app.stopLessonVideos();
                 document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden')); 
                 document.getElementById(id)?.classList.remove('hidden'); 
                 if(id !== 'search-view') { const d = document.getElementById('search-input'); const m = document.getElementById('mobile-search-input'); if(d) d.value = ''; if(m) m.value = ''; }
@@ -1359,11 +1375,11 @@
                 const visibleCats=state.db.categories.filter(cat=>app.effectiveAccess('category',cat)!=='hidden');
                 const box=document.getElementById('categories-grid');if(!box)return;
                 const themes=[['#064e3b','#0f766e','fa-scale-balanced'],['#5b3a16','#a06d10','fa-book-quran'],['#193b56','#256b87','fa-mosque'],['#4c2b57','#815493','fa-feather-pointed'],['#3b4b1c','#708238','fa-scroll'],['#49321e','#8a623e','fa-book-open-reader'],['#183c36','#2d7a6b','fa-landmark'],['#3a325e','#655aa0','fa-language']];
-                box.innerHTML=visibleCats.length?visibleCats.map((cat,index)=>{const books=state.db.books.filter(b=>b.categoryId===cat.id&&app.effectiveAccess('book',b)!=='hidden'),chapters=state.db.chapters.filter(ch=>ch.categoryId===cat.id&&app.effectiveAccess('chapter',ch)!=='hidden'),lessons=state.db.lessons.filter(l=>chapters.some(ch=>ch.id===l.chapterId)&&app.effectiveAccess('lesson',l)!=='hidden'),locked=app.effectiveAccess('category',cat)==='subscriber'&&!app.isSubscriptionActive(),img=cat.image||cat.imageUrl||'',th=themes[index%themes.length];return `<button onclick="app.openCategory('${cat.id}')" style="--cat-a:${th[0]};--cat-b:${th[1]}" class="category-image-card ${img?'':'no-image'} text-right p-5 md:p-6 flex flex-col justify-end group ${locked?'opacity-90':''}">${img?`<img class="cat-bg" src="${app.escapeHtml(img)}" alt="${app.escapeHtml(cat.name)}" loading="lazy">`:`<i class="fas ${th[2]} category-large-icon"></i>`}<div class="relative z-10"><div class="flex items-center justify-between gap-3 mb-3"><span class="w-11 h-11 rounded-xl bg-white/15 border border-white/20 text-white grid place-items-center"><i class="fas ${locked?'fa-lock':th[2]}"></i></span>${app.accessBadge('category',cat)||'<i class="fas fa-arrow-left text-white/70"></i>'}</div><h3 class="text-xl md:text-2xl font-black text-white">${app.escapeHtml(cat.name)}</h3><p class="text-white/70 text-xs font-bold mt-2 line-clamp-2">${app.escapeHtml(cat.description||'تصفح الكتب والدروس المرتبة في هذا القسم.')}</p><div class="flex gap-2 text-[11px] font-black text-white/75 mt-4"><span>${books.length} كتاب</span><span>•</span><span>${lessons.length} درس</span></div></div></button>`;}).join(''):'<div class="col-span-full featured-books-empty"><div><i class="fas fa-layer-group text-4xl text-emerald-600 mb-4"></i><h3 class="font-black text-slate-600">لم تُضف أقسام علمية بعد</h3><p class="text-sm text-slate-400 font-bold mt-2">ابدأ ببناء المكتبة من لوحة الإدارة.</p></div></div>';
+                box.innerHTML=visibleCats.length?visibleCats.map((cat,index)=>{const books=state.db.books.filter(b=>b.categoryId===cat.id&&app.effectiveAccess('book',b)!=='hidden'),chapters=state.db.chapters.filter(ch=>ch.categoryId===cat.id&&app.effectiveAccess('chapter',ch)!=='hidden'),lessons=state.db.lessons.filter(l=>chapters.some(ch=>ch.id===l.chapterId)&&app.effectiveAccess('lesson',l)!=='hidden'),locked=app.effectiveAccess('category',cat)==='subscriber'&&!app.isSubscriptionActive(),img=cat.image||cat.imageUrl||'',th=themes[index%themes.length];return `<button onclick="app.openCategory('${cat.id}')" style="--cat-a:${th[0]};--cat-b:${th[1]}" class="category-image-card ${img?'':'no-image'} text-right p-5 md:p-6 flex flex-col justify-end group ${locked?'opacity-90':''}">${img?`<img class="cat-bg" src="${app.escapeHtml(img)}" alt="${app.escapeHtml(cat.name)}" loading="lazy">`:`<i class="fas ${th[2]} category-large-icon"></i>`}<div class="relative z-10"><div class="flex items-center justify-between gap-3 mb-3"><span class="w-11 h-11 rounded-xl bg-white/15 border border-white/20 text-white grid place-items-center"><i class="fas ${locked?'fa-lock':th[2]}"></i></span>${app.accessBadge('category',cat)||'<i class="fas fa-arrow-left text-white/70"></i>'}</div><h3 class="text-xl md:text-2xl font-black text-white">${app.escapeHtml(cat.name)}</h3><p class="text-white/70 text-xs font-bold mt-2 line-clamp-2">${app.escapeHtml(cat.description||'تصفح الكتب والدورات والدروس المرتبة في هذا القسم.')}</p><div class="flex gap-2 text-[11px] font-black text-white/75 mt-4"><span>${books.length} كتاب/دورة</span><span>•</span><span>${lessons.length} درس</span></div></div></button>`;}).join(''):'<div class="col-span-full featured-books-empty"><div><i class="fas fa-layer-group text-4xl text-emerald-600 mb-4"></i><h3 class="font-black text-slate-600">لم تُضف أقسام علمية بعد</h3><p class="text-sm text-slate-400 font-bold mt-2">ابدأ ببناء المكتبة من لوحة الإدارة.</p></div></div>';
             },
 
             openCategory: (catId) => {
-                const cat=state.db.categories.find(c=>c.id===catId);if(!cat||!app.guardAccess('category',cat))return;state.currentCat=cat;state.currentBook=null;document.getElementById('cat-title').innerText=cat.name;document.getElementById('cat-description').innerText=cat.description||'تصفح كتب القسم وابدأ التعلم من الكتاب المناسب.';const img=cat.image||cat.imageUrl||'',heroImg=document.getElementById('category-hero-image');if(img){heroImg.src=img;heroImg.classList.remove('hidden')}else heroImg.classList.add('hidden');const books=state.db.books.filter(b=>b.categoryId===catId&&app.effectiveAccess('book',b)!=='hidden');const chapters=state.db.chapters.filter(ch=>ch.categoryId===catId&&app.effectiveAccess('chapter',ch)!=='hidden');const lessons=state.db.lessons.filter(l=>chapters.some(ch=>ch.id===l.chapterId)&&app.effectiveAccess('lesson',l)!=='hidden');const done=lessons.filter(l=>state.local.completedLessons.includes(l.id)).length,progress=lessons.length?Math.round(done/lessons.length*100):0;document.getElementById('cat-books-count').innerText=books.length;document.getElementById('cat-lessons-count').innerText=lessons.length;document.getElementById('cat-completed-count').innerText=done;document.getElementById('cat-progress-label').innerText=`${progress}%`;document.getElementById('cat-progress-bar').style.width=`${progress}%`;const grid=document.getElementById('category-books-grid');grid.innerHTML=books.length?books.map(b=>app.bookCardHtml(b)).join(''):'<div class="col-span-full modern-card rounded-3xl p-10 text-center"><i class="fas fa-book-open text-4xl text-slate-300 mb-3"></i><p class="font-black text-slate-500">لم تُضف كتب لهذا القسم بعد.</p></div>';const legacy=chapters.filter(ch=>!ch.bookId),legacyBox=document.getElementById('legacy-category-content');if(legacy.length){legacyBox.classList.remove('hidden');legacyBox.innerHTML=`<div class="legacy-content-note mb-4"><strong class="text-slate-700">محتوى سابق غير مربوط بكتاب</strong><p class="text-xs text-slate-400 font-bold mt-1">حافظنا عليه حتى لا تفقد أي محتوى قديم، ويمكن ربطه بكتاب من لوحة الإدارة.</p></div><div class="grid md:grid-cols-2 gap-4">${legacy.map((ch,i)=>app.chapterCardHtml(ch,i)).join('')}</div>`;}else{legacyBox.classList.add('hidden');legacyBox.innerHTML='';}window.history.pushState({},document.title,window.location.pathname);app.showSection('category-view');
+                const cat=state.db.categories.find(c=>c.id===catId);if(!cat||!app.guardAccess('category',cat))return;state.currentCat=cat;state.currentBook=null;document.getElementById('cat-title').innerText=cat.name;document.getElementById('cat-description').innerText=cat.description||'تصفح كتب ودورات القسم وابدأ التعلم من المسار المناسب.';const img=cat.image||cat.imageUrl||'',heroImg=document.getElementById('category-hero-image');if(img){heroImg.src=img;heroImg.classList.remove('hidden')}else heroImg.classList.add('hidden');const books=state.db.books.filter(b=>b.categoryId===catId&&app.effectiveAccess('book',b)!=='hidden');const chapters=state.db.chapters.filter(ch=>ch.categoryId===catId&&app.effectiveAccess('chapter',ch)!=='hidden');const lessons=state.db.lessons.filter(l=>chapters.some(ch=>ch.id===l.chapterId)&&app.effectiveAccess('lesson',l)!=='hidden');const done=lessons.filter(l=>state.local.completedLessons.includes(l.id)).length,progress=lessons.length?Math.round(done/lessons.length*100):0;document.getElementById('cat-books-count').innerText=books.length;document.getElementById('cat-lessons-count').innerText=lessons.length;document.getElementById('cat-completed-count').innerText=done;document.getElementById('cat-progress-label').innerText=`${progress}%`;document.getElementById('cat-progress-bar').style.width=`${progress}%`;const grid=document.getElementById('category-books-grid');grid.innerHTML=books.length?books.map(b=>app.bookCardHtml(b)).join(''):'<div class="col-span-full modern-card rounded-3xl p-10 text-center"><i class="fas fa-book-open text-4xl text-slate-300 mb-3"></i><p class="font-black text-slate-500">لم تُضف كتب أو دورات لهذا القسم بعد.</p></div>';const legacy=chapters.filter(ch=>!ch.bookId),legacyBox=document.getElementById('legacy-category-content');if(legacy.length){legacyBox.classList.remove('hidden');legacyBox.innerHTML=`<div class="legacy-content-note mb-4"><strong class="text-slate-700">محتوى سابق غير مربوط بكتاب</strong><p class="text-xs text-slate-400 font-bold mt-1">حافظنا عليه حتى لا تفقد أي محتوى قديم، ويمكن ربطه بكتاب من لوحة الإدارة.</p></div><div class="grid md:grid-cols-2 gap-4">${legacy.map((ch,i)=>app.chapterCardHtml(ch,i)).join('')}</div>`;}else{legacyBox.classList.add('hidden');legacyBox.innerHTML='';}window.history.pushState({},document.title,window.location.pathname);app.showSection('category-view');
             },
 
             openChapter: (chapId) => {
@@ -1389,7 +1405,7 @@
                 const banner = document.getElementById('chapter-quiz-banner');
                 if (quizCount > 0) {
                     banner.classList.remove('hidden');
-                    banner.innerHTML = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4"><div class="flex items-center gap-3"><span class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fas fa-bolt"></i></span><div><h3 class="font-black text-slate-800">اختبار شامل على الباب</h3><p class="text-sm text-slate-400 font-bold mt-1">يجمع أسئلة اختبارات الدروس الموجودة في هذا الباب.</p></div></div><button onclick="app.startComprehensiveQuiz('${chap.id}')" class="bg-amber-500 text-white px-6 py-3 rounded-2xl font-black shadow">ابدأ الاختبار الشامل</button></div>`;
+                    banner.innerHTML = `<div class="flex flex-col md:flex-row md:items-center justify-between gap-4"><div class="flex items-center gap-3"><span class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fas fa-bolt"></i></span><div><h3 class="font-black text-slate-800">اختبار شامل على الباب</h3><p class="text-sm text-slate-400 font-bold mt-1">يجمع أسئلة اختبارات الدروس الموجودة في هذا الباب لتثبيت الفهم.</p></div></div><button onclick="app.startComprehensiveQuiz('${chap.id}')" class="bg-amber-500 text-white px-6 py-3 rounded-2xl font-black shadow">ابدأ الاختبار الشامل</button></div>`;
                 } else banner.classList.add('hidden');
 
                 const list = document.getElementById('lessons-list');
@@ -1397,7 +1413,7 @@
                     list.innerHTML = lessons.map((l, index) => {
                         const isDone = state.local.completedLessons.includes(l.id);
                         const isFav = state.local.favorites.includes(l.id);
-                        return `<div class="lesson-row modern-card rounded-[1.6rem] p-4 md:p-5 border ${isDone ? 'border-emerald-200' : 'border-slate-100'} flex flex-col md:flex-row md:items-center justify-between gap-4"><div class="flex items-center gap-4 min-w-0 cursor-pointer flex-1" onclick="app.openLesson('${l.id}')"><span class="w-12 h-12 rounded-2xl ${isDone ? 'bg-emerald-500 text-white' : 'bg-islamic-50 text-islamic-600'} flex items-center justify-center font-black shrink-0">${isDone ? '<i class="fas fa-check"></i>' : index+1}</span><div class="min-w-0"><div class="flex items-center gap-2"><h4 class="font-black text-lg md:text-xl text-slate-800 truncate">${l.title}</h4>${app.accessBadge('lesson',l)}${isFav ? '<i class="fas fa-bookmark text-rose-400 text-xs"></i>' : ''}</div><div class="flex flex-wrap gap-2 mt-2"><span class="text-[11px] font-bold text-slate-400"><i class="fas fa-book-open ml-1"></i> شرح</span>${l.quizId ? '<span class="text-[11px] font-bold text-amber-600"><i class="fas fa-clipboard-question ml-1"></i> اختبار متاح</span>' : ''}${isDone ? '<span class="text-[11px] font-black text-emerald-600">مكتمل ✓</span>' : ''}</div></div></div><div class="flex gap-2 w-full md:w-auto">${l.quizId ? `<button onclick="app.startQuiz('${l.quizId}', 'chapter')" class="flex-1 md:flex-none bg-amber-50 text-amber-700 border border-amber-200 px-4 py-2.5 rounded-xl font-black text-sm">اختبار</button>` : ''}<button onclick="app.openLesson('${l.id}')" class="flex-1 md:flex-none bg-slate-900 text-white px-5 py-2.5 rounded-xl font-black text-sm">قراءة <i class="fas fa-arrow-left mr-1"></i></button></div></div>`;
+                        return `<div class="lesson-row modern-card rounded-[1.6rem] p-4 md:p-5 border ${isDone ? 'border-emerald-200' : 'border-slate-100'} flex flex-col md:flex-row md:items-center justify-between gap-4"><div class="flex items-center gap-4 min-w-0 cursor-pointer flex-1" onclick="app.openLesson('${l.id}')"><span class="w-12 h-12 rounded-2xl ${isDone ? 'bg-emerald-500 text-white' : 'bg-islamic-50 text-islamic-600'} flex items-center justify-center font-black shrink-0">${isDone ? '<i class="fas fa-check"></i>' : index+1}</span><div class="min-w-0"><div class="flex items-center gap-2"><h4 class="font-black text-lg md:text-xl text-slate-800 truncate">${app.escapeHtml(l.title)}</h4>${app.accessBadge('lesson',l)}${isFav ? '<i class="fas fa-bookmark text-rose-400 text-xs"></i>' : ''}</div><div class="flex flex-wrap gap-2 mt-2"><span class="text-[11px] font-bold text-slate-400"><i class="fas fa-book-open ml-1"></i> شرح</span>${l.quizId ? '<span class="text-[11px] font-bold text-amber-600"><i class="fas fa-clipboard-question ml-1"></i> اختبار تثبيت</span>' : ''}${isDone ? '<span class="text-[11px] font-black text-emerald-600">مكتمل ✓</span>' : ''}</div></div></div><div class="flex gap-2 w-full md:w-auto">${l.quizId ? `<button onclick="app.startQuiz('${l.quizId}', 'chapter')" class="flex-1 md:flex-none bg-amber-50 text-amber-700 border border-amber-200 px-4 py-2.5 rounded-xl font-black text-sm">اختبار</button>` : ''}<button onclick="app.openLesson('${l.id}')" class="flex-1 md:flex-none bg-slate-900 text-white px-5 py-2.5 rounded-xl font-black text-sm">فتح الدرس <i class="fas fa-arrow-left mr-1"></i></button></div></div>`;
                     }).join('');
                 } else {
                     list.innerHTML = `<div class="modern-card rounded-3xl p-12 text-center"><i class="fas fa-book-open text-5xl text-slate-300 mb-4"></i><p class="text-slate-500 font-black">لا توجد دروس مضافة حالياً.</p></div>`;
@@ -1409,7 +1425,7 @@
             formatLessonContent: (text) => {
                 if (!text) return '';
                 text = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                text = text.replace(/\{([^}]+)\}/g, '<span class="text-islamic-600 font-black text-2xl block my-3 bg-islamic-50 p-4 rounded-xl border border-islamic-100 text-center leading-loose font-quran">{$1}</span>');
+                text = text.replace(/\{([^}]+)\}/g, '<span class="text-islamic-800 font-black text-2xl md:text-3xl block my-4 bg-islamic-50 p-5 rounded-2xl border border-islamic-100 text-center font-quran">﴿ $1 ﴾</span>');
                 text = text.replace(/«([^»]+)»/g, '<span class="text-blue-600 font-black">«$1»</span>');
                 text = text.replace(/\[ازرق\](.*?)\[\/ازرق\]/gs, '<span class="text-indigo-800 font-black text-xl block mt-8 mb-4 bg-indigo-50 p-4 rounded-xl border-r-8 border-indigo-500 shadow-sm"><i class="fas fa-layer-group text-indigo-500 ml-2"></i> $1</span>');
                 text = text.replace(/\[اخضر\](.*?)\[\/اخضر\]/gs, '<span class="text-emerald-800 font-black text-xl block mt-8 mb-4 bg-emerald-50 p-4 rounded-xl border-r-8 border-emerald-500 shadow-sm"><i class="fas fa-check-circle text-emerald-500 ml-2"></i> $1</span>');
@@ -1438,14 +1454,41 @@
                 if (status) status.innerText = active ? 'وضع التركيز مفعل' : 'وضع القراءة';
             },
 
+            getProtectedLessonPayload: async lesson => { 
+                if(!lesson)return null; 
+                if(lesson.content!==undefined&&lesson.content!==null&&String(lesson.content).length)return lesson; 
+                try{
+                    const snap=await protectedRef.child(`lessons/${lesson.id}`).once('value');
+                    const payload=snap.val();
+                    if(payload)return{...lesson,...payload};
+                }catch(e){
+                    const off=app.getOfflineLesson(lesson.id);
+                    if(off&&app.canUseOfflineEntry(off))return off.lesson;
+                    throw e;
+                }
+                const off=app.getOfflineLesson(lesson.id);
+                if(off&&app.canUseOfflineEntry(off))return off.lesson;
+                return lesson; 
+            },
+
+            getQuizWithQuestions: async quiz => {
+                if(!quiz)return null;
+                if(Array.isArray(quiz.questions)&&quiz.questions.length)return quiz;
+                const snap=await protectedRef.child(`quizzes/${quiz.id}/questions`).once('value');
+                return{...quiz,questions:snap.val()||[]};
+            },
+
             openLesson: async (lessonId) => {
+                const beforeId = state.currentLesson?.id;
                 const meta=state.db.lessons.find(l=>l.id===lessonId); if(!meta)return; if(!app.guardAccess('lesson',meta))return;
-                let lesson=meta; try{lesson=await app.getProtectedLessonPayload(meta)}catch(e){return app.showAccessModal('تعذر فتح المحتوى','لم نتمكن من تحميل المحتوى المحمي. تأكد من تسجيل الدخول وصلاحية الاشتراك.','expired')}
+                let lesson=meta; try{lesson=await app.getProtectedLessonPayload(meta)}catch(e){return app.showAccessModal('تعذر فتح المحتوى','لم نتمكن من تحميل المحتوى. تأكد من اتصالك بالإنترنت.','expired')}
                 state.currentLesson=lesson; state.currentChap=state.db.chapters.find(c=>c.id===lesson.chapterId); state.currentCat=state.currentChap?state.db.categories.find(c=>c.id===state.currentChap.categoryId):null; state.currentBook=state.currentChap?.bookId?state.db.books.find(b=>b.id===state.currentChap.bookId)||null:null; state.local.lastLessonId=lesson.id; app.recordActivity();
                 document.body.classList.remove('focus-reading'); state.lessonFontLevel=0; document.getElementById('lesson-title').innerText=lesson.title; const content=document.getElementById('lesson-content');content.innerHTML=app.formatLessonContent(lesson.content||'');content.style.fontSize='';document.getElementById('lesson-breadcrumb').innerText=`${state.currentCat?state.currentCat.name+' • ':''}${state.currentBook?state.currentBook.title+' • ':''}${state.currentChap?state.currentChap.title:'الدرس'}`;document.getElementById('lesson-reader-status').innerText='وضع القراءة';
-                const embed=app.mediaEmbedHtml(lesson.videoUrl);const top=document.getElementById('lesson-video-top'),bottom=document.getElementById('lesson-video-bottom');[top,bottom].forEach(x=>{if(x){x.innerHTML='';x.classList.add('hidden')}});
                 
-                // التعديل الخاص بعرض الفيديو والعنوان بأسلوب الدورات والمحاضرات
+                app.stopLessonVideos();
+                const embed=app.mediaEmbedHtml(lesson.videoUrl);
+                const top=document.getElementById('lesson-video-top'),bottom=document.getElementById('lesson-video-bottom');
+                
                 if(embed){
                     const target=(lesson.videoPosition||'top')==='bottom'?bottom:top;
                     target.innerHTML=`<div class="mb-8 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-slate-50">${embed}</div>`;
@@ -1456,10 +1499,20 @@
                 }
 
                 const note=document.getElementById('lesson-note');if(note)note.value=state.local.notes?.[lesson.id]||'';document.getElementById('lesson-note-wrap')?.classList.toggle('hidden',!state.auth.user);
-                document.getElementById('back-to-chap-btn').onclick=()=>{document.body.classList.remove('focus-reading');if(state.currentChap)app.openChapter(state.currentChap.id);else app.resetUrlAndGo('landing')};
-                const quizAction=document.getElementById('lesson-quiz-action');if(lesson.quizId){quizAction.classList.remove('hidden');document.getElementById('start-quiz-btn').onclick=()=>app.startQuiz(lesson.quizId,'lesson')}else quizAction.classList.add('hidden');
+                document.getElementById('back-to-chap-btn').onclick=()=>{document.body.classList.remove('focus-reading');app.stopLessonVideos();if(state.currentChap)app.openChapter(state.currentChap.id);else app.resetUrlAndGo('landing')};
+                const quizAction=document.getElementById('lesson-quiz-action');if(lesson.quizId){quizAction.classList.remove('hidden');document.getElementById('start-quiz-btn').onclick=()=>{app.stopLessonVideos();app.startQuiz(lesson.quizId,'lesson');}}else quizAction.classList.add('hidden');
                 const resource=document.getElementById('lesson-resource-book');const book=app.safeUrl(lesson.bookUrl);if(resource&&book){resource.innerHTML=`<div class="flex flex-col md:flex-row md:items-center justify-between gap-4"><div class="flex items-center gap-4"><span class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl"><i class="fas fa-book"></i></span><div><span class="text-xs font-black text-amber-600">مادة إضافية</span><h4 class="text-xl font-black text-slate-800 mt-1">${app.escapeHtml(lesson.bookTitle||'الكتاب المرتبط بالدرس')}</h4></div></div><a href="${book}" target="_blank" rel="noopener" class="bg-amber-600 text-white px-6 py-3 rounded-xl font-black text-center"><i class="fas fa-arrow-up-right-from-square ml-2"></i>فتح الكتاب</a></div>`;resource.classList.remove('hidden')}else resource?.classList.add('hidden');
-                app.updateLessonActionButtons();app.renderDashboard();window.history.pushState({},document.title,`?lesson=${lesson.id}`);app.showSection('lesson-view');
+                
+                if(state.currentLesson?.id===lessonId && beforeId!==lessonId){
+                    state.local.lessonViews||={};
+                    state.local.lessonViews[lessonId]=(Number(state.local.lessonViews[lessonId])||0)+1;
+                    app.saveLocalState();
+                }
+                app.updateLessonActionButtons();
+                app.updateOfflineButton();
+                app.renderDashboard();
+                window.history.pushState({},document.title,`?lesson=${lesson.id}`);
+                app.showSection('lesson-view');
             },
 
             startBookComprehensiveQuiz: async (bookId) => {
@@ -1471,10 +1524,22 @@
                 if(!combinedQs.length)return alert('لا توجد أسئلة متاحة لإنشاء اختبار شامل.');const data={id:`comp_${chapterId}`,name:`اختبار شامل - ${targetChapter?.title||state.currentChap?.title||'الباب'}`,questions:app.shuffle(combinedQs)};state.quizData=data;state.quizBaseData=data;state.quizReturnLocation='chapter';app.initiateQuizSession();
             },
             startQuiz: async (quizId, returnLocation='lesson') => {
-                const meta=state.db.quizzes.find(q=>q.id===quizId);if(meta&&!app.guardAccess('quiz',meta))return;if(!meta)return alert('غير متوفر حالياً.');let quiz;try{quiz=await app.getQuizWithQuestions(meta)}catch(e){return app.showAccessModal('تعذر فتح الاختبار','لم نتمكن من تحميل أسئلة الاختبار المحمية.','expired')}if(!quiz.questions?.length)return alert('غير متوفر حالياً.');state.quizData=quiz;state.quizBaseData=quiz;state.quizReturnLocation=returnLocation;window.history.pushState({},document.title,`?quiz=${quiz.id}`);app.initiateQuizSession();
+                const meta=state.db.quizzes.find(q=>q.id===quizId);
+                if(meta&&!app.guardAccess('quiz',meta))return;
+                if(!meta)return alert('غير متوفر حالياً.');
+                if(meta?.examMode&&Number(meta.maxAttempts)>0){
+                    const used=(state.local.quizHistory||[]).filter(h=>h.quizId===quizId).length;
+                    if(used>=Number(meta.maxAttempts))return app.showAccessModal('انتهت المحاولات',`هذا الاختبار يسمح بـ ${meta.maxAttempts} محاولة فقط، وقد استخدمتها بالفعل.`,'hidden');
+                }
+                let quiz;try{quiz=await app.getQuizWithQuestions(meta)}catch(e){return app.showAccessModal('تعذر فتح الاختبار','لم نتمكن من تحميل أسئلة الاختبار.','expired')}
+                if(!quiz.questions?.length)return alert('غير متوفر حالياً.');
+                state.quizData=quiz;state.quizBaseData=quiz;state.quizReturnLocation=returnLocation;
+                window.history.pushState({},document.title,`?quiz=${quiz.id}`);
+                app.initiateQuizSession();
             },
 
             initiateQuizSession: () => {
+                app.stopLessonVideos();
                 app.clearQuizTimer();
                 const reviewWrap=document.getElementById('review-list')?.parentElement;if(reviewWrap)reviewWrap.classList.remove('hidden');const review=document.getElementById('review-list');if(review)review.innerHTML='';document.getElementById('quiz-certificate-btn')?.classList.add('hidden');
                 
@@ -1485,6 +1550,7 @@
                     document.getElementById('question-box').classList.remove('hidden');
                     document.getElementById('result-box').classList.add('hidden');
                     document.getElementById('quiz-title-display').innerText = state.quizData.name || 'اختبار';
+                    document.getElementById('quiz-correct-live')?.classList.remove('hidden');
                     app.showSection('quiz-view');
                     app.renderQuestion();
                     return;
@@ -1607,7 +1673,11 @@
                     const percentage = total ? Math.round((finalScore / total) * 100) : 0;
 
                     state.local.quizHistory.unshift({ quizId: state.quizData.id, name: state.quizData.name || 'اختبار', percentage, date: Date.now() });
-                    state.local.quizHistory = state.local.quizHistory.slice(0, 50); app.updateMistakeBank(); app.recordActivity(); app.renderDashboard();
+                    state.local.quizHistory = state.local.quizHistory.slice(0, 50); 
+                    app.updateMistakeBank(); 
+                    app.recordActivity(); 
+                    app.saveLocalState(true); // تأكيد الحفظ السحابي الفوري
+                    app.renderDashboard();
 
                     document.getElementById('res-score').innerText = `${percentage}%`;
                     document.getElementById('res-correct').innerText = finalScore;
@@ -1621,7 +1691,7 @@
                         if(!q) return '';
                         const userAns = state.answers[idx];
                         const isCorrect = userAns === q.correctIndex;
-                        return `<div class="review-card ${isCorrect ? 'review-correct' : 'review-wrong'} modern-card p-5 md:p-6 rounded-[1.7rem] text-right"><div class="flex items-center justify-between gap-3 mb-4"><span class="text-xs font-black text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl">سؤال ${idx+1}</span><span class="text-xs font-black ${isCorrect ? 'text-emerald-600 bg-emerald-50' : 'text-red-500 bg-red-50'} px-3 py-1.5 rounded-xl">${isCorrect ? 'صحيحة ✓' : 'تحتاج مراجعة'}</span></div><p class="font-black text-slate-800 mb-4 text-lg leading-relaxed">${q.text}</p><div class="space-y-2"><div class="bg-slate-50 p-3 rounded-xl text-sm font-bold"><span class="text-slate-400">إجابتك: </span><span class="${isCorrect ? 'text-emerald-700' : 'text-red-600'}">${userAns !== null ? q.options[userAns] : 'لم يتم الاختيار'}</span></div>${!isCorrect ? `<div class="bg-emerald-50 p-3 rounded-xl text-sm font-bold"><span class="text-emerald-500">الإجابة الصحيحة: </span><span class="text-emerald-800">${q.options[q.correctIndex]}</span></div>` : ''}</div></div>`;
+                        return `<div class="review-card ${isCorrect ? 'review-correct' : 'review-wrong'} modern-card p-5 md:p-6 rounded-[1.7rem] text-right"><div class="flex items-center justify-between gap-3 mb-4"><span class="text-xs font-black text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl">سؤال ${idx+1}</span><span class="text-xs font-black ${isCorrect ? 'text-emerald-600 bg-emerald-50' : 'text-red-500 bg-red-50'} px-3 py-1.5 rounded-xl">${isCorrect ? 'صحيحة ✓' : 'تحتاج مراجعة'}</span></div><p class="font-black text-slate-800 mb-4 text-lg leading-relaxed">${app.escapeHtml(q.text)}</p><div class="space-y-2"><div class="bg-slate-50 p-3 rounded-xl text-sm font-bold"><span class="text-slate-400">إجابتك: </span><span class="${isCorrect ? 'text-emerald-700' : 'text-red-600'}">${userAns !== null ? app.escapeHtml(q.options[userAns]) : 'لم يتم الاختيار'}</span></div>${!isCorrect ? `<div class="bg-emerald-50 p-3 rounded-xl text-sm font-bold"><span class="text-emerald-500">الإجابة الصحيحة: </span><span class="text-emerald-800">${app.escapeHtml(q.options[q.correctIndex])}</span></div>` : ''}</div></div>`;
                     }).join('');
                     
                     const meta=state.quizBaseData||state.quizData,pass=Number(meta?.passingScore??70);
@@ -1637,7 +1707,10 @@
                 
                 state.local.quizHistory.unshift({quizId:state.quizData.id,name:state.quizData.name||'اختبار',percentage,date:Date.now(),examMode:true,durationSeconds:duration,passed:percentage>=passing,forced:!!forced});
                 state.local.quizHistory=state.local.quizHistory.slice(0,100);
-                app.updateMistakeBank();app.recordActivity();app.renderDashboard();
+                app.updateMistakeBank();
+                app.recordActivity();
+                app.saveLocalState(true); // تأكيد الحفظ السحابي الفوري
+                app.renderDashboard();
                 
                 document.getElementById('res-score').innerText=`${percentage}%`;
                 document.getElementById('res-correct').innerText=finalScore;
@@ -1695,16 +1768,43 @@
         app.isScheduled = item => Number(item?.publishAt||0) > Date.now();
         state.offlineOverrideId = null;
 
+        app.hashText = async text => {const bytes=new TextEncoder().encode(String(text||'').trim().toUpperCase());const hash=await crypto.subtle.digest('SHA-256',bytes);return[...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('');};
+        app.redeemSubscriptionCode = async () => {};
+        app.renderSubscriptionPlansPreview = () => {};
+
+        // خطة المذاكرة
+        app.generateStudyPlan = () => {if(!state.auth.user)return app.openAuthModal('login');const value=document.getElementById('study-exam-date')?.value;if(!value)return alert('اختر التاريخ المستهدف أولًا.');const end=new Date(value+'T23:59:59'),today=new Date();today.setHours(0,0,0,0);if(end.getTime()<today.getTime())return alert('التاريخ يجب أن يكون اليوم أو بعده.');const lessons=state.db.lessons.filter(l=>app.effectiveAccess('lesson',l)!=='hidden'&&(app.effectiveAccess('lesson',l)==='free'||app.isSubscriptionActive())&&!state.local.completedLessons.includes(l.id));const days=Math.max(1,Math.floor((end.getTime()-today.getTime())/86400000)+1);const items=lessons.map((l,i)=>{const d=new Date(today);d.setDate(d.getDate()+(i%days));return{lessonId:l.id,date:d.toISOString().slice(0,10)}}).sort((a,b)=>a.date.localeCompare(b.date));state.local.studyPlan={examDate:value,createdAt:Date.now(),items};app.saveLocalState();app.renderStudyPlan();};
+        app.clearStudyPlan = () => {if(!state.local.studyPlan)return;if(!confirm('حذف خطة المذاكرة الحالية؟'))return;state.local.studyPlan=null;app.saveLocalState();app.renderStudyPlan();};
+        app.renderStudyPlan = () => {const plan=state.local.studyPlan,summary=document.getElementById('study-plan-summary'),list=document.getElementById('study-plan-list'),clear=document.getElementById('clear-study-plan-btn'),input=document.getElementById('study-exam-date');if(!summary||!list)return;if(!plan){summary.classList.add('hidden');clear?.classList.add('hidden');list.innerHTML='<div class="text-center p-5 text-slate-400 font-bold">حدد موعدًا مستهدفًا لإنشاء خطة مذاكرة تلقائية.</div>';return;}if(input)input.value=plan.examDate||'';clear?.classList.remove('hidden');const remaining=(plan.items||[]).filter(x=>!state.local.completedLessons.includes(x.lessonId));const exam=new Date((plan.examDate||'')+'T23:59:59'),days=Math.max(0,Math.ceil((exam-Date.now())/86400000));summary.classList.remove('hidden');summary.innerHTML=`<div class="flex flex-wrap justify-between gap-3"><div><strong class="text-emerald-800">متبقي ${days} يوم</strong><p class="text-xs font-bold text-emerald-600 mt-1">${remaining.length} درس متبقٍ في الخطة</p></div><span class="text-xs font-black text-emerald-700 bg-white px-3 py-2 rounded-xl">الموعد: ${exam.toLocaleDateString('ar-EG')}</span></div>`;const grouped={};remaining.forEach(x=>(grouped[x.date]||=[]).push(x));const dates=Object.keys(grouped).sort().slice(0,10);list.innerHTML=dates.length?dates.map(date=>`<div class="study-plan-item rounded-2xl p-4"><div class="font-black text-sm text-slate-600 mb-3">${new Date(date+'T12:00:00').toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'short'})}</div><div class="space-y-2">${grouped[date].map(x=>{const l=state.db.lessons.find(y=>y.id===x.lessonId);return l?`<button onclick="app.openLesson('${l.id}')" class="w-full flex items-center justify-between gap-3 bg-slate-50 rounded-xl p-3 text-right"><span class="font-black text-sm text-slate-700">${app.escapeHtml(l.title)}</span><i class="fas fa-arrow-left text-emerald-500"></i></button>`:''}).join('')}</div></div>`).join(''):'<div class="text-center p-5 bg-emerald-50 rounded-2xl text-emerald-700 font-black">أحسنت! أنهيت كل دروس الخطة 🎉</div>';};
+
+        // الشهادات
+        app.getCertificates = () => {const out=[];state.db.categories.forEach(cat=>{const ch=state.db.chapters.filter(c=>c.categoryId===cat.id&&app.effectiveAccess('chapter',c)!=='hidden'),less=state.db.lessons.filter(l=>ch.some(c=>c.id===l.chapterId)&&app.effectiveAccess('lesson',l)!=='hidden');if(less.length&&less.every(l=>state.local.completedLessons.includes(l.id)))out.push({kind:'category',id:cat.id,title:`إتمام قسم ${cat.name}`,subtitle:`تم إكمال ${less.length} درسًا`});});const best={};(state.local.quizHistory||[]).forEach(h=>{const q=state.db.quizzes.find(x=>x.id===h.quizId);if(!q)return;const pass=Number(q.passingScore??70);if(Number(h.percentage)>=pass&&(!best[q.id]||Number(h.percentage)>Number(best[q.id].percentage)))best[q.id]=h;});Object.values(best).forEach(h=>out.push({kind:'quiz',id:h.quizId,title:`اجتياز ${h.name||'الاختبار'}`,subtitle:`الدرجة ${Number(h.percentage)||0}%`,score:Number(h.percentage)||0,date:h.date}));return out;};
+        app.renderCertificates = () => {const box=document.getElementById('certificates-list');if(!box)return;const arr=app.getCertificates();box.innerHTML=arr.length?arr.map(c=>`<div class="border border-amber-200 bg-amber-50/50 rounded-2xl p-4 flex items-center justify-between gap-3"><div><strong class="text-amber-900 text-sm">${app.escapeHtml(c.title)}</strong><p class="text-[11px] font-bold text-amber-700 mt-1">${app.escapeHtml(c.subtitle||'')}</p></div><button onclick="app.printCertificate('${c.kind}','${c.id}')" class="bg-white border border-amber-200 text-amber-700 w-10 h-10 rounded-xl"><i class="fas fa-print"></i></button></div>`).join(''):'<div class="md:col-span-2 text-center p-5 text-slate-400 font-bold">أكمل قسمًا أو اجتز اختبارًا لتظهر شهادتك هنا.</div>';};
+        app.printCertificate = (kind,id) => {if(!state.auth.user)return app.openAuthModal('login');const c=app.getCertificates().find(x=>x.kind===kind&&x.id===id);if(!c)return alert('الشهادة غير متاحة بعد.');const name=state.auth.profile?.name||state.auth.user.displayName||'الطالب',platform=state.db.settings?.branding?.name||'منصة أستاذ أحمد عيد',certId=`CERT-${state.auth.user.uid.slice(0,6).toUpperCase()}-${String(id).replace(/[^a-zA-Z0-9]/g,'').slice(-8).toUpperCase()}`,w=window.open('','_blank','width=1100,height=750');if(!w)return alert('اسمح بالنوافذ المنبثقة لطباعة الشهادة.');w.document.write(`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>شهادة إنجاز</title><style>body{font-family:Arial,sans-serif;background:#f7faf9;padding:35px}.cert{max-width:950px;margin:auto;background:white;border:14px double #0f766e;padding:60px;text-align:center;min-height:520px;box-sizing:border-box}.small{color:#64748b}.title{font-size:48px;color:#064e3b;margin:15px}.name{font-size:38px;font-weight:800;margin:30px}.desc{font-size:22px;line-height:1.9}.id{margin-top:50px;font-size:12px;color:#94a3b8}@media print{body{background:white;padding:0}.cert{max-width:none}}</style></head><body><div class="cert"><div class="small">${app.escapeHtml(platform)}</div><div class="title">شهادة إنجاز</div><p>تشهد المنصة بأن</p><div class="name">${app.escapeHtml(name)}</div><div class="desc">قد حقق إنجازًا بنجاح في<br><strong>${app.escapeHtml(c.title)}</strong><br>${app.escapeHtml(c.subtitle||'')}</div><p class="small">التاريخ: ${new Date(c.date||Date.now()).toLocaleDateString('ar-EG')}</p><div class="id">رقم الشهادة: ${certId}</div></div><script>window.onload=()=>{window.print()}<\/script></body></html>`);w.document.close();};
+        app.printCurrentQuizCertificate = () => {const id=state.quizBaseData?.id||state.quizData?.id;if(id&&state.db.quizzes.some(q=>q.id===id))app.printCertificate('quiz',id);else alert('الشهادات متاحة للاختبارات المنشورة بالمنصة فقط.');};
+
+        // حفظ دروس بدون إنترنت
+        app.offlineStorageKey = () => `ahmed_offline_lessons_${state.auth.user?.uid||'guest'}`;
+        app.getOfflineStore = () => {try{return JSON.parse(localStorage.getItem(app.offlineStorageKey())||'{}')}catch(e){return{}}};
+        app.setOfflineStore = store => {localStorage.setItem(app.offlineStorageKey(),JSON.stringify(store||{}));app.renderOfflineLessons();app.updateOfflineButton();};
+        app.getOfflineLesson = id => app.getOfflineStore()[id]||null;
+        app.canUseOfflineEntry = entry => entry && (!entry.requiresSubscriber || !entry.subscriptionEndsAt || Number(entry.subscriptionEndsAt)>Date.now());
+        app.toggleOfflineCurrentLesson = () => {const l=state.currentLesson;if(!l)return;const store=app.getOfflineStore();if(store[l.id]){delete store[l.id];app.setOfflineStore(store);return;}const access=app.effectiveAccess('lesson',l);store[l.id]={savedAt:Date.now(),requiresSubscriber:access==='subscriber',subscriptionEndsAt:access==='subscriber'?(state.auth.profile?.subscriptionEndsAt?Number(state.auth.profile.subscriptionEndsAt):null):null,lesson:JSON.parse(JSON.stringify(l)),chapter:state.currentChap?JSON.parse(JSON.stringify(state.currentChap)):null,category:state.currentCat?JSON.parse(JSON.stringify(state.currentCat)):null};try{app.setOfflineStore(store)}catch(e){alert('مساحة التخزين على الجهاز غير كافية لهذا الدرس.');}};
+        app.updateOfflineButton = () => {const b=document.getElementById('offline-lesson-btn');if(!b||!state.currentLesson)return;const saved=!!app.getOfflineLesson(state.currentLesson.id);b.innerHTML=`<i class="fas ${saved?'fa-circle-check':'fa-cloud-arrow-down'}"></i>`;b.title=saved?'حذف النسخة الأوفلاين':'حفظ بدون إنترنت';};
+        app.renderOfflineLessons = () => {const box=document.getElementById('offline-lessons-list');if(!box)return;const entries=Object.values(app.getOfflineStore()).sort((a,b)=>(b.savedAt||0)-(a.savedAt||0));box.innerHTML=entries.length?entries.map(e=>`<div class="flex items-center justify-between gap-3 border border-slate-100 rounded-2xl p-4"><div class="min-w-0"><div class="flex gap-2 items-center"><strong class="text-slate-700 truncate">${app.escapeHtml(e.lesson?.title||'درس')}</strong><span class="offline-chip text-[10px] font-black px-2 py-1 rounded-lg">أوفلاين</span></div><p class="text-[10px] font-bold text-slate-400 mt-1">حُفظ ${new Date(e.savedAt).toLocaleDateString('ar-EG')}</p></div><div class="flex gap-2"><button onclick="app.openOfflineLesson('${e.lesson?.id||''}')" class="bg-cyan-50 text-cyan-700 px-3 py-2 rounded-xl font-black text-xs">فتح</button><button onclick="app.removeOfflineLesson('${e.lesson?.id||''}')" class="bg-red-50 text-red-600 w-9 h-9 rounded-xl"><i class="fas fa-trash"></i></button></div></div>`).join(''):'<div class="text-center p-5 text-slate-400 font-bold">لم تحفظ دروسًا للأوفلاين بعد.</div>';};
+        app.removeOfflineLesson = id => {const s=app.getOfflineStore();delete s[id];app.setOfflineStore(s);};
+        app.openOfflineLesson = async id => {const e=app.getOfflineLesson(id);if(!e)return;if(!app.canUseOfflineEntry(e))return app.showAccessModal('انتهت صلاحية النسخة','يرجى الاتصال بالإنترنت وتحديث الدرس.','expired');if(e.category&&!state.db.categories.some(x=>x.id===e.category.id))state.db.categories.push(e.category);if(e.chapter&&!state.db.chapters.some(x=>x.id===e.chapter.id))state.db.chapters.push(e.chapter);if(e.lesson&&!state.db.lessons.some(x=>x.id===e.lesson.id))state.db.lessons.push({...e.lesson,content:null});state.currentLesson=e.lesson;state.currentChap=e.chapter;state.currentCat=e.category;const old=app.getProtectedLessonPayload;state.offlineOverrideId=id;app.getProtectedLessonPayload=async l=>l.id===id?e.lesson:old(l);try{await app.openLesson(id)}finally{app.getProtectedLessonPayload=old;state.offlineOverrideId=null}};
+
         app.clearQuizTimer = () => {if(state.quizSession.timerId){clearInterval(state.quizSession.timerId);state.quizSession.timerId=null;}document.getElementById('quiz-timer')?.classList.add('hidden');};
         app.formatTimer = sec => `${String(Math.floor(Math.max(0,sec)/60)).padStart(2,'0')}:${String(Math.max(0,sec)%60).padStart(2,'0')}`;
         app.updateQuizTimer = () => {const el=document.getElementById('quiz-timer-text');if(el)el.textContent=app.formatTimer(state.quizSession.remainingSec);if(state.quizSession.remainingSec<=0){state.quizSession.forced=true;app.clearQuizTimer();app.finishQuiz(true);return;}state.quizSession.remainingSec--;};
 
-        app.renderBatch2Account = () => {if(!state.auth.user)return;const p=state.auth.profile||{},plans=state.db.settings?.subscriptionPlans||{},planName=p.planId&&plans[p.planId]?.name?plans[p.planId].name:(p.plan==='subscriber'?'طالب مشترك':'طالب مجاني'),label=document.getElementById('profile-plan');if(label)label.textContent=planName;app.renderSubscriptionPlansPreview();app.renderStudyPlan();app.renderCertificates();app.renderOfflineLessons();};
+        app.renderBatch2Account = () => {if(!state.auth.user)return;const label=document.getElementById('profile-plan');if(label)label.textContent='طالب علم';app.renderStudyPlan();app.renderCertificates();app.renderOfflineLessons();};
 
         window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();state.installPrompt=e;document.getElementById('install-app-btn')?.classList.remove('hidden')});
-        app.installPwa = async () => {if(state.installPrompt){state.installPrompt.prompt();await state.installPrompt.userChoice;state.installPrompt=null;return;}alert('لو زر التثبيت لم يظهر تلقائيًا: افتح قائمة المتصفح واختر «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق».');};
+        app.installPwa = async () => {if(state.installPrompt){state.installPrompt.prompt();await state.installPrompt.userChoice;state.installPrompt=null;return;}alert('لتثبيت التطبيق على هاتفك: افتح قائمة المتصفح (الثلاث نقاط أعلى الشاشة) واختر «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق».');};
         
-        const APP_BUILD='V8.1-LIBRARY-PRO-20260917';
+        const APP_BUILD='V8.2-WAQF-PRO-20261014';
         window.__APP_BUILD__=APP_BUILD;
         if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
             window.addEventListener('load', async()=>{
@@ -1715,7 +1815,7 @@
                         await Promise.all(keys.filter(k=>k.startsWith('sharia-platform-')).map(k=>caches.delete(k)));
                         localStorage.setItem('library_app_build',APP_BUILD);
                     }
-                    const reg=await navigator.serviceWorker.register('./sw.js?v=8.1.20260917',{updateViaCache:'none'});
+                    const reg=await navigator.serviceWorker.register('./sw.js?v=8.2.20261014',{updateViaCache:'none'});
                     await reg.update();
                 }catch(e){console.warn('SW update',e)}
             });
